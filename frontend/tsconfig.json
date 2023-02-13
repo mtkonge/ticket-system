@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es6",
         "module": "es6",
-        "moduleResolution": "nodenext",
+        "moduleResolution": "node",
         "skipLibCheck": true,
         "lib": ["es6", "dom"],
         "strict": true,
