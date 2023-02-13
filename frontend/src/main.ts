@@ -38,6 +38,36 @@ class MainPage extends Component {
 
 }
 
+class CustomerPage extends Component {
+	render() {
+		return "customer";
+	}
+}
+
+class SupporterPage extends Component {
+	render() {
+		return "supporter";
+	}
+}
+
+class Router extends Component {
+	private route = {value: "customer"};
+	private customerPage = new CustomerPage();
+	private supporterPage = new SupporterPage();
+
+	render() {
+		if (this.route.value == "customer")
+			return this.customerPage.render();
+		else if (this.route.value == "supporter")
+			return this.supporterPage.render();
+		return "<img src='https://http.cat/404.jpg'>";
+	}
+
+	children() {
+		return [ this.customerPage, this.supporterPage ];
+	}
+}
+
 class TextInput extends Component {
 
 	private buttonId = generateId();
