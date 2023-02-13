@@ -1,20 +1,9 @@
-import { Index } from "./pages/Index";
 import { Component } from "./Component";
-import { TextInput } from "./TextInput";
-import { Router } from "./Router";
-
-function select<T extends HTMLElement>(id: string): T {
-	const result = document.querySelector<T>("#" + id);
-	if (!result) {
-		throw new Error("Could not find element from id: " + id);
-	}
-	return result;
-}
-
+import { Layout } from "./Layout";
 
 function hydrateChildren(component: Component, update: () => void) {
-	component.hydrate(update);
-	component.children().forEach(child => hydrateChildren(child, update));
+	component.hydrate && component.hydrate(update);
+	component.children && component.children().forEach(child => hydrateChildren(child, update));
 }
 
 function rerenderAndHydrate(main: Component) {
@@ -23,6 +12,7 @@ function rerenderAndHydrate(main: Component) {
 		hydrateChildren(main, () => rerenderAndHydrate(main));
 	});
 }
-const mainPage = new Index();
+
+const mainPage = new Layout();
 rerenderAndHydrate(mainPage);
 

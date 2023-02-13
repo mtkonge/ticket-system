@@ -1,8 +1,9 @@
 import { TextInput } from "../TextInput";
 import { Component } from "../Component";
+import { byRef } from "../utils";
 
 export class Index implements Component {
-	private state = { value: "test" };
+	private state = byRef("test");
 	private textInput = new TextInput(this.state);
 
 	public render() {

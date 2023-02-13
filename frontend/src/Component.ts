@@ -1,5 +1,5 @@
 export interface Component {
-	render(): string;
 	children?(): Component[]
+	render(): string;
 	hydrate?(update: () => void): void
 }
