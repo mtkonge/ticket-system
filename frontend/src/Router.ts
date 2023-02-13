@@ -21,6 +21,6 @@ export class Router implements Component {
 	}
 
 	public children() {
-		return [this.customerPage, this.supporterPage];
+		return [this.indexPage, this.customerPage, this.supporterPage];
 	}
 }
