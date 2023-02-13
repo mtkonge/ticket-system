@@ -1,20 +1,18 @@
 import { TextInput } from "../TextInput";
 import { Component } from "../Component";
 
-export class Index extends Component {
-
+export class Index implements Component {
 	private state = { value: "test" };
 	private textInput = new TextInput(this.state);
 
-	render() {
+	public render() {
 		return /*html*/`
 			<h1>${this.state.value}</h1>
 			${this.textInput.render()}
 		`;
 	}
 
-	children() {
-		return [ this.textInput ];
+	public children() {
+		return [this.textInput];
 	}
-
 }

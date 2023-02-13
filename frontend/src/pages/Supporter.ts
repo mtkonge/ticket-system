@@ -1,7 +1,7 @@
 import { Component } from "../Component";
 
-export class Supporter extends Component {
-	render() {
+export class Supporter implements Component {
+	public render() {
 		return "supporter";
 	}
 }

@@ -1,9 +1,5 @@
-export abstract class Component {
-
-	public abstract render(): string;
-
-	public children(): Component[] { return [] }
-
-	public hydrate(update: () => void) {}
-
+export interface Component {
+	render(): string;
+	children?(): Component[]
+	hydrate?(update: () => void): void
 }
