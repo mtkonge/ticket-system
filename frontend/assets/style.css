@@ -47,11 +47,11 @@ button {
     border: none;
 }
 
-#ticket-row {
-    display: flex;
-    flex-direction: row;
+table, th, td {
+    border: 2px solid black;
+    border-collapse: collapse;
+    padding: 5px;
 }
 
-#ticket-row div {
-    padding: 8px;
-}
+
+
