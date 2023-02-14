@@ -1,21 +1,14 @@
-use std::{fs::self, io, path::Path};
-use actix_web::{get, HttpRequest, HttpResponse, Responder};
 use crate::response_helper::http_default_response;
+use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
+use std::{fs, io, path::Path};
 
-#[get("/assets/{path:.*}")]
-pub async fn load_assets(req: HttpRequest) -> impl Responder {
-    let mut path = req.match_info().query("filename").parse().unwrap();
-    path = Path::new("../frontend").join(path);
+#[get("/assets/{filename:.*}")]
+pub async fn load_assets(_: HttpRequest, filename: web::Path<String>) -> impl Responder {
+    let path = Path::new("../frontend").join(Path::new(&*filename));
 
-    return match fs::read_to_string(path) {
-        Ok(content) =>
-            HttpResponse::Ok()
-                .body(content),
-        Err(err) =>
-            if err.kind() == io::ErrorKind::NotFound {
-                http_default_response(404)
-            } else {
-                http_default_response(500)
-            },
-    };
+    match fs::read_to_string(path) {
+        Ok(content) => HttpResponse::Ok().body(content),
+        Err(err) if err.kind() == io::ErrorKind::NotFound => http_default_response(404),
+        Err(_) => http_default_response(500),
+    }
 }
