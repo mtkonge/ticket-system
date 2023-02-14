@@ -1,7 +1,11 @@
 # .prettierrc.toml
-trailingComma = "all"
+printWidth = 80
 tabWidth = 4
+useTabs = false
 semi = true 
+trailingComma = "all"
 singleQuote = false 
-jsxSingleQuote = false
+bracketSpacing = true
 arrowParens = "always"
+embeddedLanguageFormatting = "auto"
+
