@@ -1,2 +1,4 @@
 pub mod register;
-pub mod static_files;
+pub mod load_assets;
+pub mod load_html;
+
