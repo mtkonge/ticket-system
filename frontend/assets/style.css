@@ -21,6 +21,7 @@ body {
 }
 
 .topbar > div {
+    background-color: #594aff;
     display: flex;
     flex-direction: row;
     gap: 5px;

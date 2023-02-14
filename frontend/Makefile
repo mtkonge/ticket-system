@@ -2,10 +2,10 @@
 .PHONY: build watch check clean
 
 build:
-	esbuild src/main.ts --outfile=bundle.js --minify --sourcemap --bundle
+	esbuild src/main.ts --outfile=assets/bundle.js --minify --sourcemap --bundle
 
 watch:
-	esbuild src/main.ts --outfile=bundle.js --minify --sourcemap --bundle --watch
+	esbuild src/main.ts --outfile=assets/bundle.js --minify --sourcemap --bundle --watch
 
 check:
 	tsc --noEmit -p tsconfig.json
