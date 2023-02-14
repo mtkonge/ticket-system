@@ -1,4 +1,4 @@
-use crate::response_helper::http_default_response;
+use crate::response_helper::html_default_response;
 use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
 use std::{fs, io, path::Path};
 
@@ -8,7 +8,7 @@ pub async fn load_assets(_: HttpRequest, filename: web::Path<String>) -> impl Re
 
     match fs::read_to_string(path) {
         Ok(content) => HttpResponse::Ok().body(content),
-        Err(err) if err.kind() == io::ErrorKind::NotFound => http_default_response(404),
-        Err(_) => http_default_response(500),
+        Err(err) if err.kind() == io::ErrorKind::NotFound => html_default_response(404),
+        Err(_) => html_default_response(500),
     }
 }

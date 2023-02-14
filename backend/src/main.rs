@@ -9,12 +9,6 @@ use actix_web::{web::Data, App, HttpServer};
 use routes::load_assets::load_assets;
 use routes::load_html::load_html;
 use routes::register::register;
-use serde::Serialize;
-
-#[derive(Serialize)]
-struct Response {
-    amount: u32,
-}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
