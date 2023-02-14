@@ -4,8 +4,11 @@ use std::fs;
 
 #[get("/")]
 pub async fn load_html(_: HttpRequest) -> impl Responder {
-    match fs::read_to_string("../frontend/index.html") {
+    match fs::read("../frontend/index.html") {
         Ok(content) => HttpResponse::Ok().content_type("text/html").body(content),
-        Err(_) => html_default_response(500),
+        Err(err) => {
+            println!("{}", err);
+            html_default_response(500)
+        },
     }
 }
