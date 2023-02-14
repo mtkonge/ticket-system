@@ -14,13 +14,25 @@ body {
     color: #eee; */
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.4)
+}
+
+.topbar > div {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }
 
 .topbar h1 {
     margin: 0;
     margin-right: 1rem
+}
+
+.topbar button {
+    font-size: 1rem;
 }
 
 main {
