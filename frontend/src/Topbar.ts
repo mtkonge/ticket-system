@@ -12,7 +12,6 @@ export class Topbar implements Component {
     public render() {
         return /*html*/ `
 			<div class="topbar">
-				<h1>Welcome to ticket-system</h1>
 				<button id="${this.indexButtonId}"><span class="material-symbols-outlined">home</span></button>
 				<button id="${this.customerButtonId}">I am a customer</button>
 				<button id="${this.supporterButtonId}">I am an it-supporter punjabi no virus</button>
