@@ -3,8 +3,8 @@ import { Router } from "./Router";
 import { Topbar } from "./Topbar";
 
 export class Layout implements Component {
-	private topbar = new Topbar();
 	private router = new Router();
+	private topbar = new Topbar(this.router);
 
 	public children() { return [this.topbar, this.router]; }
 

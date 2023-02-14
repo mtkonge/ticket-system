@@ -2,8 +2,8 @@ import { Component } from "./Component";
 import { ByRef, domSelectId, generateId } from "./utils";
 
 export class TextInput implements Component {
-	private buttonId = generateId();
-	private inputId = generateId();
+	private buttonId = generateId("button");
+	private inputId = generateId("input");
 
 	public constructor(private value: ByRef<string>) { }
 

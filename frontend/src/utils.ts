@@ -11,8 +11,8 @@ export const randomChar = (chars: string = randomCharPalette): string =>
 export const randomString = (length: number, chars: string = randomCharPalette): string =>
 	length > 0 ? randomChar(chars) + randomString(length - 1, chars) : "";
 
-export function generateId() {
-	return `id_${randomString(10)}`
+export function generateId(name: string = "id") {
+	return `${name}_${randomString(10)}`
 }
 
 export function domSelectId<T extends HTMLElement>(id: string): T {
