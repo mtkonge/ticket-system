@@ -14,7 +14,7 @@ export class Router implements Component {
     ) { }
 
     public render() {
-        if (this.routerPath.route() == "/index") return this.indexPage.render();
+        if (this.routerPath.route() == "/") return this.indexPage.render();
         else if (this.routerPath.route() == "/customer")
             return this.customerPage.render();
         else if (this.routerPath.route() == "/supporter")
@@ -23,6 +23,12 @@ export class Router implements Component {
     }
 
     public children() {
-        return [this.indexPage, this.customerPage, this.supporterPage];
+        if (this.routerPath.route() == "/")
+            return [this.indexPage];
+        else if (this.routerPath.route() == "/customer")
+            return [this.customerPage];
+        else if (this.routerPath.route() == "/supporter")
+            return [this.supporterPage];
+        else return [];
     }
 }

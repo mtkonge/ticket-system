@@ -23,16 +23,16 @@ export class Topbar implements Component {
         `;
     }
     public hydrate(update: () => void) {
+        domSelectId(this.indexButtonId).addEventListener("click", () => {
+            this.router.routeTo("/");
+            update();
+        });
         domSelectId(this.customerButtonId).addEventListener("click", () => {
-            this.router.routeTo("customer");
+            this.router.routeTo("/customer");
             update();
         });
         domSelectId(this.supporterButtonId).addEventListener("click", () => {
-            this.router.routeTo("supporter");
-            update();
-        });
-        domSelectId(this.indexButtonId).addEventListener("click", () => {
-            this.router.routeTo("index");
+            this.router.routeTo("/supporter");
             update();
         });
     }
