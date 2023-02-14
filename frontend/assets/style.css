@@ -10,8 +10,8 @@ body {
 }
 
 .topbar {
-    /* background-color: #333;
-    color: #eee; */
+    background-color: #594aff;
+    color: white;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -21,7 +21,6 @@ body {
 }
 
 .topbar > div {
-    background-color: #594aff;
     display: flex;
     flex-direction: row;
     gap: 5px;
