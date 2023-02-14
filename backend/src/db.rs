@@ -1,5 +1,6 @@
-use futures::lock::Mutex;
 use std::sync::Arc;
+
+use tokio::sync::RwLock;
 
 pub struct Id(pub u64);
 #[derive(PartialEq, Eq, Debug)]
@@ -36,8 +37,8 @@ pub enum TicketDbError {
 }
 
 impl TicketDb {
-    pub fn new() -> Arc<Mutex<Self>> {
-        Arc::new(Mutex::new(TicketDb {
+    pub fn new() -> Arc<RwLock<Self>> {
+        Arc::new(RwLock::new(TicketDb {
             id_counter: 0,
             tickets: Vec::new(),
             users: Vec::new(),

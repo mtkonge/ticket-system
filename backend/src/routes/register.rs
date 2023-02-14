@@ -1,6 +1,6 @@
 use actix_web::{http::header::ContentType, post, web, HttpResponse, Responder};
-use futures::lock::Mutex;
 use serde::{Deserialize, Serialize};
+use tokio::sync::RwLock;
 
 use crate::{
     db::{Password, Role, TicketDb, TicketDbError, Username},
@@ -19,8 +19,8 @@ struct Response {
 }
 
 #[post("/user/register")]
-async fn register(db: web::Data<Mutex<TicketDb>>, request: web::Json<Request>) -> impl Responder {
-    let mut db = (**db).lock().await;
+async fn register(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>) -> impl Responder {
+    let mut db = (**db).write().await;
 
     let request = request.into_inner();
 
