@@ -14,10 +14,10 @@ export class Router implements Component {
     ) { }
 
     public render() {
-        if (this.routerPath.route() == "index") return this.indexPage.render();
-        else if (this.routerPath.route() == "customer")
+        if (this.routerPath.route() == "/index") return this.indexPage.render();
+        else if (this.routerPath.route() == "/customer")
             return this.customerPage.render();
-        else if (this.routerPath.route() == "supporter")
+        else if (this.routerPath.route() == "/supporter")
             return this.supporterPage.render();
         return "<img src='https://http.cat/404.jpg'>";
     }

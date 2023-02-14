@@ -27,21 +27,15 @@ export class RouterPath {
 	public currentRoute: string;
 
 	public constructor() {
-		let params = new URLSearchParams(window.location.search);
-		if (params.has("route")) {
-			this.currentRoute = params.get("route")!;
-		} else {
-			this.currentRoute = "index";
-			params.set("route", "index");
-			window.location.search = params.toString();
-		}
+		const url = new URL(window.location.href);
+		this.currentRoute = url.pathname;
 	}
 
 	public routeTo(route: string) {
-		let params = new URLSearchParams(window.location.search);
-		params.set("route", route);
-		window.location.search = params.toString();
 		this.currentRoute = route;
+		const url = new URL(window.location.href);
+		url.pathname = route;
+		window.history.pushState({}, "", url);
 	}
 
 	public route(): string { return this.currentRoute; }
