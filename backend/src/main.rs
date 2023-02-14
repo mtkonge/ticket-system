@@ -4,6 +4,7 @@ mod routes;
 
 use crate::db::TicketDb;
 use actix_cors::Cors;
+use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
 use routes::load_assets::load_assets;
 use routes::load_html::load_html;
@@ -23,7 +24,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(Data::from(db.clone()))
             .wrap(Cors::permissive())
-            .service(register)
+            .service(web::scope("/api").service(register))
             .service(load_assets)
             .service(load_html)
     })
