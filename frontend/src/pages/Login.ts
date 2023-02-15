@@ -1,4 +1,4 @@
-import { loginUser } from "../api";
+import { loginUser, userInfo } from "../api";
 import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
 import { Session } from "../session";
 import { generateId, RouterPath } from "../utils";
@@ -14,15 +14,15 @@ export class Login implements Component {
     public constructor(
         private router: RouterPath,
         private session: ByRef<Session | null>,
-    ) {}
+    ) { }
 
     public render() {
         return html`
             <div class="auth-container" id="${this.loginContainerId}">
                 <h2>Login</h2>
                 ${this.errorMessage !== ""
-                    ? html`<p class="error-text">${this.errorMessage}</p>`
-                    : ""}
+                ? html`<p class="error-text">${this.errorMessage}</p>`
+                : ""}
                 <p class="error-text"></p>
                 <input
                     id="${this.usernameFieldId}"
@@ -53,10 +53,13 @@ export class Login implements Component {
                     .value,
             });
             if (response.ok) {
+                const infoResponse = await userInfo({
+                    token: response.token!
+                });
                 this.session.value = {
                     token: response.token!,
-                    userId: -1,
-                    username: "<fixme>",
+                    userId: infoResponse.user_id!,
+                    username: infoResponse.username!,
                 };
                 this.router.routeTo("/");
             } else {

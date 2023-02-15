@@ -1,7 +1,9 @@
+export type UserRole = "Consumer" | "LevelOne" | "LevelTwo" | "Admin";
+
 export type EditUserRoleRequest = {
     token: string;
     user_id: number;
-    role: "Consumer" | "LevelOne" | "LevelTwo" | "Admin";
+    role: UserRole;
 };
 
 export type EditUserRoleResponse = {
@@ -71,3 +73,29 @@ export async function loginUser(request: LoginRequest): Promise<LoginResponse> {
         ok: response.ok,
     };
 }
+
+export type UserInfoRequest = {
+    token: string,
+}
+
+export type UserInfoResponse = {
+    ok: boolean,
+    msg: string,
+    user_id?: number,
+    username?: string,
+    role?: UserRole,
+}
+
+export async function userInfo(request: UserInfoRequest): Promise<UserInfoResponse> {
+    const response = await fetch("/api/user/login", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...await response.json(),
+        ok: response.ok,
+    };
+
+}
+
