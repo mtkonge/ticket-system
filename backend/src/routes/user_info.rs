@@ -17,6 +17,7 @@ struct Response<'a> {
     msg: &'a str,
     user_id: u64,
     username: String,
+    role: &'a str,
 }
 
 #[post("/user/info")]
@@ -37,6 +38,7 @@ async fn user_info(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
             msg: "",
             user_id: user.id.0,
             username: user.name.clone(),
+            role: user.role.to_string(),
         })
 }
 

@@ -13,6 +13,17 @@ pub enum Role {
     Admin,
 }
 
+impl Role {
+    pub fn to_string(&self) -> &'static str {
+        match self {
+            Role::Consumer => "Consumer",
+            Role::LevelOne => "LevelOne",
+            Role::LevelTwo => "LevelTwo",
+            Role::Admin => "Admin",
+        }
+    }
+}
+
 pub struct Ticket {
     pub id: Id,
     pub title: String,
