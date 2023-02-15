@@ -87,7 +87,7 @@ export type UserInfoResponse = {
 }
 
 export async function userInfo(request: UserInfoRequest): Promise<UserInfoResponse> {
-    const response = await fetch("/api/user/login", {
+    const response = await fetch("/api/user/info", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(request),
