@@ -74,6 +74,7 @@ footer p {
 button {
     cursor: pointer;
     border: none;
+    padding: 3px;
 }
 
 table, th, td {
