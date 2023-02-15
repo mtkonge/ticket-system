@@ -1,0 +1,26 @@
+frontend:
+hydration to admin panel
+create ticket button
+ticket editor
+    escalate ticket
+    incident or request selector
+sla editor
+    service level bingbong editor
+servicekatalog
+document editor
+ticket activities
+save session on reload
+document viewer
+
+backend:
+create document
+edit document
+post comment
+ticket activities
+???
+
+brug system:
+lav nogle tickets og incidents og andet bingbong (det kan vi klare imorgen, -simon 2023)
+
+
+
