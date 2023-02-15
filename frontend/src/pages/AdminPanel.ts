@@ -1,7 +1,8 @@
 import { allUsers, editUserRole, UserInfo } from "../api";
-import { ByRef, Component, domAddEvent, domSelectId, fetched, html } from "../framework"
-import { Session, UserRole } from "../session";
-import { generateId, Router } from "../utils";
+import { Context } from "../Context";
+import { Component, domAddEvent, domSelectId, fetched, html } from "../framework"
+import { UserRole } from "../session";
+import { generateId } from "../utils";
 
 
 export class AdminPanel implements Component {
@@ -15,8 +16,7 @@ export class AdminPanel implements Component {
     private currentUserInfo: UserInfo | null = null;
 
     public constructor(
-        public router: Router,
-        public session: ByRef<Session | null>,
+        private context: Context,
     ) { }
 
     public render() {
@@ -53,13 +53,13 @@ export class AdminPanel implements Component {
 
     public hydrate(update: () => void): void {
         domSelectId<HTMLSelectElement>(this.userSelectId).selectedIndex = this.selectedOptionIndex;
-        if (this.session.value === null) {
-            this.router.routeTo("/login");
+        if (this.context.session === null) {
+            this.context.router.routeTo("/login");
             return update();
         }
         const userSelectElement = domSelectId<HTMLSelectElement>(this.userSelectId);
         if (!this.usersInfo.isFetched) {
-            allUsers({ token: this.session.value!.token }).then((response) => {
+            allUsers({ token: this.context.session!.token }).then((response) => {
                 this.usersInfo.isFetched = true;
                 if (!response.ok) {
                     this.errorMessage = "could not fetch userinfo"
@@ -81,7 +81,7 @@ export class AdminPanel implements Component {
         if (this.currentUserInfo !== null) {
             domAddEvent(this.saveNewRoleButtonId, "click", async () => {
                 const response = await editUserRole({
-                    token: this.session.value!.token,
+                    token: this.context.session!.token,
                     user_id: this.currentUserInfo!.id,
                     role: domSelectId<HTMLSelectElement>(this.newRoleSelectId).value as UserRole,
                 })
