@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Role, TicketDb, TicketDbError, Urgency},
+    db::{Db, Error, Role, Urgency},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -22,9 +22,9 @@ struct Response<'a> {
     msg: &'a str,
 }
 
-fn user_with_least_tasks(db: &TicketDb) -> Result<u64, &str> {
+fn user_with_least_tasks(db: &Db) -> Result<u64, &str> {
     let mut user_ids = db
-        .users_with_role(Role::LevelOne)
+        .users_with_role(&Role::LevelOne)
         .iter()
         .map(|user| (user.id, 0))
         .collect::<HashMap<u64, usize>>();
@@ -51,10 +51,7 @@ fn user_with_least_tasks(db: &TicketDb) -> Result<u64, &str> {
 }
 
 #[post("/ticket/open")]
-async fn open_ticket(
-    db: web::Data<RwLock<TicketDb>>,
-    request: web::Json<Request>,
-) -> impl Responder {
+async fn open_ticket(db: web::Data<RwLock<Db>>, request: web::Json<Request>) -> impl Responder {
     let mut db = (**db).write().await;
 
     let request = request.into_inner();
@@ -65,22 +62,18 @@ async fn open_ticket(
     };
 
     let creator_id = match db.user_from_session(&request.token) {
-        Ok(user) => user.id.clone(),
-        Err(TicketDbError::NotFound) => return bad_request("invalid session"),
+        Ok(user) => user.id,
+        Err(Error::NotFound) => return bad_request("invalid session"),
         Err(_) => return internal_server_error("db error"),
     };
 
-    let add_ticket_success = db.add_ticket(
+    db.add_ticket(
         request.title,
         request.content,
         request.urgency,
         creator_id,
         assignee,
     );
-
-    if add_ticket_success.is_err() {
-        return internal_server_error("db error");
-    }
 
     HttpResponse::Ok()
         .insert_header(ContentType::json())
@@ -91,8 +84,8 @@ async fn open_ticket(
 
 #[test]
 fn should_fail_without_level_one() {
-    use crate::db::{Password, TicketDb, Username};
-    let mut db = TicketDb::new();
+    use crate::db::{Db, Password, Username};
+    let mut db = Db::new();
 
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
@@ -106,8 +99,8 @@ fn should_fail_without_level_one() {
 
 #[test]
 fn should_pick_with_least_tasks() {
-    use crate::db::{Password, TicketDb, Username};
-    let mut db = TicketDb::new();
+    use crate::db::{Db, Password, Username};
+    let mut db = Db::new();
 
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
@@ -138,8 +131,7 @@ fn should_pick_with_least_tasks() {
         Urgency::Request,
         user_2.clone(),
         user_1,
-    )
-    .expect("should succeed with valid input");
+    );
 
     let user = user_with_least_tasks(&db).expect("should succeed with valid input");
 

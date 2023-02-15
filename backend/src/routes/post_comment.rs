@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Role, TicketDb, TicketDbError},
+    db::{Db, Error, Role},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -20,23 +20,20 @@ struct Response<'a> {
 }
 
 #[post("/ticket/comment")]
-async fn post_comment(
-    db: web::Data<RwLock<TicketDb>>,
-    request: web::Json<Request>,
-) -> impl Responder {
+async fn post_comment(db: web::Data<RwLock<Db>>, request: web::Json<Request>) -> impl Responder {
     let mut db = (**db).write().await;
 
     let request = request.into_inner();
 
     let user = match db.user_from_session(&request.token) {
         Ok(user) => user,
-        Err(TicketDbError::NotFound) => return bad_request("invalid session"),
+        Err(Error::NotFound) => return bad_request("invalid session"),
         Err(_) => return internal_server_error("db error"),
     };
 
     let ticket = match db.ticket_from_id(request.id) {
         Ok(ticket) => ticket,
-        Err(TicketDbError::NotFound) => return bad_request("invalid id"),
+        Err(Error::NotFound) => return bad_request("invalid id"),
         Err(_) => return internal_server_error("db error"),
     };
 

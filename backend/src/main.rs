@@ -1,3 +1,5 @@
+#![allow(clippy::unused_async)]
+
 mod db;
 mod response_helper;
 mod routes;
@@ -5,7 +7,7 @@ mod token_generation;
 
 use std::sync::Arc;
 
-use crate::db::TicketDb;
+use crate::db::Db;
 use actix_cors::Cors;
 use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
@@ -21,7 +23,7 @@ use tokio::sync::RwLock;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db = Arc::new(RwLock::new(TicketDb::new()));
+    let db = Arc::new(RwLock::new(Db::new()));
 
     HttpServer::new(move || {
         App::new()

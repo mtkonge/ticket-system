@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Role, TicketDb, TicketDbError, Urgency},
+    db::{Db, Error, Role, Urgency},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -21,23 +21,20 @@ struct Response<'a> {
 }
 
 #[post("/ticket/edit")]
-async fn edit_ticket(
-    db: web::Data<RwLock<TicketDb>>,
-    request: web::Json<Request>,
-) -> impl Responder {
+async fn edit_ticket(db: web::Data<RwLock<Db>>, request: web::Json<Request>) -> impl Responder {
     let mut db = (**db).write().await;
 
     let request = request.into_inner();
 
     let user = match db.user_from_session(&request.token) {
         Ok(user) => user,
-        Err(TicketDbError::NotFound) => return bad_request("invalid session"),
+        Err(Error::NotFound) => return bad_request("invalid session"),
         Err(_) => return internal_server_error("db error"),
     };
 
     let ticket = match db.ticket_from_id(request.id) {
         Ok(ticket) => ticket,
-        Err(TicketDbError::NotFound) => return bad_request("invalid id"),
+        Err(Error::NotFound) => return bad_request("invalid id"),
         Err(_) => return internal_server_error("db error"),
     };
 
@@ -48,7 +45,7 @@ async fn edit_ticket(
 
     match db.edit_ticket(request.id, Some(request.title), None, Some(request.urgency)) {
         Ok(_) => (),
-        Err(TicketDbError::NotFound) => return bad_request("invalid id"),
+        Err(Error::NotFound) => return bad_request("invalid id"),
         Err(_) => return internal_server_error("db error"),
     };
 

@@ -55,7 +55,7 @@ pub struct User {
     pub role: Role,
 }
 
-pub struct TicketDb {
+pub struct Db {
     id_counter: u64,
     sessions: Vec<Session>,
     tickets: Vec<Ticket>,
@@ -64,14 +64,14 @@ pub struct TicketDb {
 }
 
 #[derive(Debug)]
-pub enum TicketDbError {
+pub enum Error {
     NotFound,
     Duplicate,
 }
 
-impl TicketDb {
+impl Db {
     pub fn new() -> Self {
-        TicketDb {
+        Db {
             id_counter: 0,
             tickets: Vec::new(),
             sessions: Vec::new(),
@@ -79,55 +79,55 @@ impl TicketDb {
             documents: Vec::new(),
         }
     }
-    pub fn ticket_from_id(&self, id: u64) -> Result<&Ticket, TicketDbError> {
+    pub fn ticket_from_id(&self, id: u64) -> Result<&Ticket, Error> {
         let ticket = self
             .tickets
             .iter()
             .find(|ticket| ticket.id == id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         Ok(ticket)
     }
-    pub fn edit_user_role(&mut self, user_id: u64, role: Role) -> Result<(), TicketDbError> {
+    pub fn edit_user_role(&mut self, user_id: u64, role: Role) -> Result<(), Error> {
         let user = self
             .users
             .iter_mut()
             .find(|user| user.id == user_id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         user.role = role;
 
         Ok(())
     }
-    pub fn user_from_session(&self, token: &str) -> Result<&User, TicketDbError> {
+    pub fn user_from_session(&self, token: &str) -> Result<&User, Error> {
         let session = self
             .sessions
             .iter()
             .find(|session| session.token == token)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
         self.users
             .iter()
             .find(|user| user.id == session.user_id)
-            .ok_or(TicketDbError::NotFound)
+            .ok_or(Error::NotFound)
     }
-    pub fn document_from_title(&self, title: &str) -> Result<&Document, TicketDbError> {
+    pub fn document_from_title(&self, title: &str) -> Result<&Document, Error> {
         self.documents
             .iter()
             .find(|doc| doc.title == title)
-            .ok_or(TicketDbError::NotFound)
+            .ok_or(Error::NotFound)
     }
-    pub fn user_from_name(&self, name: &str) -> Result<&User, TicketDbError> {
+    pub fn user_from_name(&self, name: &str) -> Result<&User, Error> {
         self.users
             .iter()
             .find(|user| user.name == name)
-            .ok_or(TicketDbError::NotFound)
+            .ok_or(Error::NotFound)
     }
-    pub fn add_session(&mut self, token: &str, user_id: u64) -> Result<(), TicketDbError> {
+    pub fn add_session(&mut self, token: &str, user_id: u64) -> Result<(), Error> {
         let id = self.request_id();
         self.users
             .iter()
             .find(|user| user.id == user_id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         let session = Session {
             id,
@@ -137,8 +137,11 @@ impl TicketDb {
         self.sessions.push(session);
         Ok(())
     }
-    pub fn users_with_role(&self, role: Role) -> Vec<&User> {
-        self.users.iter().filter(|user| user.role == role).collect()
+    pub fn users_with_role(&self, role: &Role) -> Vec<&User> {
+        self.users
+            .iter()
+            .filter(|user| user.role == *role)
+            .collect()
     }
     pub fn documents(&self) -> &Vec<Document> {
         &self.documents
@@ -149,10 +152,10 @@ impl TicketDb {
     pub fn tickets(&self) -> &Vec<Ticket> {
         &self.tickets
     }
-    pub fn add_user(&mut self, name: Username, password: Password) -> Result<(), TicketDbError> {
+    pub fn add_user(&mut self, name: Username, password: Password) -> Result<(), Error> {
         match self.user_from_name(&name.0) {
-            Ok(_) => Err(TicketDbError::Duplicate),
-            Err(TicketDbError::NotFound) => Ok(()),
+            Ok(_) => Err(Error::Duplicate),
+            Err(Error::NotFound) => Ok(()),
             Err(other_error) => Err(other_error),
         }?;
 
@@ -176,11 +179,11 @@ impl TicketDb {
         ticket_id: u64,
         creator: u64,
         content: String,
-    ) -> Result<(), TicketDbError> {
+    ) -> Result<(), Error> {
         self.tickets
             .iter()
             .find(|ticket| ticket.id == ticket_id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         let id = self.request_id();
 
@@ -188,12 +191,12 @@ impl TicketDb {
             .tickets
             .iter_mut()
             .find(|ticket| ticket.id == ticket_id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         ticket.comments.push(TicketComment {
             id,
-            creator,
             content,
+            creator,
         });
 
         Ok(())
@@ -204,12 +207,12 @@ impl TicketDb {
         title: Option<String>,
         assignee: Option<u64>,
         urgency: Option<Urgency>,
-    ) -> Result<(), TicketDbError> {
+    ) -> Result<(), Error> {
         let ticket = self
             .tickets
             .iter_mut()
             .find(|ticket| ticket.id == id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         if let Some(title) = title {
             ticket.title = title;
@@ -223,32 +226,27 @@ impl TicketDb {
 
         Ok(())
     }
-    pub fn edit_document(
-        &mut self,
-        id: u64,
-        title: String,
-        content: String,
-    ) -> Result<(), TicketDbError> {
+    pub fn edit_document(&mut self, id: u64, title: String, content: String) -> Result<(), Error> {
         match self.document_from_title(&title) {
-            Ok(doc) if doc.id != id => Err(TicketDbError::Duplicate),
-            Err(TicketDbError::NotFound) | Ok(_) => Ok(()),
+            Ok(doc) if doc.id != id => Err(Error::Duplicate),
+            Err(Error::NotFound) | Ok(_) => Ok(()),
             Err(err) => Err(err),
         }?;
         let doc = self
             .documents
             .iter_mut()
             .find(|doc| doc.id == id)
-            .ok_or(TicketDbError::NotFound)?;
+            .ok_or(Error::NotFound)?;
 
         doc.title = title;
         doc.content = content;
 
         Ok(())
     }
-    pub fn add_document(&mut self, title: String, content: String) -> Result<(), TicketDbError> {
+    pub fn add_document(&mut self, title: String, content: String) -> Result<(), Error> {
         match self.document_from_title(&title) {
-            Err(TicketDbError::NotFound) => Ok(()),
-            Ok(_) => Err(TicketDbError::Duplicate),
+            Err(Error::NotFound) => Ok(()),
+            Ok(_) => Err(Error::Duplicate),
             Err(err) => Err(err),
         }?;
         let id = self.request_id();
@@ -263,7 +261,7 @@ impl TicketDb {
         urgency: Urgency,
         creator: u64,
         assignee: u64,
-    ) -> Result<(), TicketDbError> {
+    ) {
         let id = self.request_id();
         let ticket = Ticket {
             id,
@@ -275,7 +273,6 @@ impl TicketDb {
             comments: Vec::new(),
         };
         self.tickets.push(ticket);
-        Ok(())
     }
     fn request_id(&mut self) -> u64 {
         let previous_id = self.id_counter;
@@ -286,7 +283,7 @@ impl TicketDb {
 
 #[test]
 fn should_add_and_find_user() {
-    let mut db = TicketDb::new();
+    let mut db = Db::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
 
@@ -305,7 +302,7 @@ fn should_add_and_find_user() {
 
 #[test]
 fn should_add_and_find_document() {
-    let mut db = TicketDb::new();
+    let mut db = Db::new();
     db.add_document("document 1".to_string(), String::new())
         .expect("should add document");
 
@@ -323,7 +320,7 @@ fn should_add_and_find_document() {
 }
 #[test]
 fn should_have_correct_starting_roles() {
-    let mut db = TicketDb::new();
+    let mut db = Db::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
 
@@ -349,7 +346,7 @@ fn should_have_correct_starting_roles() {
 
 #[test]
 fn should_edit_role() {
-    let mut db = TicketDb::new();
+    let mut db = Db::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
 
@@ -375,7 +372,7 @@ fn should_edit_role() {
 
 #[test]
 fn users_with_role() {
-    let mut db = TicketDb::new();
+    let mut db = Db::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
     db.add_user(Username("user 2".to_string()), Password(String::new()))
@@ -401,7 +398,7 @@ fn users_with_role() {
     db.edit_user_role(user_2, Role::LevelOne)
         .expect("should not fail with valid input");
 
-    let level_one_users = db.users_with_role(Role::LevelOne);
+    let level_one_users = db.users_with_role(&Role::LevelOne);
 
     assert_eq!(level_one_users.len(), 2, "should have 2 level one users");
 
