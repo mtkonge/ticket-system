@@ -1,11 +1,9 @@
-import { ByRef, Component, html } from "../framework"
-import { Session } from "../session";
-import { Router } from "../utils";
+import { Context } from "../Context";
+import { Component, html } from "../framework"
 
 export class TicketEditor implements Component {
     public constructor(
-        private router: Router,
-        private session: ByRef<Session | null>,
+        private context: Context,
     ) { }
 
     public render() {
