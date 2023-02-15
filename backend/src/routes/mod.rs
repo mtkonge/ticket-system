@@ -4,3 +4,4 @@ pub mod load_html;
 pub mod login;
 pub mod open_ticket;
 pub mod register;
+pub mod user_info;

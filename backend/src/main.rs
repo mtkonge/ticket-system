@@ -11,7 +11,7 @@ use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
 use routes::{
     edit_role::edit_role, load_assets::load_assets, load_html::load_html, login::login,
-    open_ticket::open_ticket, register::register,
+    open_ticket::open_ticket, register::register, user_info::user_info,
 };
 use tokio::sync::RwLock;
 
@@ -28,7 +28,8 @@ async fn main() -> std::io::Result<()> {
                     .service(register)
                     .service(login)
                     .service(edit_role)
-                    .service(open_ticket),
+                    .service(open_ticket)
+                    .service(user_info),
             )
             .service(load_assets)
             .service(load_html)
