@@ -10,10 +10,11 @@ use actix_cors::Cors;
 use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
 use routes::{
-    all_documents::all_documents, all_users::all_users, edit_role::edit_role,
-    load_assets::load_assets, load_html::load_html, login::login, open_ticket::open_ticket,
-    register::register, user_assigned_tickets::user_assigned_tickets,
-    user_created_tickets::user_created_tickets, user_info::user_info,
+    all_documents::all_documents, all_users::all_users, create_document::create_document,
+    edit_document::edit_document, edit_role::edit_role, load_assets::load_assets,
+    load_html::load_html, login::login, open_ticket::open_ticket, register::register,
+    user_assigned_tickets::user_assigned_tickets, user_created_tickets::user_created_tickets,
+    user_info::user_info,
 };
 use tokio::sync::RwLock;
 
@@ -33,6 +34,8 @@ async fn main() -> std::io::Result<()> {
                     .service(open_ticket)
                     .service(user_info)
                     .service(all_users)
+                    .service(create_document)
+                    .service(edit_document)
                     .service(all_documents)
                     .service(user_created_tickets)
                     .service(user_assigned_tickets),

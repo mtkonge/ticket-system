@@ -14,7 +14,7 @@ pub enum Role {
 #[derive(Serialize)]
 pub struct Document {
     pub id: u64,
-    pub name: String,
+    pub title: String,
     pub content: Vec<u8>,
 }
 
@@ -94,6 +94,12 @@ impl TicketDb {
             .find(|user| user.id == session.user_id)
             .ok_or(TicketDbError::NotFound)
     }
+    pub fn document_from_title(&self, title: &str) -> Result<&Document, TicketDbError> {
+        self.documents
+            .iter()
+            .find(|doc| doc.title == title)
+            .ok_or(TicketDbError::NotFound)
+    }
     pub fn user_from_name(&self, name: &str) -> Result<&User, TicketDbError> {
         self.users
             .iter()
@@ -149,6 +155,39 @@ impl TicketDb {
         self.users.push(user);
         Ok(())
     }
+    pub fn edit_document(
+        &mut self,
+        id: u64,
+        title: String,
+        content: Vec<u8>,
+    ) -> Result<(), TicketDbError> {
+        match self.document_from_title(&title) {
+            Ok(doc) if doc.id != id => Err(TicketDbError::Duplicate),
+            Err(TicketDbError::NotFound) | Ok(_) => Ok(()),
+            Err(err) => Err(err),
+        }?;
+        let doc = self
+            .documents
+            .iter_mut()
+            .find(|doc| doc.id == id)
+            .ok_or(TicketDbError::NotFound)?;
+
+        doc.title = title;
+        doc.content = content;
+
+        Ok(())
+    }
+    pub fn add_document(&mut self, title: String, content: Vec<u8>) -> Result<(), TicketDbError> {
+        match self.document_from_title(&title) {
+            Err(TicketDbError::NotFound) => Ok(()),
+            Ok(_) => Err(TicketDbError::Duplicate),
+            Err(err) => Err(err),
+        }?;
+        let id = self.request_id();
+        let document = Document { id, title, content };
+        self.documents.push(document);
+        Ok(())
+    }
     pub fn add_ticket(
         &mut self,
         title: String,
@@ -194,6 +233,24 @@ fn should_add_and_find_user() {
     assert_eq!(user_2.name, "user 2".to_string())
 }
 
+#[test]
+fn should_add_and_find_document() {
+    let mut db = TicketDb::new();
+    db.add_document("document 1".to_string(), Vec::new())
+        .expect("should add document");
+
+    db.add_document("document 2".to_string(), Vec::new())
+        .expect("should add document");
+
+    db.add_document("document 1".to_string(), Vec::new())
+        .expect_err("should fail with duplicate names");
+
+    let doc = db
+        .document_from_title("document 2")
+        .expect("should not fail with valid input");
+
+    assert_eq!(doc.title, "document 2".to_string())
+}
 #[test]
 fn should_have_correct_starting_roles() {
     let mut db = TicketDb::new();

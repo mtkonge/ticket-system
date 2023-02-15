@@ -1,8 +1,57 @@
 # api
 
-## documents
+## edit document
 
-`documents/all`
+`document/edit`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+    "id": 1024,
+    "title": "...",
+    "content": ['a', 'b', 'c']
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
+## create document
+
+`document/create`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+    "title": "...",
+    "content": ['a', 'b', 'c']
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
+## all documents
+
+`document/all`
 
 request: 
 
@@ -22,7 +71,7 @@ status: `200` | `400` | `500`
     "documents": [
         {
             "id": 1024,
-            "name": "...",
+            "title": "...",
         }
     ]
 }

@@ -10,26 +10,21 @@ use crate::{
 #[derive(Deserialize)]
 pub struct Request {
     token: String,
-}
-
-#[derive(Serialize)]
-struct ShortDocument<'a> {
-    id: u64,
-    title: &'a str,
+    title: String,
+    content: Vec<u8>,
 }
 
 #[derive(Serialize)]
 struct Response<'a> {
     msg: &'a str,
-    documents: Vec<ShortDocument<'a>>,
 }
 
-#[post("/document/all")]
-async fn all_documents(
+#[post("/document/create")]
+async fn create_document(
     db: web::Data<RwLock<TicketDb>>,
     request: web::Json<Request>,
 ) -> impl Responder {
-    let db = (**db).read().await;
+    let mut db = (**db).write().await;
 
     let request = request.into_inner();
 
@@ -44,19 +39,15 @@ async fn all_documents(
         Role::Consumer => return bad_request("unauthorized"),
     }
 
-    let documents = db
-        .documents()
-        .iter()
-        .map(|doc| ShortDocument {
-            id: doc.id,
-            title: &doc.title,
-        })
-        .collect();
+    match db.add_document(request.title, request.content) {
+        Ok(_) => (),
+        Err(TicketDbError::Duplicate) => return bad_request("invalid title"),
+        Err(_) => return internal_server_error("db error"),
+    };
 
     HttpResponse::Ok()
         .insert_header(ContentType::json())
         .json(Response {
-            msg: "ticket successfully created",
-            documents,
+            msg: "document successfully created",
         })
 }
