@@ -1,4 +1,5 @@
 import { loginUser, registerUser, RegisterUserRequest, userInfo } from "../api";
+import { Context } from "../Context";
 import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
 import { Session } from "../session";
 import { generateId, Router } from "../utils";
@@ -12,8 +13,7 @@ export class Register implements Component {
     private errorMessage = "";
 
     public constructor(
-        private router: Router,
-        private session: ByRef<Session | null>,
+        private context: Context,
     ) { }
 
     public render() {
@@ -66,20 +66,20 @@ export class Register implements Component {
                 const infoResponse = await userInfo({
                     token: loginResponse.token!
                 });
-                this.session.value = {
+                this.context.session = {
                     token: loginResponse.token!,
                     userId: infoResponse.user_id!,
                     username: infoResponse.username!,
                     role: infoResponse.role!,
                 };
-                this.router.routeTo("/");
+                this.context.router.routeTo("/");
             } else {
                 this.errorMessage = loginResponse.msg;
             }
             update();
         });
         domAddEvent(this.registerLinkId, "click", () => {
-            this.router.routeTo("/login");
+            this.context.router.routeTo("/login");
             update();
         });
     }
