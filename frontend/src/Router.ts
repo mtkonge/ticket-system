@@ -6,6 +6,7 @@ import { RouterPath } from "./utils";
 import { Session } from "./session";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
+import { AdminPanel } from "./pages/AdminPanel";
 
 export class Router implements Component {
     private indexPage = new Index();
@@ -13,6 +14,7 @@ export class Router implements Component {
     private supporterPage = new Supporter();
     private loginPage: Login;
     private registerPage: Register;
+    private adminPanelPage: AdminPanel;
 
     public constructor(
         private routerPath: RouterPath,
@@ -20,6 +22,7 @@ export class Router implements Component {
     ) {
         this.loginPage = new Login(this.routerPath, this.session);
         this.registerPage = new Register(this.routerPath, this.session);
+        this.adminPanelPage = new AdminPanel(this.session);
     }
 
     public render() {
@@ -32,6 +35,8 @@ export class Router implements Component {
             return this.loginPage.render();
         else if (this.routerPath.route() == "/register")
             return this.registerPage.render();
+        else if (this.routerPath.route() == "/admin_panel")
+            return this.adminPanelPage.render();
         return "<img src='https://http.cat/404.jpg'>";
     }
 
@@ -44,6 +49,8 @@ export class Router implements Component {
         else if (this.routerPath.route() == "/login") return [this.loginPage];
         else if (this.routerPath.route() == "/register")
             return [this.registerPage];
+        else if (this.routerPath.route() == "/admin_panel")
+            return [this.adminPanelPage];
         else return [];
     }
 

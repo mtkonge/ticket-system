@@ -6,13 +6,14 @@ export class Topbar implements Component {
     private indexButtonId = generateId("index");
     private customerButtonId = generateId("customer");
     private supporterButtonId = generateId("supporter");
+    private adminPanelButtonId = generateId("supporter");
 
     private loginButton = generateId("login");
 
     public constructor(
         private router: RouterPath,
         private session: ByRef<Session | null>,
-    ) {}
+    ) { }
 
     public render() {
         return html`
@@ -25,8 +26,8 @@ export class Topbar implements Component {
                 </div>
                 <div class="text-buttons">
                     ${(() => {
-                        if (this.session.value !== null) {
-                            return html`
+                if (this.session.value !== null) {
+                    return html`
                                 <button id="${this.customerButtonId}">
                                     I am a customer
                                 </button>
@@ -34,12 +35,12 @@ export class Topbar implements Component {
                                     I am an it-supporter
                                 </button>
                             `;
-                        } else {
-                            return html`
+                } else {
+                    return html`
                                 <button id="${this.loginButton}">Login</button>
                             `;
-                        }
-                    })()}
+                }
+            })()}
                 </div>
             </div>
         `;
