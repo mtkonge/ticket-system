@@ -12,6 +12,13 @@ pub enum Role {
 }
 
 #[derive(Serialize)]
+pub struct Document {
+    pub id: u64,
+    pub name: String,
+    pub content: Vec<u8>,
+}
+
+#[derive(Serialize)]
 pub struct Ticket {
     pub id: u64,
     pub title: String,
@@ -46,6 +53,7 @@ pub struct TicketDb {
     sessions: Vec<Session>,
     tickets: Vec<Ticket>,
     users: Vec<User>,
+    documents: Vec<Document>,
 }
 
 #[derive(Debug)]
@@ -61,6 +69,7 @@ impl TicketDb {
             tickets: Vec::new(),
             sessions: Vec::new(),
             users: Vec::new(),
+            documents: Vec::new(),
         }
     }
     pub fn edit_user_role(&mut self, user_id: u64, role: Role) -> Result<(), TicketDbError> {
@@ -108,6 +117,9 @@ impl TicketDb {
     }
     pub fn users_with_role(&self, role: Role) -> Vec<&User> {
         self.users.iter().filter(|user| user.role == role).collect()
+    }
+    pub fn documents(&self) -> &Vec<Document> {
+        &self.documents
     }
     pub fn users(&self) -> &Vec<User> {
         &self.users

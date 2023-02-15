@@ -1,5 +1,33 @@
 # api
 
+## documents
+
+`documents/all`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+    "documents": [
+        {
+            "id": 1024,
+            "name": "...",
+        }
+    ]
+}
+```
+
 ## user created tickets
 
 `user/opened`
@@ -221,5 +249,3 @@ response:
     username?: string
 }
 ```
-
->>>>>>> 9403e3b (specify user info)
