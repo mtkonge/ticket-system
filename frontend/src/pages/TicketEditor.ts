@@ -11,5 +11,13 @@ export class TicketEditor implements Component {
             <h1>Ticket editor</h1>
         `;
     }
+
+    public hydrate(update: () => void): void {
+        if (this.context.currentTicketEditId === null) {
+            this.context.router.routeTo("/")
+            return update();
+        }
+
+    }
 }
 
