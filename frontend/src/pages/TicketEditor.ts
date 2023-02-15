@@ -13,8 +13,11 @@ export class TicketEditor implements Component {
     }
 
     public hydrate(update: () => void): void {
-        if (this.context.currentTicketEditId === null) {
+        if (this.context.currentTicketEdit === null) {
             this.context.router.routeTo("/")
+            return update();
+        } else if (this.context.session === null) {
+            this.context.router.routeTo("/login")
             return update();
         }
 
