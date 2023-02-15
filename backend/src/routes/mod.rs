@@ -1,3 +1,4 @@
+pub mod all_users;
 pub mod edit_role;
 pub mod load_assets;
 pub mod load_html;

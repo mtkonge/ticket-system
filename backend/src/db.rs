@@ -109,6 +109,9 @@ impl TicketDb {
     pub fn users_with_role(&self, role: Role) -> Vec<&User> {
         self.users.iter().filter(|user| user.role == role).collect()
     }
+    pub fn users(&self) -> &Vec<User> {
+        &self.users
+    }
     pub fn tickets(&self) -> &Vec<Ticket> {
         &self.tickets
     }
