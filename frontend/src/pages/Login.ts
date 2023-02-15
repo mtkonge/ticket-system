@@ -11,18 +11,21 @@ export class Login implements Component {
     private loginLinkId = generateId("registerLink");
     private errorMessage = "";
 
+    private devLevelOneLoginId = generateId();
+    private devAdminLoginId = generateId();
+
     public constructor(
         private router: RouterPath,
         private session: ByRef<Session | null>,
-    ) {}
+    ) { }
 
     public render() {
         return html`
             <div class="auth-container" id="${this.loginContainerId}">
                 <h2>Login</h2>
                 ${this.errorMessage !== ""
-                    ? html`<p class="error-text">${this.errorMessage}</p>`
-                    : ""}
+                ? html`<p class="error-text">${this.errorMessage}</p>`
+                : ""}
                 <p class="error-text"></p>
                 <input
                     id="${this.usernameFieldId}"
@@ -35,7 +38,8 @@ export class Login implements Component {
                     placeholder="password"
                 />
                 <button id="${this.loginButtonId}" class="brand-button">Login</button>
-                <button id="cheat" class="brand-button">Cheat</button>
+                <button id="${this.devLevelOneLoginId}" class="brand-button">Dev Level One Login</button>
+                <button id="${this.devAdminLoginId}" class="brand-button">Dev Admin Login</button>
                 <p>
                     Don't have an account?
                     <a class="link" id="${this.loginLinkId}">Register</a>
@@ -69,12 +73,22 @@ export class Login implements Component {
             }
             update();
         });
-        domAddEvent("cheat", "click", () => {
+        domAddEvent(this.devLevelOneLoginId, "click", () => {
             this.session.value = {
                 token: "123",
                 userId: 0,
                 username: "testuser",
                 role: "LevelOne",
+            };
+            this.router.routeTo("/");
+            update();
+        });
+        domAddEvent(this.devAdminLoginId, "click", () => {
+            this.session.value = {
+                token: "123",
+                userId: 0,
+                username: "admin",
+                role: "Admin",
             };
             this.router.routeTo("/");
             update();
