@@ -37,6 +37,22 @@ body {
     color: white;
 }
 
+.topbar div.text-buttons button {
+    padding: 5px;
+    border: 1px solid #00000000;
+    border-radius: 5px;
+}
+
+.topbar div.text-buttons button:hover {
+    border: 1px solid white;
+}
+
+.topbar div.text-buttons button:active {
+    background: white;
+    color: #594aff;
+}
+
+
 main {
     width: 1000px;
     margin-left: auto;

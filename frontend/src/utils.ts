@@ -26,5 +26,10 @@ export class RouterPath {
 		window.history.pushState({}, "", url);
 	}
 
+	public updateRouteToUrl() {
+		const url = new URL(window.location.href);
+		this.currentRoute = url.pathname;
+	}
+
 	public route(): string { return this.currentRoute; }
 }

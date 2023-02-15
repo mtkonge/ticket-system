@@ -6,11 +6,12 @@ import { RouterPath } from "./utils";
 
 export class Layout implements Component {
 	private routerPath = new RouterPath();
-	private router = new Router(this.routerPath);
+	private router: Router;
 	private topbar: Topbar;
 	public constructor(
 		private session: ByRef<Session | null>,
 	) {
+		this.router = new Router(this.routerPath, this.session);
 		this.topbar = new Topbar(this.routerPath, this.session);
 	}
 
