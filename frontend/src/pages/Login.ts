@@ -44,6 +44,7 @@ export class Login implements Component {
     }
 
     public hydrate(update: () => void): void {
+        this.errorMessage = "";
         domAddEvent(this.loginButtonId, "click", async () => {
             const response = await loginUser({
                 username: domSelectId<HTMLInputElement>(this.usernameFieldId)

@@ -45,6 +45,7 @@ export class Register implements Component {
     }
 
     public hydrate(update: () => void): void {
+        this.errorMessage = "";
         domAddEvent(this.registerButtonId, "click", async () => {
             const credentials: RegisterUserRequest = {
                 username: domSelectId<HTMLInputElement>(this.usernameFieldId)

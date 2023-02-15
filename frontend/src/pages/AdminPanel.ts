@@ -1,14 +1,17 @@
-import { allUsers, editUserRole, UserInfo, UserRole } from "../api";
+import { allUsers, editUserRole, registerUser, UserInfo, UserRole } from "../api";
 import { Context } from "../Context";
 import { Component, domAddEvent, domSelectId, fetched, html } from "../framework"
 import { generateId } from "../utils";
 
 
 export class AdminPanel implements Component {
+    private errorMessage = ""
+
+    private addUserFormId = generateId();
+
     private userSelectId = generateId();
     private newRoleSelectId = generateId();
     private saveNewRoleButtonId = generateId();
-    private errorMessage = "";
 
     private selectedOptionIndex = 0;
     private usersInfo = fetched<UserInfo[]>();
@@ -22,7 +25,15 @@ export class AdminPanel implements Component {
         return html`
             <h1>Admin panel</h1>
             <div>
-                <h2>Update users role</h2>
+                <h2>Add user</h2>
+                <form id="${this.addUserFormId}">
+                    <input type="text" name="username" placeholder="Username">
+                    <br>
+                    <input type="password" name="password" placeholder="Password">
+                    <br>
+                    <input type="submit" value="Add user">
+                </form>
+                <h2>Update user</h2>
                 ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
@@ -51,11 +62,28 @@ export class AdminPanel implements Component {
     }
 
     public hydrate(update: () => void): void {
+        this.errorMessage = "";
         domSelectId<HTMLSelectElement>(this.userSelectId).selectedIndex = this.selectedOptionIndex;
         if (this.context.session === null) {
             this.context.router.routeTo("/login");
             return update();
         }
+
+        const addUserForm = domSelectId<HTMLFormElement>(this.addUserFormId);
+        addUserForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const data = new FormData(addUserForm);
+            const response = await registerUser({
+                username: data.get("username")!.toString(),
+                password: data.get("password")!.toString(),
+            });
+            if (!response.ok) {
+                this.errorMessage = response.msg;
+            }
+            this.usersInfo.isFetched = false;
+            update();
+        })
+
         const userSelectElement = domSelectId<HTMLSelectElement>(this.userSelectId);
         if (!this.usersInfo.isFetched) {
             allUsers({ token: this.context.session!.token }).then((response) => {
