@@ -12,25 +12,18 @@ import { TicketEditor } from "./pages/TicketEditor";
 import { Context } from "./Context";
 
 export class RouterPage implements Component {
-    private indexPage = new Index();
-    private customerPage;
-    private supporterPage = new Supporter();
-    private loginPage: Login;
-    private registerPage: Register;
-    private adminPanelPage: AdminPanel;
-    private createTicketPage: CreateTicket;
-    private ticketEditorPage: TicketEditor;
+    private indexPage = new Index(this.context);
+    private customerPage = new Customer(this.context);
+    private supporterPage = new Supporter(this.context);
+    private loginPage = new Login(this.context);
+    private registerPage = new Register(this.context);
+    private adminPanelPage = new AdminPanel(this.context);
+    private createTicketPage = new CreateTicket(this.context);
+    private ticketEditorPage = new TicketEditor(this.context);
 
     public constructor(
         private context: Context,
-    ) {
-        this.customerPage = new Customer(this.context);
-        this.loginPage = new Login(this.context);
-        this.registerPage = new Register(this.context);
-        this.adminPanelPage = new AdminPanel(this.context);
-        this.createTicketPage = new CreateTicket(this.context);
-        this.ticketEditorPage = new TicketEditor(this.context);
-    }
+    ) { }
 
     public render() {
         if (this.context.router.route() == "/") return this.indexPage.render();
