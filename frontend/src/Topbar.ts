@@ -72,11 +72,14 @@ export class Topbar implements Component {
                 this.router.routeTo("/customer");
                 update();
             });
+        }
+        if (this.session.value !== null) {
             domAddEvent(this.supporterButtonId, "click", () => {
                 this.router.routeTo("/supporter");
                 update();
             });
-        } else {
+        }
+        if (this.session.value === null) {
             domAddEvent(this.loginButton, "click", () => {
                 this.router.routeTo("/login");
                 update();
