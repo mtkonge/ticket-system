@@ -76,6 +76,35 @@ status: `200` | `400` | `500`
 }
 ```
 
+## all users
+
+`user/all`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+    "users": [
+        {
+            "id": 1024,
+            "name": "...",
+            "role": "Consumer" | "LevelOne" | "LevelTwo" | "Admin"
+        }
+    ]
+}
+```
+
 ## edit role
 
 `user/edit_role`
