@@ -6,7 +6,11 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: "Arial", sans-serif
+    font-family: "Arial", sans-serif;
+    background-image: url('/assets/background.jpg');
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
 }
 
 .topbar {
@@ -55,20 +59,25 @@ body {
 
 main {
     max-width: 1000px;
-    min-height: 100vh;
+    flex: 1;
     margin-left: auto;
     margin-right: auto;
+    color: white;
 }
 
 footer {
-    box-shadow: 0 0px 4px rgb(0, 0, 0, 0.2);
+    color: white;
     text-align: center;
     padding: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
-footer p {
-    margin: 0;
-    color: #666;
+#trustpilot {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
 }
 
 button {
@@ -78,7 +87,7 @@ button {
 }
 
 table, th, td {
-    border: 2px solid black;
+    border: 2px solid white;
     border-collapse: collapse;
     padding: 5px;
 }
@@ -125,13 +134,35 @@ table, th, td {
 
 .index {
     text-align: center;
+    padding: 60px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: 3px 3px 3px black;
 }
 
 .index h1 {
-    font-size: 4rem;
+    font-size: 8rem;
+    animation-name: slide;
+    animation-duration: 1s;
 }
 
-.index h2 {
-    /* font-size: 2rem; */
+.index h3 {
+    font-size: 1.5rem;
+    animation-name: slide;
+    animation-duration: 2s;
+}
+
+@keyframes slide {
+    from {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
