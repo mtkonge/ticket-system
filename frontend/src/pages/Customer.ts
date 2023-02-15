@@ -5,16 +5,10 @@ import { generateId } from "../utils";
 export class Customer implements Component {
     private createTicketButtonId = generateId("createTicket");
 
-    public constructor(private context: Context) { }
+    public constructor(private context: Context) {}
 
     public render() {
         return html`
-            <div id="create-ticket-container" class="modal">
-                <div id="create-ticket-content" class="modal-content">
-                    <span id="close-modal" class="close">&times;</span>
-                    <p>Create ticket</p>
-                </div>
-            </div>
             <div id="customer-tickets-container">
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
@@ -37,25 +31,12 @@ export class Customer implements Component {
 
     hydrate(update: () => void): void {
         if (this.context.session === null) {
-            this.context.router.routeTo("/login")
+            this.context.router.routeTo("/login");
             return update();
         }
         domAddEvent(this.createTicketButtonId, "click", () => {
-            // domSelectId("create-ticket-container").style.display = "block";
-            this.context.router.routeTo("/create_ticket")
+            this.context.router.routeTo("/create_ticket");
             update();
         });
-        domAddEvent("close-modal", "click", () => {
-            domSelectId("create-ticket-container").style.display = "none";
-        });
-        document.body.onclick = (event) => {
-            try {
-                if (event.target == domSelectId("create-ticket-container")) {
-                    domSelectId("create-ticket-container").style.display = "none";
-                }
-            } catch {
-                document.body.onclick = null;
-            }
-        };
     }
 }
