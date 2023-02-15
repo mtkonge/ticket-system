@@ -94,3 +94,27 @@ status: `200` | `400` | `500`
     "msg": "...",
 }
 ```
+
+## user info
+
+`user/info`
+
+request:
+
+```ts
+{
+    token: string,
+}
+```
+
+response:
+
+```ts
+{
+    msg: string,
+    user_id?: string,
+    username?: string
+}
+```
+
+>>>>>>> 9403e3b (specify user info)
