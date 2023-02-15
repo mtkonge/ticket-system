@@ -14,13 +14,15 @@ export class Login implements Component {
     public constructor(
         private router: RouterPath,
         private session: ByRef<Session | null>,
-    ) { }
+    ) {}
 
     public render() {
         return html`
             <div class="auth-container" id="${this.loginContainerId}">
                 <h2>Login</h2>
-                ${this.errorMessage !== "" ? html`<p class="error-text">${this.errorMessage}</p>` : ""}
+                ${this.errorMessage !== ""
+                    ? html`<p class="error-text">${this.errorMessage}</p>`
+                    : ""}
                 <p class="error-text"></p>
                 <input
                     id="${this.usernameFieldId}"
@@ -45,14 +47,16 @@ export class Login implements Component {
     public hydrate(update: () => void): void {
         domAddEvent(this.loginButtonId, "click", async () => {
             const response = await loginUser({
-                username: domSelectId<HTMLInputElement>(this.usernameFieldId).value,
-                password: domSelectId<HTMLInputElement>(this.passwordFieldId).value,
+                username: domSelectId<HTMLInputElement>(this.usernameFieldId)
+                    .value,
+                password: domSelectId<HTMLInputElement>(this.passwordFieldId)
+                    .value,
             });
             if (response.ok) {
                 this.session.value = {
                     token: response.token!,
                     userId: -1,
-                    username: "<fixme>"
+                    username: "<fixme>",
                 };
                 this.router.routeTo("/");
             } else {
