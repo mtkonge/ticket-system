@@ -11,6 +11,12 @@ pub enum Role {
     Admin,
 }
 
+#[derive(Deserialize, Serialize)]
+pub enum Urgency {
+    Incident,
+    Request,
+}
+
 #[derive(Serialize)]
 pub struct Document {
     pub id: u64,
@@ -26,6 +32,7 @@ pub struct Ticket {
     pub creator: u64,
     pub assignee: u64,
     pub comments: Vec<TicketComment>,
+    pub urgency: Urgency,
 }
 
 #[derive(Serialize)]
@@ -228,6 +235,7 @@ impl TicketDb {
         &mut self,
         title: String,
         content: String,
+        urgency: Urgency,
         creator: u64,
         assignee: u64,
     ) -> Result<(), TicketDbError> {
@@ -236,6 +244,7 @@ impl TicketDb {
             id,
             title,
             content,
+            urgency,
             assignee,
             creator,
             comments: Vec::new(),

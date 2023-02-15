@@ -125,6 +125,7 @@ status: `200` | `400` | `500`
             id: 1024,
             title: "...",
             content: "...",
+            urgency: "Incident" | "Request",
             creator: 1024,
             assignee: 1024,
             comments: [
@@ -165,6 +166,7 @@ status: `200` | `400` | `500`
             content: "...",
             creator: 1024,
             assignee: 1024,
+            urgency: "Incident" | "Request",
             comments: [
                 {
                     id: 1024,
@@ -288,6 +290,7 @@ request:
     "token": "...",
     "title": "...",
     "content": "...",
+    urgency: "Incident" | "Request",
 }
 ```
 

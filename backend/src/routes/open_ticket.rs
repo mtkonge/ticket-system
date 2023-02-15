@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Role, TicketDb, TicketDbError},
+    db::{Role, TicketDb, TicketDbError, Urgency},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -13,6 +13,7 @@ use crate::{
 pub struct Request {
     token: String,
     title: String,
+    urgency: Urgency,
     content: String,
 }
 
@@ -69,7 +70,13 @@ async fn open_ticket(
         Err(_) => return internal_server_error("db error"),
     };
 
-    let add_ticket_success = db.add_ticket(request.title, request.content, creator_id, assignee);
+    let add_ticket_success = db.add_ticket(
+        request.title,
+        request.content,
+        request.urgency,
+        creator_id,
+        assignee,
+    );
 
     if add_ticket_success.is_err() {
         return internal_server_error("db error");
