@@ -203,7 +203,7 @@ fn should_edit_role() {
         panic!("first user should be an admin");
     };
 
-    db.edit_user_role(user.id.clone(), Role::LevelOne)
+    db.edit_user_role(&user.id.clone(), Role::LevelOne)
         .expect("should not fail with valid input");
 
     let user = db

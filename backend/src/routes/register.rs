@@ -14,8 +14,8 @@ pub struct Request {
 }
 
 #[derive(Serialize)]
-struct Response {
-    msg: String,
+struct Response<'a> {
+    msg: &'a str,
 }
 
 #[post("/user/register")]
@@ -35,6 +35,6 @@ async fn register(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>) 
     HttpResponse::Ok()
         .insert_header(ContentType::json())
         .json(Response {
-            msg: "user successfully created".to_string(),
+            msg: "user successfully created",
         })
 }

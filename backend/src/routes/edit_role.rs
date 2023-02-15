@@ -15,8 +15,8 @@ pub struct Request {
 }
 
 #[derive(Serialize)]
-struct Response {
-    msg: String,
+struct Response<'a> {
+    msg: &'a str,
 }
 
 #[post("/user/edit_role")]
@@ -49,6 +49,6 @@ async fn role_change(
     HttpResponse::Ok()
         .insert_header(ContentType::json())
         .json(Response {
-            msg: "user successfully created".to_string(),
+            msg: "role successfully edited",
         })
 }
