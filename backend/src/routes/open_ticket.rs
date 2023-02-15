@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Id, Role, TicketDb, TicketDbError},
+    db::{Role, TicketDb, TicketDbError},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -21,11 +21,11 @@ struct Response<'a> {
     msg: &'a str,
 }
 
-fn user_with_least_tasks(db: &TicketDb) -> Result<Id, &str> {
+fn user_with_least_tasks(db: &TicketDb) -> Result<u64, &str> {
     let mut user_ids = db
         .users_with_role(Role::LevelOne)
         .iter()
-        .map(|user| (user.id.0, 0))
+        .map(|user| (user.id, 0))
         .collect::<HashMap<u64, usize>>();
 
     if user_ids.is_empty() {
@@ -33,9 +33,9 @@ fn user_with_least_tasks(db: &TicketDb) -> Result<Id, &str> {
     }
 
     db.tickets().iter().for_each(|ticket| {
-        if user_ids.contains_key(&ticket.assignee.0) {
+        if user_ids.contains_key(&ticket.assignee) {
             let mutable_ref = user_ids
-                .get_mut(&ticket.assignee.0)
+                .get_mut(&ticket.assignee)
                 .expect("already filtered based on it existing");
             *mutable_ref += 1;
         }
@@ -46,7 +46,7 @@ fn user_with_least_tasks(db: &TicketDb) -> Result<Id, &str> {
         .min_by_key(|(_user_id, &value)| value)
         .expect("already checked whether it's empty");
 
-    Ok(Id(user_id))
+    Ok(user_id)
 }
 
 #[post("/ticket/open")]
@@ -119,10 +119,10 @@ fn should_pick_with_least_tasks() {
         .id
         .clone();
 
-    db.edit_user_role(&user_1, Role::LevelOne)
+    db.edit_user_role(user_1, Role::LevelOne)
         .expect("should not fail with valid input");
 
-    db.edit_user_role(&user_2.clone(), Role::LevelOne)
+    db.edit_user_role(user_2, Role::LevelOne)
         .expect("should not fail with valid input");
 
     db.add_ticket(
@@ -136,7 +136,7 @@ fn should_pick_with_least_tasks() {
     let user = user_with_least_tasks(&db).expect("should succeed with valid input");
 
     assert_eq!(
-        user.0, user_2.0,
+        user, user_2,
         "should pick user_2, with least assigned tasks"
     )
 }

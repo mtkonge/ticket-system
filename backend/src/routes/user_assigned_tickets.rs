@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{TicketDb, TicketDbError},
-    response_helper::{bad_request, internal_server_error, ResponseTicket},
+    db::{Ticket, TicketDb, TicketDbError},
+    response_helper::{bad_request, internal_server_error},
 };
 
 #[derive(Deserialize)]
@@ -15,7 +15,7 @@ pub struct Request {
 #[derive(Serialize)]
 struct Response<'a> {
     msg: &'a str,
-    tickets: Vec<ResponseTicket>,
+    tickets: Vec<&'a Ticket>,
 }
 
 #[post("/user/assigned")]
@@ -36,9 +36,7 @@ async fn user_assigned_tickets(
     let tickets = db
         .tickets()
         .iter()
-        .cloned()
-        .filter(|ticket| ticket.assignee.0 == user.id.0)
-        .map(|ticket| ticket.into())
+        .filter(|ticket| ticket.assignee == user.id)
         .collect();
 
     HttpResponse::Ok()

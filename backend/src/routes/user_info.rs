@@ -16,7 +16,7 @@ pub struct Request {
 struct Response<'a> {
     msg: &'a str,
     user_id: u64,
-    username: String,
+    username: &'a str,
     role: &'a Role,
 }
 
@@ -36,8 +36,8 @@ async fn user_info(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
         .insert_header(ContentType::json())
         .json(Response {
             msg: "",
-            user_id: user.id.0,
-            username: user.name.clone(),
+            user_id: user.id,
+            username: &user.name,
             role: &user.role,
         })
 }

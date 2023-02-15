@@ -1,7 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone)]
-pub struct Id(pub u64);
 pub struct Username(pub String);
 pub struct Password(pub String);
 
@@ -13,31 +11,31 @@ pub enum Role {
     Admin,
 }
 
-#[derive(Clone)]
+#[derive(Serialize)]
 pub struct Ticket {
-    pub id: Id,
+    pub id: u64,
     pub title: String,
     pub content: String,
-    pub creator: Id,
-    pub assignee: Id,
+    pub creator: u64,
+    pub assignee: u64,
     pub comments: Vec<TicketComment>,
 }
 
-#[derive(Clone)]
+#[derive(Serialize)]
 pub struct TicketComment {
-    pub id: Id,
+    pub id: u64,
     pub message: String,
-    pub user_id: Id,
+    pub user_id: u64,
 }
 
 pub struct Session {
-    pub id: Id,
-    pub user_id: Id,
+    pub id: u64,
+    pub user_id: u64,
     pub token: String,
 }
 
 pub struct User {
-    pub id: Id,
+    pub id: u64,
     pub name: String,
     pub password: String,
     pub role: Role,
@@ -65,11 +63,11 @@ impl TicketDb {
             users: Vec::new(),
         }
     }
-    pub fn edit_user_role(&mut self, user_id: &Id, role: Role) -> Result<(), TicketDbError> {
+    pub fn edit_user_role(&mut self, user_id: u64, role: Role) -> Result<(), TicketDbError> {
         let user = self
             .users
             .iter_mut()
-            .find(|user| user.id.0 == user_id.0)
+            .find(|user| user.id == user_id)
             .ok_or(TicketDbError::NotFound)?;
 
         user.role = role;
@@ -84,7 +82,7 @@ impl TicketDb {
             .ok_or(TicketDbError::NotFound)?;
         self.users
             .iter()
-            .find(|user| user.id.0 == session.user_id.0)
+            .find(|user| user.id == session.user_id)
             .ok_or(TicketDbError::NotFound)
     }
     pub fn user_from_name(&self, name: &str) -> Result<&User, TicketDbError> {
@@ -93,15 +91,15 @@ impl TicketDb {
             .find(|user| user.name == name)
             .ok_or(TicketDbError::NotFound)
     }
-    pub fn add_session(&mut self, token: &str, user_id: Id) -> Result<(), TicketDbError> {
+    pub fn add_session(&mut self, token: &str, user_id: u64) -> Result<(), TicketDbError> {
         let id = self.request_id();
         self.users
             .iter()
-            .find(|user| user.id.0 == user_id.0)
+            .find(|user| user.id == user_id)
             .ok_or(TicketDbError::NotFound)?;
 
         let session = Session {
-            id: Id(id),
+            id,
             user_id,
             token: token.to_owned(),
         };
@@ -128,7 +126,7 @@ impl TicketDb {
             Role::Consumer
         };
         let user = User {
-            id: Id(id),
+            id,
             name: name.0,
             password: password.0,
             role,
@@ -140,12 +138,12 @@ impl TicketDb {
         &mut self,
         title: String,
         content: String,
-        creator: Id,
-        assignee: Id,
+        creator: u64,
+        assignee: u64,
     ) -> Result<(), TicketDbError> {
         let id = self.request_id();
         let ticket = Ticket {
-            id: Id(id),
+            id,
             title,
             content,
             assignee,
@@ -221,7 +219,7 @@ fn should_edit_role() {
         panic!("first user should be an admin");
     };
 
-    db.edit_user_role(&user.id.clone(), Role::LevelOne)
+    db.edit_user_role(user.id, Role::LevelOne)
         .expect("should not fail with valid input");
 
     let user = db
@@ -248,19 +246,17 @@ fn users_with_role() {
     let user_1 = db
         .user_from_name("user 1")
         .expect("should not fail with valid input")
-        .id
-        .clone();
+        .id;
 
     let user_2 = db
         .user_from_name("user 2")
         .expect("should not fail with valid input")
-        .id
-        .clone();
+        .id;
 
-    db.edit_user_role(&user_1, Role::LevelOne)
+    db.edit_user_role(user_1, Role::LevelOne)
         .expect("should not fail with valid input");
 
-    db.edit_user_role(&user_2.clone(), Role::LevelOne)
+    db.edit_user_role(user_2, Role::LevelOne)
         .expect("should not fail with valid input");
 
     let level_one_users = db.users_with_role(Role::LevelOne);

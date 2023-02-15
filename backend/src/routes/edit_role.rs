@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Id, Role, TicketDb, TicketDbError},
+    db::{Role, TicketDb, TicketDbError},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -26,7 +26,7 @@ async fn edit_role(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
     let request = request.into_inner();
 
     let user = match db.user_from_session(&request.token) {
-        Ok(user) if user.id.0 == request.user_id => return bad_request("cannot edit own role"),
+        Ok(user) if user.id == request.user_id => return bad_request("cannot edit own role"),
         Ok(user) => user,
         Err(TicketDbError::NotFound) => return bad_request("invalid session"),
         Err(_) => return internal_server_error("db error"),
@@ -36,10 +36,7 @@ async fn edit_role(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
         return bad_request("unauthorized")
     };
 
-    if db
-        .edit_user_role(&Id(request.user_id), request.role)
-        .is_err()
-    {
+    if db.edit_user_role(request.user_id, request.role).is_err() {
         return internal_server_error("db error");
     };
 
