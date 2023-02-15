@@ -35,7 +35,7 @@ request:
     "token": "{token_string}",
     "id": 1024,
     "title": "...",
-    "content": ['a', 'b', 'c']
+    "content": "..."
 }
 ```
 
@@ -59,7 +59,7 @@ request:
 {
     "token": "{token_string}",
     "title": "...",
-    "content": ['a', 'b', 'c']
+    "content": "...",
 }
 ```
 

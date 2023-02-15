@@ -11,7 +11,7 @@ use crate::{
 pub struct Request {
     token: String,
     title: String,
-    content: Vec<u8>,
+    content: String,
 }
 
 #[derive(Serialize)]

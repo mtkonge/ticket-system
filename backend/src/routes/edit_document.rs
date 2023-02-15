@@ -12,7 +12,7 @@ pub struct Request {
     id: u64,
     token: String,
     title: String,
-    content: Vec<u8>,
+    content: String,
 }
 
 #[derive(Serialize)]

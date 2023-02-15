@@ -21,7 +21,7 @@ pub enum Urgency {
 pub struct Document {
     pub id: u64,
     pub title: String,
-    pub content: Vec<u8>,
+    pub content: String,
 }
 
 #[derive(Serialize)]
@@ -227,7 +227,7 @@ impl TicketDb {
         &mut self,
         id: u64,
         title: String,
-        content: Vec<u8>,
+        content: String,
     ) -> Result<(), TicketDbError> {
         match self.document_from_title(&title) {
             Ok(doc) if doc.id != id => Err(TicketDbError::Duplicate),
@@ -245,7 +245,7 @@ impl TicketDb {
 
         Ok(())
     }
-    pub fn add_document(&mut self, title: String, content: Vec<u8>) -> Result<(), TicketDbError> {
+    pub fn add_document(&mut self, title: String, content: String) -> Result<(), TicketDbError> {
         match self.document_from_title(&title) {
             Err(TicketDbError::NotFound) => Ok(()),
             Ok(_) => Err(TicketDbError::Duplicate),
@@ -306,13 +306,13 @@ fn should_add_and_find_user() {
 #[test]
 fn should_add_and_find_document() {
     let mut db = TicketDb::new();
-    db.add_document("document 1".to_string(), Vec::new())
+    db.add_document("document 1".to_string(), String::new())
         .expect("should add document");
 
-    db.add_document("document 2".to_string(), Vec::new())
+    db.add_document("document 2".to_string(), String::new())
         .expect("should add document");
 
-    db.add_document("document 1".to_string(), Vec::new())
+    db.add_document("document 1".to_string(), String::new())
         .expect_err("should fail with duplicate names");
 
     let doc = db
