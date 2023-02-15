@@ -13,7 +13,7 @@ export class Customer implements Component {
                 </div>
             </div>
             <div id="customer-tickets-container">
-                <button class="create-ticket" id="${this.createTicketButtonId}">
+                <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
                 <table id="ticket-table">

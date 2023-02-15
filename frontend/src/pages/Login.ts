@@ -34,8 +34,8 @@ export class Login implements Component {
                     type="password"
                     placeholder="password"
                 />
-                <button id="${this.loginButtonId}">Login</button>
-                <button id="cheat">Cheat</button>
+                <button id="${this.loginButtonId}" class="brand-button">Login</button>
+                <button id="cheat" class="brand-button">Cheat</button>
                 <p>
                     Don't have an account?
                     <a class="link" id="${this.loginLinkId}">Register</a>

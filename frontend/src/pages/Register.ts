@@ -34,7 +34,7 @@ export class Register implements Component {
                     type="password"
                     placeholder="password"
                 />
-                <button id="${this.registerButtonId}">Register</button>
+                <button id="${this.registerButtonId}" class="brand-button">Register</button>
 
                 <p>
                     Already have an account?
