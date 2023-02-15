@@ -1,7 +1,5 @@
-
 export type Session = {
-	token: string,
-	userId: number,
-	username: string,
+    token: string;
+    userId: number;
+    username: string;
 };
-

@@ -1,4 +1,4 @@
-import { registerUser, RegisterUserRequest } from "../api";
+import { loginUser, registerUser, RegisterUserRequest } from "../api";
 import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
 import { Session } from "../session";
 import { generateId, RouterPath } from "../utils";
@@ -52,11 +52,25 @@ export class Register implements Component {
                 password: domSelectId<HTMLInputElement>(this.passwordFieldId)
                     .value,
             };
-            const response = await registerUser(credentials);
-            if (response.ok) {
+            const registerResponse = await registerUser(credentials);
+            if (!registerResponse.ok) {
+                this.errorMessage = registerResponse.msg;
+            }
+            const loginResponse = await loginUser({
+                username: domSelectId<HTMLInputElement>(this.usernameFieldId)
+                    .value,
+                password: domSelectId<HTMLInputElement>(this.passwordFieldId)
+                    .value,
+            });
+            if (loginResponse.ok) {
+                this.session.value = {
+                    token: loginResponse.token!,
+                    userId: -1,
+                    username: "<fixme>",
+                };
                 this.router.routeTo("/");
             } else {
-                this.errorMessage = response.msg;
+                this.errorMessage = loginResponse.msg;
             }
             update();
         });
