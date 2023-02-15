@@ -20,10 +20,7 @@ struct Response<'a> {
 }
 
 #[post("/user/edit_role")]
-async fn role_change(
-    db: web::Data<RwLock<TicketDb>>,
-    request: web::Json<Request>,
-) -> impl Responder {
+async fn edit_role(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>) -> impl Responder {
     let mut db = (**db).write().await;
 
     let request = request.into_inner();
