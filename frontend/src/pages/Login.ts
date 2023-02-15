@@ -14,15 +14,15 @@ export class Login implements Component {
     public constructor(
         private router: RouterPath,
         private session: ByRef<Session | null>,
-    ) { }
+    ) {}
 
     public render() {
         return html`
             <div class="auth-container" id="${this.loginContainerId}">
                 <h2>Login</h2>
                 ${this.errorMessage !== ""
-                ? html`<p class="error-text">${this.errorMessage}</p>`
-                : ""}
+                    ? html`<p class="error-text">${this.errorMessage}</p>`
+                    : ""}
                 <p class="error-text"></p>
                 <input
                     id="${this.usernameFieldId}"
@@ -31,7 +31,7 @@ export class Login implements Component {
                 />
                 <input
                     id="${this.passwordFieldId}"
-                    type="text"
+                    type="password"
                     placeholder="password"
                 />
                 <button id="${this.loginButtonId}">Login</button>
@@ -54,7 +54,7 @@ export class Login implements Component {
             });
             if (response.ok) {
                 const infoResponse = await userInfo({
-                    token: response.token!
+                    token: response.token!,
                 });
                 this.session.value = {
                     token: response.token!,
