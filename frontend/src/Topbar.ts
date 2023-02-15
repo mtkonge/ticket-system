@@ -9,28 +9,37 @@ export class Topbar implements Component {
 
     private loginButton = generateId("login");
 
-    public constructor(private router: RouterPath, private session: ByRef<Session | null>) { }
+    public constructor(
+        private router: RouterPath,
+        private session: ByRef<Session | null>,
+    ) {}
 
     public render() {
         return html`
             <div class="topbar">
                 <div>
                     <h1>TicketSystem®</h1>
-                    <button id="${this.indexButtonId}"><span class="material-symbols-outlined">home</span></button>
+                    <button id="${this.indexButtonId}">
+                        <span class="material-symbols-outlined">home</span>
+                    </button>
                 </div>
                 <div class="text-buttons">
                     ${(() => {
-                if (this.session.value !== null) {
-                    return html`
-                        <button id="${this.customerButtonId}">I am a customer</button>
-                        <button id="${this.supporterButtonId}">I am an it-supporter punjabi no virus</button>
-                    `;
-                } else {
-                    return html`
-                        <button id="${this.loginButton}">Login</button>
-                    `;
-                }
-            })()}
+                        if (this.session.value !== null) {
+                            return html`
+                                <button id="${this.customerButtonId}">
+                                    I am a customer
+                                </button>
+                                <button id="${this.supporterButtonId}">
+                                    I am an it-supporter
+                                </button>
+                            `;
+                        } else {
+                            return html`
+                                <button id="${this.loginButton}">Login</button>
+                            `;
+                        }
+                    })()}
                 </div>
             </div>
         `;

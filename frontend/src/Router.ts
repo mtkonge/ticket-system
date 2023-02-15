@@ -5,18 +5,21 @@ import { Index } from "./pages/Index";
 import { RouterPath } from "./utils";
 import { Session } from "./session";
 import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
 
 export class Router implements Component {
     private indexPage = new Index();
     private customerPage = new Customer();
     private supporterPage = new Supporter();
     private loginPage: Login;
+    private registerPage: Register;
 
     public constructor(
         private routerPath: RouterPath,
         private session: ByRef<Session | null>,
     ) {
         this.loginPage = new Login(this.routerPath, this.session);
+        this.registerPage = new Register(this.routerPath, this.session);
     }
 
     public render() {
@@ -27,18 +30,20 @@ export class Router implements Component {
             return this.supporterPage.render();
         else if (this.routerPath.route() == "/login")
             return this.loginPage.render();
+        else if (this.routerPath.route() == "/register")
+            return this.registerPage.render();
         return "<img src='https://http.cat/404.jpg'>";
     }
 
     public children() {
-        if (this.routerPath.route() == "/")
-            return [this.indexPage];
+        if (this.routerPath.route() == "/") return [this.indexPage];
         else if (this.routerPath.route() == "/customer")
             return [this.customerPage];
         else if (this.routerPath.route() == "/supporter")
             return [this.supporterPage];
-        else if (this.routerPath.route() == "/login")
-            return [this.loginPage];
+        else if (this.routerPath.route() == "/login") return [this.loginPage];
+        else if (this.routerPath.route() == "/register")
+            return [this.registerPage];
         else return [];
     }
 
@@ -49,5 +54,4 @@ export class Router implements Component {
             update();
         };
     }
-
 }

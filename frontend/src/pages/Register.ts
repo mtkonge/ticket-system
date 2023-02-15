@@ -2,12 +2,12 @@ import { ByRef, Component, domAddEvent, html } from "../framework";
 import { Session } from "../session";
 import { generateId, RouterPath } from "../utils";
 
-export class Login implements Component {
+export class Register implements Component {
     private usernameFieldId = generateId("usernameField");
     private passwordFieldId = generateId("usernameField");
-    private loginButtonId = generateId("loginButton");
-    private loginContainerId = generateId("loginContainer");
-    private loginLinkId = generateId("registerLink");
+    private registerButtonId = generateId("registerButton");
+    private registerContainerId = generateId("registerContainer");
+    private registerLinkId = generateId("registerLink");
 
     public constructor(
         private router: RouterPath,
@@ -16,8 +16,8 @@ export class Login implements Component {
 
     public render() {
         return html`
-            <div class="auth-container" id="${this.loginContainerId}">
-                <h2>Login</h2>
+            <div class="auth-container" id="${this.registerContainerId}">
+                <h2>Register</h2>
                 <input
                     id="${this.usernameFieldId}"
                     type="text"
@@ -28,18 +28,17 @@ export class Login implements Component {
                     type="text"
                     placeholder="password"
                 />
-                <button id="${this.loginButtonId}">Login</button>
+                <button id="${this.registerButtonId}">Register</button>
                 <p>
-                    Don't have an account?
-                    <a class="link" id="${this.loginLinkId}">Register</a>
-                    here
+                    Already have an account?
+                    <a class="link" id="${this.registerLinkId}">Login</a> here
                 </p>
             </div>
         `;
     }
 
     public hydrate(update: () => void): void {
-        domAddEvent(this.loginButtonId, "click", () => {
+        domAddEvent(this.registerButtonId, "click", () => {
             this.session.value = {
                 id: 0,
                 userId: 0,
@@ -48,8 +47,8 @@ export class Login implements Component {
             this.router.routeTo("/");
             update();
         });
-        domAddEvent(this.loginLinkId, "click", () => {
-            this.router.routeTo("/register");
+        domAddEvent(this.registerLinkId, "click", () => {
+            this.router.routeTo("/login");
             update();
         });
     }
