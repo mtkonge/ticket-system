@@ -3,16 +3,15 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Role, TicketDb, TicketDbError, Urgency},
+    db::{Role, TicketDb, TicketDbError},
     response_helper::{bad_request, internal_server_error},
 };
 
 #[derive(Deserialize)]
 pub struct Request {
-    id: u64,
     token: String,
-    title: String,
-    urgency: Urgency,
+    id: u64,
+    assignee: u64,
 }
 
 #[derive(Serialize)]
@@ -20,8 +19,8 @@ struct Response<'a> {
     msg: &'a str,
 }
 
-#[post("/ticket/edit")]
-async fn edit_ticket(
+#[post("/ticket/reassign")]
+async fn reassign_ticket(
     db: web::Data<RwLock<TicketDb>>,
     request: web::Json<Request>,
 ) -> impl Responder {
@@ -35,18 +34,12 @@ async fn edit_ticket(
         Err(_) => return internal_server_error("db error"),
     };
 
-    let ticket = match db.ticket_from_id(request.id) {
-        Ok(ticket) => ticket,
-        Err(TicketDbError::NotFound) => return bad_request("invalid id"),
-        Err(_) => return internal_server_error("db error"),
-    };
-
     match user.role {
-        Role::Consumer if ticket.creator != user.id => return bad_request("unauthorized"),
-        Role::Admin | Role::LevelTwo | Role::LevelOne | Role::Consumer => (),
+        Role::Admin | Role::LevelTwo | Role::LevelOne => (),
+        Role::Consumer => return bad_request("unauthorized"),
     }
 
-    match db.edit_ticket(request.id, Some(request.title), None, Some(request.urgency)) {
+    match db.edit_ticket(request.id, None, Some(request.assignee), None) {
         Ok(_) => (),
         Err(TicketDbError::NotFound) => return bad_request("invalid id"),
         Err(_) => return internal_server_error("db error"),
@@ -55,6 +48,6 @@ async fn edit_ticket(
     HttpResponse::Ok()
         .insert_header(ContentType::json())
         .json(Response {
-            msg: "ticket successfully edited",
+            msg: "document successfully edited",
         })
 }

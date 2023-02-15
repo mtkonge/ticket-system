@@ -9,6 +9,7 @@ use crate::db::TicketDb;
 use actix_cors::Cors;
 use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
+use routes::reassign_ticket::reassign_ticket;
 use routes::{
     all_documents::all_documents, all_users::all_users, create_document::create_document,
     edit_document::edit_document, edit_role::edit_role, edit_ticket::edit_ticket,
@@ -31,6 +32,7 @@ async fn main() -> std::io::Result<()> {
                     .service(register)
                     .service(login)
                     .service(edit_role)
+                    .service(reassign_ticket)
                     .service(open_ticket)
                     .service(user_info)
                     .service(all_users)

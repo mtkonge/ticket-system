@@ -201,8 +201,9 @@ impl TicketDb {
     pub fn edit_ticket(
         &mut self,
         id: u64,
-        assignee: u64,
-        urgency: Urgency,
+        title: Option<String>,
+        assignee: Option<u64>,
+        urgency: Option<Urgency>,
     ) -> Result<(), TicketDbError> {
         let ticket = self
             .tickets
@@ -210,8 +211,15 @@ impl TicketDb {
             .find(|ticket| ticket.id == id)
             .ok_or(TicketDbError::NotFound)?;
 
-        ticket.assignee = assignee;
-        ticket.urgency = urgency;
+        if let Some(title) = title {
+            ticket.title = title;
+        }
+        if let Some(assignee) = assignee {
+            ticket.assignee = assignee;
+        }
+        if let Some(urgency) = urgency {
+            ticket.urgency = urgency;
+        }
 
         Ok(())
     }

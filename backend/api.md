@@ -304,6 +304,80 @@ status: `200` | `400` | `500`
 }
 ```
 
+## reassign ticket
+
+`ticket/reassign`
+
+request: 
+
+```json
+{
+    "token": "...",
+    "id": 1024,
+    "assignee": 1024
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "...",
+}
+```
+
+## reassign ticket
+
+`ticket/reassign`
+
+request: 
+
+```json
+{
+    "token": "...",
+    "id": 1024,
+    "assignee": 1024,
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "...",
+}
+```
+
+
+## edit ticket
+
+`ticket/edit`
+
+request: 
+
+```json
+{
+    "token": "...",
+    "id": 1024,
+    "title": "...",
+    "urgency": "Incident" | "Request",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "...",
+}
+```
+
 ## user info
 
 `user/info`
