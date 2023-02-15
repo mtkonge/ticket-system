@@ -31,8 +31,8 @@ pub struct Ticket {
 #[derive(Serialize)]
 pub struct TicketComment {
     pub id: u64,
-    pub message: String,
-    pub user_id: u64,
+    pub content: String,
+    pub creator: u64,
 }
 
 pub struct Session {
@@ -71,6 +71,15 @@ impl TicketDb {
             users: Vec::new(),
             documents: Vec::new(),
         }
+    }
+    pub fn ticket_from_id(&self, id: u64) -> Result<&Ticket, TicketDbError> {
+        let ticket = self
+            .tickets
+            .iter()
+            .find(|ticket| ticket.id == id)
+            .ok_or(TicketDbError::NotFound)?;
+
+        Ok(ticket)
     }
     pub fn edit_user_role(&mut self, user_id: u64, role: Role) -> Result<(), TicketDbError> {
         let user = self
@@ -153,6 +162,33 @@ impl TicketDb {
             role,
         };
         self.users.push(user);
+        Ok(())
+    }
+    pub fn add_ticket_comment(
+        &mut self,
+        ticket_id: u64,
+        creator: u64,
+        content: String,
+    ) -> Result<(), TicketDbError> {
+        self.tickets
+            .iter()
+            .find(|ticket| ticket.id == ticket_id)
+            .ok_or(TicketDbError::NotFound)?;
+
+        let id = self.request_id();
+
+        let ticket = self
+            .tickets
+            .iter_mut()
+            .find(|ticket| ticket.id == ticket_id)
+            .ok_or(TicketDbError::NotFound)?;
+
+        ticket.comments.push(TicketComment {
+            id,
+            creator,
+            content,
+        });
+
         Ok(())
     }
     pub fn edit_document(

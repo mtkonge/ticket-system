@@ -7,6 +7,7 @@ pub mod load_assets;
 pub mod load_html;
 pub mod login;
 pub mod open_ticket;
+pub mod post_comment;
 pub mod register;
 pub mod user_assigned_tickets;
 pub mod user_created_tickets;

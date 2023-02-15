@@ -1,5 +1,29 @@
 # api
 
+## post comment
+
+`ticket/comment`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+    "id": 1024,
+    "content": "..."
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
 ## edit document
 
 `document/edit`
