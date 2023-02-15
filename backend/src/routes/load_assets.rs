@@ -1,5 +1,5 @@
-use crate::response_helper::html_default_response;
-use actix_web::{get, routes, web, HttpRequest, HttpResponse, Responder};
+use crate::response_helper::{bad_request, html_default_response};
+use actix_web::{routes, web, HttpRequest, HttpResponse, Responder};
 use std::{fs, io, path::Path};
 
 fn file_extension_mime_type<'a>(extension: &str) -> &'a str {
@@ -19,8 +19,15 @@ fn file_extension_mime_type<'a>(extension: &str) -> &'a str {
 pub async fn load_assets(_: HttpRequest, path: web::Path<String>) -> impl Responder {
     let path = Path::new("../frontend").join(Path::new(&*path));
 
-    let file_extension = path.extension().unwrap().to_str().unwrap();
-    let mime_type = file_extension_mime_type(file_extension);
+    let Some(file_extension) = path.extension() else {
+        return bad_request("invalid file extension");
+    };
+
+    let Some(file_extension) = file_extension.to_str() else {
+        return bad_request("invalid file extension");
+    };
+
+    let mime_type = file_extension_mime_type(&file_extension);
 
     match fs::read(path) {
         Ok(content) => HttpResponse::Ok().content_type(mime_type).body(content),

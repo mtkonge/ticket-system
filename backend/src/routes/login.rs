@@ -28,22 +28,22 @@ async fn login(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>) -> 
 
     let user = match db.user_from_name(&request.username) {
         Ok(user) => user,
-        Err(TicketDbError::NotFound) => return bad_request("invalid login".to_string()),
+        Err(TicketDbError::NotFound) => return bad_request("invalid login"),
         Err(TicketDbError::Duplicate) => unreachable!(),
     };
 
     if user.password != request.password {
-        return bad_request("invalid login".to_string());
+        return bad_request("invalid login");
     }
 
     let Ok(session) = random_valid_string() else {
-        return internal_server_error("token error".to_string());
+        return internal_server_error("token error");
     };
 
     let id = user.id.clone();
 
     if db.add_session(&session, id).is_err() {
-        return internal_server_error("db error".to_string());
+        return internal_server_error("db error");
     };
 
     HttpResponse::Ok()

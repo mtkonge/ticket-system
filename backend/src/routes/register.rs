@@ -31,9 +31,9 @@ async fn register(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>) 
     );
 
     if let Err(TicketDbError::Duplicate) = add_user_success {
-        return bad_request("invalid username".to_string());
+        return bad_request("invalid username");
     } else if add_user_success.is_err() {
-        internal_server_error("db error".to_string());
+        return internal_server_error("db error");
     }
 
     HttpResponse::Ok()
