@@ -1,6 +1,6 @@
 import { ByRef, Component, domAddEvent, html } from "./framework";
 import { Session } from "./session";
-import { generateId, RouterPath } from "./utils";
+import { generateId, Router } from "./utils";
 
 export class Topbar implements Component {
     private indexButtonId = generateId("index");
@@ -12,7 +12,7 @@ export class Topbar implements Component {
     private logoutButton = generateId("logout");
 
     public constructor(
-        private router: RouterPath,
+        private router: Router,
         private session: ByRef<Session | null>,
     ) { }
 

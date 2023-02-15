@@ -1,11 +1,11 @@
 import { Session } from "../session"
 import { ByRef, Component, html } from "../framework"
-import { RouterPath } from "../utils";
+import { Router } from "../utils";
 
 
 export class CreateTicket implements Component {
     public constructor(
-        private router: RouterPath,
+        private router: Router,
         private session: ByRef<Session | null>,
     ) { }
 

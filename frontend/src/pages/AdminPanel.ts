@@ -1,7 +1,7 @@
 import { allUsers, editUserRole, UserInfo } from "../api";
 import { ByRef, Component, domAddEvent, domSelectId, fetched, html } from "../framework"
 import { Session, UserRole } from "../session";
-import { generateId, RouterPath } from "../utils";
+import { generateId, Router } from "../utils";
 
 
 export class AdminPanel implements Component {
@@ -15,7 +15,7 @@ export class AdminPanel implements Component {
     private currentUserInfo: UserInfo | null = null;
 
     public constructor(
-        public router: RouterPath,
+        public router: Router,
         public session: ByRef<Session | null>,
     ) { }
 

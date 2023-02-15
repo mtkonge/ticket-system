@@ -1,7 +1,7 @@
 import { loginUser, registerUser, RegisterUserRequest, userInfo } from "../api";
 import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
 import { Session } from "../session";
-import { generateId, RouterPath } from "../utils";
+import { generateId, Router } from "../utils";
 
 export class Register implements Component {
     private usernameFieldId = generateId("usernameField");
@@ -12,7 +12,7 @@ export class Register implements Component {
     private errorMessage = "";
 
     public constructor(
-        private router: RouterPath,
+        private router: Router,
         private session: ByRef<Session | null>,
     ) { }
 

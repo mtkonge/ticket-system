@@ -1,7 +1,7 @@
 import { loginUser, userInfo } from "../api";
 import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
 import { Session } from "../session";
-import { generateId, RouterPath } from "../utils";
+import { generateId, Router } from "../utils";
 
 export class Login implements Component {
     private usernameFieldId = generateId("usernameField");
@@ -16,7 +16,7 @@ export class Login implements Component {
     private devAdminLoginId = generateId();
 
     public constructor(
-        private router: RouterPath,
+        private router: Router,
         private session: ByRef<Session | null>,
     ) { }
 

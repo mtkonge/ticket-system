@@ -2,13 +2,13 @@ import { Customer } from "./pages/Customer";
 import { Supporter } from "./pages/Supporter";
 import { ByRef, Component } from "./framework";
 import { Index } from "./pages/Index";
-import { RouterPath } from "./utils";
+import { Router } from "./utils";
 import { Session } from "./session";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { AdminPanel } from "./pages/AdminPanel";
 
-export class Router implements Component {
+export class RouterPage implements Component {
     private indexPage = new Index();
     private customerPage = new Customer();
     private supporterPage = new Supporter();
@@ -17,7 +17,7 @@ export class Router implements Component {
     private adminPanelPage: AdminPanel;
 
     public constructor(
-        private routerPath: RouterPath,
+        private routerPath: Router,
         private session: ByRef<Session | null>,
     ) {
         this.loginPage = new Login(this.routerPath, this.session);

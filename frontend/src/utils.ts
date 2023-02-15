@@ -11,7 +11,7 @@ export function generateId(name: string = "id") {
 	return `${name}_${randomString(10)}`
 }
 
-export class RouterPath {
+export class Router {
 	public currentRoute: string;
 
 	public constructor() {
