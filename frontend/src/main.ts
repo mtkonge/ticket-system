@@ -1,8 +1,13 @@
-import { initiaizeApp, byRef } from "./framework";
+import { Context } from "./Context";
+import { initiaizeApp } from "./framework";
 import { Layout } from "./Layout";
-import { Session } from "./session";
+import { Router } from "./utils";
 
-let session = byRef<Session | null>(null);
+let context: Context = {
+    router: new Router(),
+    session: null,
+}
 
-initiaizeApp(new Layout(session));
+initiaizeApp(new Layout(context));
+
 
