@@ -1,6 +1,6 @@
-import { ByRef, Component, domAddEvent, html } from "./framework";
-import { Session } from "./session";
-import { generateId, Router } from "./utils";
+import { Context } from "./Context";
+import { Component, domAddEvent, html } from "./framework";
+import { generateId } from "./utils";
 
 export class Topbar implements Component {
     private indexButtonId = generateId("index");
@@ -12,8 +12,7 @@ export class Topbar implements Component {
     private logoutButton = generateId("logout");
 
     public constructor(
-        private router: Router,
-        private session: ByRef<Session | null>,
+        private context: Context
     ) { }
 
     public render() {
@@ -27,27 +26,27 @@ export class Topbar implements Component {
                     </button>
                 </div>
                 <div class="text-buttons">
-                    ${this.session.value?.role === "Admin" ? html`
+                    ${this.context.session?.role === "Admin" ? html`
                         <button id="${this.adminPanelButtonId}">
                             Admin panel
                         </button>
                     ` : ""}
-                    ${this.session.value !== null ? html`
+                    ${this.context.session !== null ? html`
                         <button id="${this.customerButtonId}">
                             My tickets
                         </button>
                     ` : ""}
-                    ${this.session.value !== null && this.session.value?.role !== "Consumer" ? html`
+                    ${this.context.session !== null && this.context.session?.role !== "Consumer" ? html`
                         <button id="${this.supporterButtonId}">
                             Assigned tickets
                         </button>
                     ` : ""}
-                    ${this.session.value === null ? html`
+                    ${this.context.session === null ? html`
                         <button id="${this.loginButton}">
                             Login
                         </button>
                     ` : ""}
-                    ${this.session.value !== null ? html`
+                    ${this.context.session !== null ? html`
                         <button id="${this.logoutButton}">
                             Logout
                         </button>
@@ -58,37 +57,37 @@ export class Topbar implements Component {
     }
     public hydrate(update: () => void) {
         domAddEvent(this.indexButtonId, "click", () => {
-            this.router.routeTo("/");
+            this.context.router.routeTo("/");
             update();
         });
-        if (this.session.value?.role === "Admin") {
+        if (this.context.session?.role === "Admin") {
             domAddEvent(this.adminPanelButtonId, "click", () => {
-                this.router.routeTo("/admin_panel");
+                this.context.router.routeTo("/admin_panel");
                 update();
             })
         }
-        if (this.session.value !== null) {
+        if (this.context.session !== null) {
             domAddEvent(this.customerButtonId, "click", () => {
-                this.router.routeTo("/customer");
+                this.context.router.routeTo("/customer");
                 update();
             });
         }
-        if (this.session.value !== null && this.session.value?.role !== "Consumer") {
+        if (this.context.session !== null && this.context.session?.role !== "Consumer") {
             domAddEvent(this.supporterButtonId, "click", () => {
-                this.router.routeTo("/supporter");
+                this.context.router.routeTo("/supporter");
                 update();
             });
         }
-        if (this.session.value === null) {
+        if (this.context.session === null) {
             domAddEvent(this.loginButton, "click", () => {
-                this.router.routeTo("/login");
+                this.context.router.routeTo("/login");
                 update();
             });
         }
-        if (this.session.value !== null) {
+        if (this.context.session !== null) {
             domAddEvent(this.logoutButton, "click", () => {
-                this.session.value = null;
-                this.router.routeTo("/");
+                this.context.session = null;
+                this.context.router.routeTo("/");
                 update();
             });
         }
