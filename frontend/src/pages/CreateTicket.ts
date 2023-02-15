@@ -1,7 +1,7 @@
-import { Session } from "../session"
-import { ByRef, Component, domAddEvent, html } from "../framework"
-import { generateId, Router } from "../utils";
+import { Component, domAddEvent, html } from "../framework"
+import { generateId } from "../utils";
 import { openTicket } from "../api";
+import { Context } from "../Context";
 
 
 export class CreateTicket implements Component {
@@ -10,8 +10,7 @@ export class CreateTicket implements Component {
     private formId = generateId();
 
     public constructor(
-        private router: Router,
-        private session: ByRef<Session | null>,
+        private context: Context,
     ) { }
 
     public render() {
@@ -34,8 +33,8 @@ export class CreateTicket implements Component {
     }
 
     public hydrate(update: () => void): void {
-        if (this.session.value === null) {
-            this.router.routeTo("/login");
+        if (this.context.session === null) {
+            this.context.router.routeTo("/login");
             return update();
         }
 
@@ -43,7 +42,7 @@ export class CreateTicket implements Component {
             event.preventDefault();
             const form = new FormData(event.target as HTMLFormElement)
             const response = await openTicket({
-                token: this.session.value!.token,
+                token: this.context.session!.token,
                 title: form.get("title")!.toString(),
                 content: form.get("content")!.toString(),
                 urgency: form.get("type")!.toString() as "Incident" | "Request",
@@ -51,7 +50,7 @@ export class CreateTicket implements Component {
             if (!response.ok) {
                 this.errorMessage = response.msg;
             } else {
-                this.router.routeTo("/customer");
+                this.context.router.routeTo("/customer");
             }
             update();
         })
