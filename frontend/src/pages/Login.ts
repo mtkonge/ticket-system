@@ -11,10 +11,6 @@ export class Login implements Component {
     private loginLinkId = generateId("registerLink");
     private errorMessage = "";
 
-    private devConsumerLoginId = generateId();
-    private devLevelOneLoginId = generateId();
-    private devAdminLoginId = generateId();
-
     public constructor(
         private context: Context,
     ) { }
@@ -38,9 +34,6 @@ export class Login implements Component {
                     placeholder="password"
                 />
                 <button id="${this.loginButtonId}" class="brand-button">Login</button>
-                <button id="${this.devConsumerLoginId}" class="brand-button">Dev Consumer Login</button>
-                <button id="${this.devLevelOneLoginId}" class="brand-button">Dev Level One Login</button>
-                <button id="${this.devAdminLoginId}" class="brand-button">Dev Admin Login</button>
                 <p>
                     Don't have an account?
                     <a class="link" id="${this.loginLinkId}">Register</a>
@@ -72,36 +65,6 @@ export class Login implements Component {
             } else {
                 this.errorMessage = response.msg;
             }
-            update();
-        });
-        domAddEvent(this.devLevelOneLoginId, "click", () => {
-            this.context.session = {
-                token: "123",
-                userId: 0,
-                username: "testuser",
-                role: "LevelOne",
-            };
-            this.context.router.routeTo("/");
-            update();
-        });
-        domAddEvent(this.devConsumerLoginId, "click", () => {
-            this.context.session = {
-                token: "123",
-                userId: 0,
-                username: "testuser",
-                role: "Consumer",
-            };
-            this.context.router.routeTo("/");
-            update();
-        });
-        domAddEvent(this.devAdminLoginId, "click", () => {
-            this.context.session = {
-                token: "123",
-                userId: 0,
-                username: "testadmin",
-                role: "Admin",
-            };
-            this.context.router.routeTo("/");
             update();
         });
         domAddEvent(this.loginLinkId, "click", () => {
