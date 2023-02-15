@@ -35,6 +35,7 @@ export class Login implements Component {
                     placeholder="password"
                 />
                 <button id="${this.loginButtonId}">Login</button>
+                <button id="cheat">Cheat</button>
                 <p>
                     Don't have an account?
                     <a class="link" id="${this.loginLinkId}">Register</a>
@@ -66,6 +67,17 @@ export class Login implements Component {
             } else {
                 this.errorMessage = response.msg;
             }
+            update();
+        });
+        domAddEvent("cheat", "click", () => {
+            this.session.value = {
+                token: "123",
+                userId: 0,
+                username: "testuser",
+                role: "LevelOne",
+            };
+            console.log("test");
+            this.router.routeTo("/");
             update();
         });
         domAddEvent(this.loginLinkId, "click", () => {
