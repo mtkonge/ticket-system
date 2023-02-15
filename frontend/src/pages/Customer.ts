@@ -1,8 +1,10 @@
 import { Component, domAddEvent, domSelectId, html } from "../framework";
-import { generateId } from "../utils";
+import { generateId, Router } from "../utils";
 
 export class Customer implements Component {
     private createTicketButtonId = generateId("createTicket");
+
+    public constructor(private router: Router) { }
 
     public render() {
         return html`
@@ -34,15 +36,20 @@ export class Customer implements Component {
 
     hydrate(update: () => void): void {
         domAddEvent(this.createTicketButtonId, "click", () => {
-            domSelectId("create-ticket-container").style.display = "block";
+            // domSelectId("create-ticket-container").style.display = "block";
+            this.router.routeTo("/create_ticket")
             update();
         });
         domAddEvent("close-modal", "click", () => {
             domSelectId("create-ticket-container").style.display = "none";
         });
         document.body.onclick = (event) => {
-            if (event.target == domSelectId("create-ticket-container")) {
-                domSelectId("create-ticket-container").style.display = "none";
+            try {
+                if (event.target == domSelectId("create-ticket-container")) {
+                    domSelectId("create-ticket-container").style.display = "none";
+                }
+            } catch {
+                document.body.onclick = null;
             }
         };
     }
