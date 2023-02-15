@@ -37,8 +37,10 @@ export class AdminPanel implements Component {
         `;
     }
 
-    public async hydrate(update: () => void): void {
+    public hydrate(update: () => void): void {
+        (async () => {
 
+        })();
     }
 }
 
