@@ -101,6 +101,44 @@ status: `200` | `400` | `500`
 }
 ```
 
+## one ticket
+
+`ticket/one`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+    "id": 1234,
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+    "ticket": {
+        id: 1024,
+        title: "...",
+        content: "...",
+        urgency: "Incident" | "Request",
+        creator: 1024,
+        assignee: 1024,
+        comments: [
+            {
+                id: 1024,
+                message: "...",
+                user_id: 1024,
+            }
+        ]
+    }
+}
+```
+
 ## user created tickets
 
 `user/opened`

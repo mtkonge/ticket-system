@@ -7,6 +7,7 @@ pub mod edit_ticket;
 pub mod load_assets;
 pub mod load_html;
 pub mod login;
+pub mod one_ticket;
 pub mod open_ticket;
 pub mod post_comment;
 pub mod reassign_ticket;
