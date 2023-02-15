@@ -76,7 +76,6 @@ export class Login implements Component {
                 username: "testuser",
                 role: "LevelOne",
             };
-            console.log("test");
             this.router.routeTo("/");
             update();
         });
