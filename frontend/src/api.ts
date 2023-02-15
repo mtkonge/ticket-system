@@ -1,5 +1,32 @@
 import { UserRole } from "./session";
 
+export type UserInfo = {
+    id: number,
+    name: string,
+    role: UserRole,
+}
+
+export type AllUsersRequest = {
+    token: string,
+}
+
+export type AllUsersResponse = {
+    ok: boolean,
+    users?: UserInfo[],
+}
+
+export async function allUsers(request: AllUsersRequest): Promise<AllUsersResponse> {
+    const response = await fetch("/api/user/all", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+
 export type EditUserRoleRequest = {
     token: string;
     user_id: number;

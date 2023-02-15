@@ -22,7 +22,7 @@ export class Router implements Component {
     ) {
         this.loginPage = new Login(this.routerPath, this.session);
         this.registerPage = new Register(this.routerPath, this.session);
-        this.adminPanelPage = new AdminPanel(this.session);
+        this.adminPanelPage = new AdminPanel(this.routerPath, this.session);
     }
 
     public render() {
