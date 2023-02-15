@@ -1,18 +1,21 @@
 import { TextInput } from "../TextInput";
-import { Component, byRef } from "../framework";
+import { Component, byRef, html } from "../framework";
 
 export class Index implements Component {
-	private state = byRef("test");
-	private textInput = new TextInput(this.state);
 
 	public render() {
-		return /*html*/`
-			<h1>${this.state.value}</h1>
-			${this.textInput.render()}
+		return html`
+			<div class="index">
+				<h1>Enterprise TicketSystem</h1>
+				<h3>
+					"I kan ikke nå at lave et ticket-system fra bunden." - Bjarne 2023
+				</h3>
+				<img src="https://media.istockphoto.com/photos/business-development-to-success-and-growing-growth-concept-pointing-picture-id1203745988" alt="lars andersen">
+			</div>
 		`;
 	}
 
 	public children() {
-		return [this.textInput];
+		return [];
 	}
 }

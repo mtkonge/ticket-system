@@ -106,5 +106,19 @@ table, th, td {
 }
 
 .error-text {
-    
+    margin: 0;
+    color: #F00;
 }
+
+.index {
+    text-align: center;
+}
+
+.index h1 {
+    font-size: 4rem;
+}
+
+.index h2 {
+    /* font-size: 2rem; */
+}
+
