@@ -6,7 +6,7 @@ import { Router } from "./utils";
 let context: Context = {
     router: new Router(),
     session: null,
-    currentTicketEditId: null,
+    currentTicketEdit: null,
 }
 
 initiaizeApp(new Layout(context));
