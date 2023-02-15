@@ -1,7 +1,6 @@
-import { allUsers, editUserRole, UserInfo } from "../api";
+import { allUsers, editUserRole, UserInfo, UserRole } from "../api";
 import { Context } from "../Context";
 import { Component, domAddEvent, domSelectId, fetched, html } from "../framework"
-import { UserRole } from "../session";
 import { generateId } from "../utils";
 
 

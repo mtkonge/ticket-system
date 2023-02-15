@@ -1,6 +1,7 @@
-import { UserRole } from "./session";
 
 export type SessionToken = { token: string };
+
+export type UserRole = "Consumer" | "LevelOne" | "LevelTwo" | "Admin";
 
 export type UserInfo = {
     id: number,

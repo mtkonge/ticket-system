@@ -1,5 +1,4 @@
-
-export type UserRole = "Consumer" | "LevelOne" | "LevelTwo" | "Admin";
+import { UserRole } from "./api";
 
 export type Session = {
 	token: string;
