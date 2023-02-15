@@ -1,5 +1,5 @@
-import { Component } from "./Component";
-import { ByRef, domSelectId, generateId } from "./utils";
+import { Component, ByRef, domSelectId, } from "./framework";
+import { generateId } from "./utils";
 
 export class TextInput implements Component {
 	private buttonId = generateId("button");

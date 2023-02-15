@@ -1,12 +1,18 @@
-import { Component } from "./Component"
+import { Component, ByRef } from "./framework"
 import { Router } from "./Router";
+import { Session } from "./session";
 import { Topbar } from "./Topbar";
 import { RouterPath } from "./utils";
 
 export class Layout implements Component {
 	private routerPath = new RouterPath();
 	private router = new Router(this.routerPath);
-	private topbar = new Topbar(this.routerPath);
+	private topbar: Topbar;
+	public constructor(
+		private session: ByRef<Session | null>,
+	) {
+		this.topbar = new Topbar(this.routerPath, this.session);
+	}
 
 	public children() { return [this.topbar, this.router]; }
 

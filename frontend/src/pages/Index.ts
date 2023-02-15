@@ -1,6 +1,5 @@
 import { TextInput } from "../TextInput";
-import { Component } from "../Component";
-import { byRef } from "../utils";
+import { Component, byRef } from "../framework";
 
 export class Index implements Component {
 	private state = byRef("test");

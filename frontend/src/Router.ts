@@ -1,6 +1,6 @@
 import { Customer } from "./pages/Customer";
 import { Supporter } from "./pages/Supporter";
-import { Component } from "./Component";
+import { Component } from "./framework";
 import { Index } from "./pages/Index";
 import { RouterPath } from "./utils";
 

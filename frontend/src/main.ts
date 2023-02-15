@@ -1,18 +1,8 @@
-import { Component } from "./Component";
+import { initiaizeApp, byRef } from "./framework";
 import { Layout } from "./Layout";
+import { Session } from "./session";
 
-function hydrateChildren(component: Component, update: () => void) {
-	component.hydrate && component.hydrate(update);
-	component.children && component.children().forEach(child => hydrateChildren(child, update));
-}
+let session = byRef<Session | null>(null);
 
-function rerenderAndHydrate(main: Component) {
-	document.body.innerHTML = main.render();
-	requestAnimationFrame(() => {
-		hydrateChildren(main, () => rerenderAndHydrate(main));
-	});
-}
-
-const mainPage = new Layout();
-rerenderAndHydrate(mainPage);
+initiaizeApp(new Layout(session));
 

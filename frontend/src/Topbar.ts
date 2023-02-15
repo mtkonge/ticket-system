@@ -1,15 +1,16 @@
-import { Component } from "./Component";
-import { domSelectId, generateId, RouterPath } from "./utils";
+import { ByRef, Component, domAddEvent, html } from "./framework";
+import { Session } from "./session";
+import { generateId, RouterPath } from "./utils";
 
 export class Topbar implements Component {
     private indexButtonId = generateId("index");
     private customerButtonId = generateId("customer");
     private supporterButtonId = generateId("supporter");
 
-    public constructor(private router: RouterPath) { }
+    public constructor(private router: RouterPath, private session: ByRef<Session | null>) { }
 
     public render() {
-        return /*html*/ `
+        return html`
             <div class="topbar">
                 <div>
                     <h1>TicketSystem®</h1>
@@ -23,15 +24,15 @@ export class Topbar implements Component {
         `;
     }
     public hydrate(update: () => void) {
-        domSelectId(this.indexButtonId).addEventListener("click", () => {
+        domAddEvent(this.indexButtonId, "click", () => {
             this.router.routeTo("/");
             update();
         });
-        domSelectId(this.customerButtonId).addEventListener("click", () => {
+        domAddEvent(this.customerButtonId, "click", () => {
             this.router.routeTo("/customer");
             update();
         });
-        domSelectId(this.supporterButtonId).addEventListener("click", () => {
+        domAddEvent(this.supporterButtonId, "click", () => {
             this.router.routeTo("/supporter");
             update();
         });
