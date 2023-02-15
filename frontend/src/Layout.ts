@@ -1,27 +1,25 @@
-import { Component, ByRef } from "./framework"
+import { Context } from "./Context";
+import { Component } from "./framework"
 import { RouterPage } from "./Router";
-import { Session } from "./session";
 import { Topbar } from "./Topbar";
-import { Router } from "./utils";
 
 export class Layout implements Component {
-    private routerPath = new Router();
-    private router: RouterPage;
+    private routerPage: RouterPage;
     private topbar: Topbar;
     public constructor(
-        private session: ByRef<Session | null>,
+        private context: Context,
     ) {
-        this.router = new RouterPage(this.routerPath, this.session);
-        this.topbar = new Topbar(this.routerPath, this.session);
+        this.routerPage = new RouterPage(this.context);
+        this.topbar = new Topbar(this.context);
     }
 
-    public children() { return [this.topbar, this.router]; }
+    public children() { return [this.topbar, this.routerPage]; }
 
     public render() {
         return `
             ${this.topbar.render()}
             <main>
-                ${this.router.render()}
+                ${this.routerPage.render()}
             </main>
             <footer>
                 Copyright © 2023 Gruppe 2
