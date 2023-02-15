@@ -1,5 +1,4 @@
 frontend:
-create ticket button
 ticket editor
     escalate ticket
     incident or request selector

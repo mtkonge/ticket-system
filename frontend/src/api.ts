@@ -126,3 +126,29 @@ export async function userInfo(request: UserInfoRequest): Promise<UserInfoRespon
 
 }
 
+export type OpenTicketRequest = {
+    token: string,
+    title: string,
+    content: string,
+    urgency: "Incident" | "Request",
+}
+
+export type OpenTicketResponse = {
+    ok: boolean,
+    msg: string,
+}
+
+export async function openTicket(request: OpenTicketRequest): Promise<OpenTicketResponse> {
+    const response = await fetch("/api/ticket/open", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...await response.json(),
+        ok: response.ok,
+    };
+
+}
+
+
