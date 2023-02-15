@@ -1,7 +1,7 @@
 import { loginUser, userInfo } from "../api";
-import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
-import { Session } from "../session";
-import { generateId, Router } from "../utils";
+import { Context } from "../Context";
+import { Component, domAddEvent, domSelectId, html } from "../framework";
+import { generateId, } from "../utils";
 
 export class Login implements Component {
     private usernameFieldId = generateId("usernameField");
@@ -16,8 +16,7 @@ export class Login implements Component {
     private devAdminLoginId = generateId();
 
     public constructor(
-        private router: Router,
-        private session: ByRef<Session | null>,
+        private context: Context,
     ) { }
 
     public render() {
@@ -63,50 +62,50 @@ export class Login implements Component {
                 const infoResponse = await userInfo({
                     token: response.token!,
                 });
-                this.session.value = {
+                this.context.session = {
                     token: response.token!,
                     userId: infoResponse.user_id!,
                     username: infoResponse.username!,
                     role: infoResponse.role!,
                 };
-                this.router.routeTo("/");
+                this.context.router.routeTo("/");
             } else {
                 this.errorMessage = response.msg;
             }
             update();
         });
         domAddEvent(this.devLevelOneLoginId, "click", () => {
-            this.session.value = {
+            this.context.session = {
                 token: "123",
                 userId: 0,
                 username: "testuser",
                 role: "LevelOne",
             };
-            this.router.routeTo("/");
+            this.context.router.routeTo("/");
             update();
         });
         domAddEvent(this.devConsumerLoginId, "click", () => {
-            this.session.value = {
+            this.context.session = {
                 token: "123",
                 userId: 0,
                 username: "testuser",
                 role: "Consumer",
             };
-            this.router.routeTo("/");
+            this.context.router.routeTo("/");
             update();
         });
         domAddEvent(this.devAdminLoginId, "click", () => {
-            this.session.value = {
+            this.context.session = {
                 token: "123",
                 userId: 0,
                 username: "testadmin",
                 role: "Admin",
             };
-            this.router.routeTo("/");
+            this.context.router.routeTo("/");
             update();
         });
         domAddEvent(this.loginLinkId, "click", () => {
-            this.router.routeTo("/register");
+            this.context.router.routeTo("/register");
             update();
         });
     }
