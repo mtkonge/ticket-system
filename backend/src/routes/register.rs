@@ -24,11 +24,7 @@ async fn register(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>) 
 
     let request = request.into_inner();
 
-    let add_user_success = db.add_user(
-        Username(request.username),
-        Password(request.password),
-        Role::Member,
-    );
+    let add_user_success = db.add_user(Username(request.username), Password(request.password));
 
     if let Err(TicketDbError::Duplicate) = add_user_success {
         return bad_request("invalid username");

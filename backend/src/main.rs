@@ -9,6 +9,7 @@ use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
 use routes::load_assets::load_assets;
 use routes::load_html::load_html;
+use routes::login::login;
 use routes::register::register;
 
 #[actix_web::main]
@@ -19,7 +20,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(Data::from(db.clone()))
             .wrap(Cors::permissive())
-            .service(web::scope("/api").service(register))
+            .service(web::scope("/api").service(register).service(login))
             .service(load_assets)
             .service(load_html)
     })

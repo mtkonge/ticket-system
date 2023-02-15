@@ -8,8 +8,10 @@ pub struct Username(pub String);
 pub struct Password(pub String);
 
 pub enum Role {
-    Member,
-    Helpdesk,
+    Consumer,
+    LevelOne,
+    LevelTwo,
+    Admin,
 }
 
 pub struct Ticket {
@@ -68,12 +70,7 @@ impl TicketDb {
         self.sessions.push(session);
         Ok(())
     }
-    pub fn add_user(
-        &mut self,
-        name: Username,
-        password: Password,
-        role: Role,
-    ) -> Result<(), TicketDbError> {
+    pub fn add_user(&mut self, name: Username, password: Password) -> Result<(), TicketDbError> {
         match self.user_from_name(&name.0) {
             Ok(_) => Err(TicketDbError::Duplicate),
             Err(TicketDbError::NotFound) => Ok(()),
@@ -81,6 +78,11 @@ impl TicketDb {
         }?;
 
         let id = self.request_id();
+        let role = if self.users.is_empty() {
+            Role::Admin
+        } else {
+            Role::Consumer
+        };
         let user = User {
             id: Id(id),
             name: name.0,
@@ -105,31 +107,50 @@ fn should_add_and_find_user() {
         sessions: Vec::new(),
         users: Vec::new(),
     };
-    db.add_user(
-        Username("user 1".to_string()),
-        Password(String::new()),
-        Role::Member,
-    )
-    .expect("should add user");
+    db.add_user(Username("user 1".to_string()), Password(String::new()))
+        .expect("should add user");
 
-    db.add_user(
-        Username("user 2".to_string()),
-        Password(String::new()),
-        Role::Member,
-    )
-    .expect("should add user");
+    db.add_user(Username("user 2".to_string()), Password(String::new()))
+        .expect("should add user");
 
-    db.add_user(
-        Username("user 1".to_string()),
-        Password(String::new()),
-        Role::Member,
-    )
-    .err()
-    .expect("should fail with duplicate username");
+    db.add_user(Username("user 1".to_string()), Password(String::new()))
+        .err()
+        .expect("should fail with duplicate username");
 
     let user_2 = db
         .user_from_name("user 2")
         .expect("should not fail with valid input");
 
     assert_eq!(user_2.name, "user 2".to_string())
+}
+
+#[test]
+fn should_have_correct_roles() {
+    let mut db = TicketDb {
+        id_counter: 0,
+        tickets: Vec::new(),
+        sessions: Vec::new(),
+        users: Vec::new(),
+    };
+    db.add_user(Username("user 1".to_string()), Password(String::new()))
+        .expect("should add user");
+
+    db.add_user(Username("user 2".to_string()), Password(String::new()))
+        .expect("should add user");
+
+    let user_1 = db
+        .user_from_name("user 1")
+        .expect("should not fail with valid input");
+
+    let Role::Admin = user_1.role else {
+        panic!("first user should be an admin");
+    };
+
+    let user_2 = db
+        .user_from_name("user 2")
+        .expect("should not fail with valid input");
+
+    let Role::Consumer = user_2.role else {
+        panic!("other users should not be admin");
+    };
 }
