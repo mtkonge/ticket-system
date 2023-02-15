@@ -1,11 +1,11 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone)]
 pub struct Id(pub u64);
 pub struct Username(pub String);
 pub struct Password(pub String);
 
-#[derive(Deserialize, PartialEq)]
+#[derive(Serialize, Deserialize, PartialEq)]
 pub enum Role {
     Consumer,
     LevelOne,
@@ -13,17 +13,7 @@ pub enum Role {
     Admin,
 }
 
-impl Role {
-    pub fn to_string(&self) -> &'static str {
-        match self {
-            Role::Consumer => "Consumer",
-            Role::LevelOne => "LevelOne",
-            Role::LevelTwo => "LevelTwo",
-            Role::Admin => "Admin",
-        }
-    }
-}
-
+#[derive(Clone)]
 pub struct Ticket {
     pub id: Id,
     pub title: String,
@@ -33,10 +23,11 @@ pub struct Ticket {
     pub comments: Vec<TicketComment>,
 }
 
+#[derive(Clone)]
 pub struct TicketComment {
     pub id: Id,
     pub message: String,
-    pub user_id: String,
+    pub user_id: Id,
 }
 
 pub struct Session {

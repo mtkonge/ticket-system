@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{TicketDb, TicketDbError},
-    response_helper::{bad_request},
+    db::{Role, TicketDb, TicketDbError},
+    response_helper::bad_request,
 };
 
 #[derive(Deserialize)]
@@ -17,7 +17,7 @@ struct Response<'a> {
     msg: &'a str,
     user_id: u64,
     username: String,
-    role: &'a str,
+    role: &'a Role,
 }
 
 #[post("/user/info")]
@@ -38,7 +38,6 @@ async fn user_info(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
             msg: "",
             user_id: user.id.0,
             username: user.name.clone(),
-            role: user.role.to_string(),
+            role: &user.role,
         })
 }
-

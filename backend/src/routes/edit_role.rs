@@ -29,7 +29,7 @@ async fn edit_role(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
         Ok(user) if user.id.0 == request.user_id => return bad_request("cannot edit own role"),
         Ok(user) => user,
         Err(TicketDbError::NotFound) => return bad_request("invalid session"),
-        Err(_) => return bad_request("db error"),
+        Err(_) => return internal_server_error("db error"),
     };
 
     let Role::Admin = user.role else {

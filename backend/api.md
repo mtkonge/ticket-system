@@ -1,5 +1,81 @@
 # api
 
+## user created tickets
+
+`user/opened`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+    "tickets": [
+        {
+            id: 1024,
+            title: "...",
+            content: "...",
+            creator: 1024,
+            assignee: 1024,
+            comments: [
+                {
+                    id: 1024,
+                    message: "...",
+                    user_id: 1024,
+                }
+            ]
+        }
+    ]
+}
+```
+
+## user assigned tickets
+
+`user/assigned`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+    "tickets": [
+        {
+            id: 1024,
+            title: "...",
+            content: "...",
+            creator: 1024,
+            assignee: 1024,
+            comments: [
+                {
+                    id: 1024,
+                    message: "...",
+                    user_id: 1024,
+                }
+            ]
+        }
+    ]
+}
+```
+
 ## edit role
 
 `user/edit_role`
