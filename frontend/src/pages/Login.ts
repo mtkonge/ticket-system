@@ -60,6 +60,7 @@ export class Login implements Component {
                     token: response.token!,
                     userId: infoResponse.user_id!,
                     username: infoResponse.username!,
+                    role: infoResponse.role!,
                 };
                 this.router.routeTo("/");
             } else {

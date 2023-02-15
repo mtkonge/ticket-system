@@ -1,4 +1,4 @@
-export type UserRole = "Consumer" | "LevelOne" | "LevelTwo" | "Admin";
+import { UserRole } from "./session";
 
 export type EditUserRoleRequest = {
     token: string;
