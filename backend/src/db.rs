@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use serde::Deserialize;
 use tokio::sync::RwLock;
 
 #[derive(Clone)]
@@ -7,6 +8,7 @@ pub struct Id(pub u64);
 pub struct Username(pub String);
 pub struct Password(pub String);
 
+#[derive(Deserialize)]
 pub enum Role {
     Consumer,
     LevelOne,
@@ -53,6 +55,28 @@ impl TicketDb {
             sessions: Vec::new(),
             users: Vec::new(),
         }))
+    }
+    pub fn edit_user_role(&mut self, user_id: Id, role: Role) -> Result<(), TicketDbError> {
+        let user = self
+            .users
+            .iter_mut()
+            .find(|user| user.id.0 == user_id.0)
+            .ok_or(TicketDbError::NotFound)?;
+
+        user.role = role;
+
+        Ok(())
+    }
+    pub fn user_from_session(&self, token: &str) -> Result<&User, TicketDbError> {
+        let session = self
+            .sessions
+            .iter()
+            .find(|session| session.token == token)
+            .ok_or(TicketDbError::NotFound)?;
+        self.users
+            .iter()
+            .find(|user| user.id.0 == session.user_id.0)
+            .ok_or(TicketDbError::NotFound)
     }
     pub fn user_from_name(&self, name: &str) -> Result<&User, TicketDbError> {
         self.users
@@ -125,7 +149,7 @@ fn should_add_and_find_user() {
 }
 
 #[test]
-fn should_have_correct_roles() {
+fn should_have_correct_starting_roles() {
     let mut db = TicketDb {
         id_counter: 0,
         tickets: Vec::new(),
@@ -152,5 +176,36 @@ fn should_have_correct_roles() {
 
     let Role::Consumer = user_2.role else {
         panic!("other users should not be admin");
+    };
+}
+
+#[test]
+fn should_edit_role() {
+    let mut db = TicketDb {
+        id_counter: 0,
+        tickets: Vec::new(),
+        sessions: Vec::new(),
+        users: Vec::new(),
+    };
+    db.add_user(Username("user 1".to_string()), Password(String::new()))
+        .expect("should add user");
+
+    let user = db
+        .user_from_name("user 1")
+        .expect("should not fail with valid input");
+
+    let Role::Admin = user.role else {
+        panic!("first user should be an admin");
+    };
+
+    db.edit_user_role(user.id.clone(), Role::LevelOne)
+        .expect("should not fail with valid input");
+
+    let user = db
+        .user_from_name("user 1")
+        .expect("should not fail with valid input");
+
+    let Role::LevelOne = user.role else {
+        panic!("user should not be admin");
     };
 }

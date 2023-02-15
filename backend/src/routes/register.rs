@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Password, Role, TicketDb, TicketDbError, Username},
+    db::{Password, TicketDb, TicketDbError, Username},
     response_helper::{bad_request, internal_server_error},
 };
 
