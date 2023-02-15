@@ -13,8 +13,6 @@ save session on reload
 document viewer
 
 backend:
-create document
-edit document
 post comment
 ticket activities
 ???
