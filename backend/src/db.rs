@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use tokio::sync::RwLock;
 
+#[derive(Clone)]
 pub struct Id(pub u64);
-#[derive(PartialEq, Eq, Debug)]
 pub struct Username(pub String);
 pub struct Password(pub String);
 
@@ -17,6 +17,12 @@ pub struct Ticket {
     pub message: String,
 }
 
+pub struct Session {
+    pub id: Id,
+    pub user_id: Id,
+    pub token: String,
+}
+
 pub struct User {
     pub id: Id,
     pub name: String,
@@ -26,6 +32,7 @@ pub struct User {
 
 pub struct TicketDb {
     id_counter: u64,
+    sessions: Vec<Session>,
     tickets: Vec<Ticket>,
     users: Vec<User>,
 }
@@ -41,6 +48,7 @@ impl TicketDb {
         Arc::new(RwLock::new(TicketDb {
             id_counter: 0,
             tickets: Vec::new(),
+            sessions: Vec::new(),
             users: Vec::new(),
         }))
     }
@@ -49,6 +57,16 @@ impl TicketDb {
             .iter()
             .find(|user| user.name == name)
             .ok_or(TicketDbError::NotFound)
+    }
+    pub fn add_session(&mut self, token: &str, user_id: Id) -> Result<(), TicketDbError> {
+        let id = self.request_id();
+        let session = Session {
+            id: Id(id),
+            user_id,
+            token: token.to_owned(),
+        };
+        self.sessions.push(session);
+        Ok(())
     }
     pub fn add_user(
         &mut self,
@@ -84,6 +102,7 @@ fn should_add_and_find_user() {
     let mut db = TicketDb {
         id_counter: 0,
         tickets: Vec::new(),
+        sessions: Vec::new(),
         users: Vec::new(),
     };
     db.add_user(

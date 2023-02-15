@@ -1,6 +1,7 @@
 mod db;
 mod response_helper;
 mod routes;
+mod token_generation;
 
 use crate::db::TicketDb;
 use actix_cors::Cors;
