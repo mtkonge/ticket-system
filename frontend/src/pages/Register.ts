@@ -1,4 +1,5 @@
-import { ByRef, Component, domAddEvent, html } from "../framework";
+import { registerUser, RegisterUserRequest } from "../api";
+import { ByRef, Component, domAddEvent, domSelectId, html } from "../framework";
 import { Session } from "../session";
 import { generateId, RouterPath } from "../utils";
 
@@ -8,6 +9,7 @@ export class Register implements Component {
     private registerButtonId = generateId("registerButton");
     private registerContainerId = generateId("registerContainer");
     private registerLinkId = generateId("registerLink");
+    private errorMessage = "";
 
     public constructor(
         private router: RouterPath,
@@ -18,6 +20,10 @@ export class Register implements Component {
         return html`
             <div class="auth-container" id="${this.registerContainerId}">
                 <h2>Register</h2>
+                ${this.errorMessage !== ""
+                    ? html`<p class="error-text">${this.errorMessage}</p>`
+                    : ""}
+                <p class="error-text"></p>
                 <input
                     id="${this.usernameFieldId}"
                     type="text"
@@ -25,10 +31,11 @@ export class Register implements Component {
                 />
                 <input
                     id="${this.passwordFieldId}"
-                    type="text"
+                    type="password"
                     placeholder="password"
                 />
                 <button id="${this.registerButtonId}">Register</button>
+
                 <p>
                     Already have an account?
                     <a class="link" id="${this.registerLinkId}">Login</a> here
@@ -38,13 +45,19 @@ export class Register implements Component {
     }
 
     public hydrate(update: () => void): void {
-        domAddEvent(this.registerButtonId, "click", () => {
-            this.session.value = {
-                id: 0,
-                userId: 0,
-                username: "testuser",
+        domAddEvent(this.registerButtonId, "click", async () => {
+            const credentials: RegisterUserRequest = {
+                username: domSelectId<HTMLInputElement>(this.usernameFieldId)
+                    .value,
+                password: domSelectId<HTMLInputElement>(this.passwordFieldId)
+                    .value,
             };
-            this.router.routeTo("/");
+            const response = await registerUser(credentials);
+            if (response.ok) {
+                this.router.routeTo("/");
+            } else {
+                this.errorMessage = response.msg;
+            }
             update();
         });
         domAddEvent(this.registerLinkId, "click", () => {
