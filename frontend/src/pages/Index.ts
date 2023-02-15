@@ -5,6 +5,7 @@ export class Index implements Component {
 
     public render() {
         return html`
+            <div id="frontpage-background"></div>
             <div class="index" style="">
                 <h1>Enterprise TicketSystem&reg;</h1>
                 <h3>"I kan ikke nå at lave et ticket-system fra bunden." - Bjarne 2023</h3>
