@@ -36,6 +36,10 @@ export class Customer implements Component {
     }
 
     hydrate(update: () => void): void {
+        if (this.context.session === null) {
+            this.context.router.routeTo("/login")
+            return update();
+        }
         domAddEvent(this.createTicketButtonId, "click", () => {
             // domSelectId("create-ticket-container").style.display = "block";
             this.context.router.routeTo("/create_ticket")
