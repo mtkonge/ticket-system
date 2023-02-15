@@ -28,7 +28,7 @@ async fn edit_role(db: web::Data<RwLock<TicketDb>>, request: web::Json<Request>)
     let user = match db.user_from_session(&request.token) {
         Ok(user) if user.id.0 == request.user_id => return bad_request("cannot edit own role"),
         Ok(user) => user,
-        Err(TicketDbError::Duplicate) => return bad_request("invalid session"),
+        Err(TicketDbError::NotFound) => return bad_request("invalid session"),
         Err(_) => return bad_request("db error"),
     };
 

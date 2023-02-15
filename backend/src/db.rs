@@ -1,14 +1,11 @@
-use std::sync::Arc;
-
 use serde::Deserialize;
-use tokio::sync::RwLock;
 
 #[derive(Clone)]
 pub struct Id(pub u64);
 pub struct Username(pub String);
 pub struct Password(pub String);
 
-#[derive(Deserialize)]
+#[derive(Deserialize, PartialEq)]
 pub enum Role {
     Consumer,
     LevelOne,
@@ -18,7 +15,17 @@ pub enum Role {
 
 pub struct Ticket {
     pub id: Id,
+    pub title: String,
+    pub content: String,
+    pub creator: Id,
+    pub assignee: Id,
+    pub comments: Vec<TicketComment>,
+}
+
+pub struct TicketComment {
+    pub id: Id,
     pub message: String,
+    pub user_id: String,
 }
 
 pub struct Session {
@@ -48,13 +55,13 @@ pub enum TicketDbError {
 }
 
 impl TicketDb {
-    pub fn new() -> Arc<RwLock<Self>> {
-        Arc::new(RwLock::new(TicketDb {
+    pub fn new() -> Self {
+        TicketDb {
             id_counter: 0,
             tickets: Vec::new(),
             sessions: Vec::new(),
             users: Vec::new(),
-        }))
+        }
     }
     pub fn edit_user_role(&mut self, user_id: &Id, role: Role) -> Result<(), TicketDbError> {
         let user = self
@@ -99,6 +106,12 @@ impl TicketDb {
         self.sessions.push(session);
         Ok(())
     }
+    pub fn users_with_role(&self, role: Role) -> Vec<&User> {
+        self.users.iter().filter(|user| user.role == role).collect()
+    }
+    pub fn tickets(&self) -> &Vec<Ticket> {
+        &self.tickets
+    }
     pub fn add_user(&mut self, name: Username, password: Password) -> Result<(), TicketDbError> {
         match self.user_from_name(&name.0) {
             Ok(_) => Err(TicketDbError::Duplicate),
@@ -121,6 +134,25 @@ impl TicketDb {
         self.users.push(user);
         Ok(())
     }
+    pub fn add_ticket(
+        &mut self,
+        title: String,
+        content: String,
+        creator: Id,
+        assignee: Id,
+    ) -> Result<(), TicketDbError> {
+        let id = self.request_id();
+        let ticket = Ticket {
+            id: Id(id),
+            title,
+            content,
+            assignee,
+            creator,
+            comments: Vec::new(),
+        };
+        self.tickets.push(ticket);
+        Ok(())
+    }
     fn request_id(&mut self) -> u64 {
         let previous_id = self.id_counter;
         self.id_counter += 1;
@@ -130,12 +162,7 @@ impl TicketDb {
 
 #[test]
 fn should_add_and_find_user() {
-    let mut db = TicketDb {
-        id_counter: 0,
-        tickets: Vec::new(),
-        sessions: Vec::new(),
-        users: Vec::new(),
-    };
+    let mut db = TicketDb::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
 
@@ -143,8 +170,7 @@ fn should_add_and_find_user() {
         .expect("should add user");
 
     db.add_user(Username("user 1".to_string()), Password(String::new()))
-        .err()
-        .expect("should fail with duplicate username");
+        .expect_err("should fail with duplicate username");
 
     let user_2 = db
         .user_from_name("user 2")
@@ -155,12 +181,7 @@ fn should_add_and_find_user() {
 
 #[test]
 fn should_have_correct_starting_roles() {
-    let mut db = TicketDb {
-        id_counter: 0,
-        tickets: Vec::new(),
-        sessions: Vec::new(),
-        users: Vec::new(),
-    };
+    let mut db = TicketDb::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
 
@@ -186,12 +207,7 @@ fn should_have_correct_starting_roles() {
 
 #[test]
 fn should_edit_role() {
-    let mut db = TicketDb {
-        id_counter: 0,
-        tickets: Vec::new(),
-        sessions: Vec::new(),
-        users: Vec::new(),
-    };
+    let mut db = TicketDb::new();
     db.add_user(Username("user 1".to_string()), Password(String::new()))
         .expect("should add user");
 
@@ -213,4 +229,46 @@ fn should_edit_role() {
     let Role::LevelOne = user.role else {
         panic!("user should not be admin");
     };
+}
+
+#[test]
+fn users_with_role() {
+    let mut db = TicketDb::new();
+    db.add_user(Username("user 1".to_string()), Password(String::new()))
+        .expect("should add user");
+    db.add_user(Username("user 2".to_string()), Password(String::new()))
+        .expect("should add user");
+    db.add_user(Username("user 3".to_string()), Password(String::new()))
+        .expect("should add user");
+    db.add_user(Username("user 4".to_string()), Password(String::new()))
+        .expect("should add user");
+
+    let user_1 = db
+        .user_from_name("user 1")
+        .expect("should not fail with valid input")
+        .id
+        .clone();
+
+    let user_2 = db
+        .user_from_name("user 2")
+        .expect("should not fail with valid input")
+        .id
+        .clone();
+
+    db.edit_user_role(&user_1, Role::LevelOne)
+        .expect("should not fail with valid input");
+
+    db.edit_user_role(&user_2.clone(), Role::LevelOne)
+        .expect("should not fail with valid input");
+
+    let level_one_users = db.users_with_role(Role::LevelOne);
+
+    assert_eq!(level_one_users.len(), 2, "should have 2 level one users");
+
+    assert!(
+        level_one_users
+            .iter()
+            .all(|user| user.role == Role::LevelOne),
+        "all users returned should be level one"
+    );
 }

@@ -70,3 +70,27 @@ status: `200` | `400` | `500`
     "session": "..."
 }
 ```
+
+## open ticket
+
+`ticket/open`
+
+request: 
+
+```json
+{
+    "token": "...",
+    "title": "...",
+    "content": "...",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "...",
+}
+```
