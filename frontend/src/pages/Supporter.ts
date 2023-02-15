@@ -1,6 +1,11 @@
+import { Context } from "../Context";
 import { Component } from "../framework";
 
 export class Supporter implements Component {
+    public constructor(
+        private context: Context,
+    ) { }
+
     public render() {
         return /*html*/ `
             <h1>Welcome to ticket-system</h1>
@@ -19,5 +24,12 @@ export class Supporter implements Component {
                 </tr>
             </table>
         `;
+    }
+
+    public hydrate(update: () => void): void {
+        if (this.context.session === null) {
+            this.context.router.routeTo("/login")
+            return update();
+        }
     }
 }
