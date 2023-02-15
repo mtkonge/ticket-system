@@ -198,6 +198,23 @@ impl TicketDb {
 
         Ok(())
     }
+    pub fn edit_ticket(
+        &mut self,
+        id: u64,
+        assignee: u64,
+        urgency: Urgency,
+    ) -> Result<(), TicketDbError> {
+        let ticket = self
+            .tickets
+            .iter_mut()
+            .find(|ticket| ticket.id == id)
+            .ok_or(TicketDbError::NotFound)?;
+
+        ticket.assignee = assignee;
+        ticket.urgency = urgency;
+
+        Ok(())
+    }
     pub fn edit_document(
         &mut self,
         id: u64,

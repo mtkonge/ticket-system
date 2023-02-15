@@ -3,6 +3,7 @@ pub mod all_users;
 pub mod create_document;
 pub mod edit_document;
 pub mod edit_role;
+pub mod edit_ticket;
 pub mod load_assets;
 pub mod load_html;
 pub mod login;
