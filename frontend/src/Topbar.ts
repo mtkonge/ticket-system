@@ -25,20 +25,23 @@ export class Topbar implements Component {
                     </button>
                 </div>
                 <div class="text-buttons">
+                    ${this.session.value?.role === "Admin" ? html`
+                        <button id="${this.adminPanelButtonId}"></button>
+                    ` : ""}
                     ${(() => {
                 if (this.session.value !== null) {
                     return html`
-                                <button id="${this.customerButtonId}">
-                                    I am a customer
-                                </button>
-                                <button id="${this.supporterButtonId}">
-                                    I am an it-supporter
-                                </button>
-                            `;
+                                        <button id="${this.customerButtonId}">
+                                            My tickets
+                                        </button>
+                                        <button id="${this.supporterButtonId}">
+                                            Assigned tickets
+                                        </button>
+                                    `;
                 } else {
                     return html`
-                                <button id="${this.loginButton}">Login</button>
-                            `;
+                                        <button id="${this.loginButton}">Login</button>
+                                    `;
                 }
             })()}
                 </div>
@@ -50,6 +53,12 @@ export class Topbar implements Component {
             this.router.routeTo("/");
             update();
         });
+        if (this.session.value?.role === "Admin") {
+            domAddEvent(this.adminPanelButtonId, "click", () => {
+                this.router.routeTo("/admin_panel");
+                update();
+            })
+        }
         if (this.session.value !== null) {
             domAddEvent(this.customerButtonId, "click", () => {
                 this.router.routeTo("/customer");
