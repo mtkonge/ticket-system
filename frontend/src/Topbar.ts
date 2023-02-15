@@ -73,7 +73,7 @@ export class Topbar implements Component {
                 update();
             });
         }
-        if (this.session.value !== null) {
+        if (this.session.value !== null && this.session.value?.role !== "Consumer") {
             domAddEvent(this.supporterButtonId, "click", () => {
                 this.router.routeTo("/supporter");
                 update();

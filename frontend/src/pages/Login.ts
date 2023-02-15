@@ -11,6 +11,7 @@ export class Login implements Component {
     private loginLinkId = generateId("registerLink");
     private errorMessage = "";
 
+    private devConsumerLoginId = generateId();
     private devLevelOneLoginId = generateId();
     private devAdminLoginId = generateId();
 
@@ -38,6 +39,7 @@ export class Login implements Component {
                     placeholder="password"
                 />
                 <button id="${this.loginButtonId}" class="brand-button">Login</button>
+                <button id="${this.devConsumerLoginId}" class="brand-button">Dev Consumer Login</button>
                 <button id="${this.devLevelOneLoginId}" class="brand-button">Dev Level One Login</button>
                 <button id="${this.devAdminLoginId}" class="brand-button">Dev Admin Login</button>
                 <p>
@@ -83,11 +85,21 @@ export class Login implements Component {
             this.router.routeTo("/");
             update();
         });
+        domAddEvent(this.devConsumerLoginId, "click", () => {
+            this.session.value = {
+                token: "123",
+                userId: 0,
+                username: "testuser",
+                role: "Consumer",
+            };
+            this.router.routeTo("/");
+            update();
+        });
         domAddEvent(this.devAdminLoginId, "click", () => {
             this.session.value = {
                 token: "123",
                 userId: 0,
-                username: "admin",
+                username: "testadmin",
                 role: "Admin",
             };
             this.router.routeTo("/");
