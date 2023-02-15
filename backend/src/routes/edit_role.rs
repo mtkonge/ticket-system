@@ -40,7 +40,7 @@ async fn role_change(
     };
 
     if db
-        .edit_user_role(Id(request.user_id), request.role)
+        .edit_user_role(&Id(request.user_id), request.role)
         .is_err()
     {
         return internal_server_error("db error");

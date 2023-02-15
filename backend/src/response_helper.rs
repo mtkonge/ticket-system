@@ -25,7 +25,6 @@ pub fn html_default_response(status: u16) -> HttpResponse<BoxBody> {
         StatusCode::from_u16(status).expect("value provided should be 100 >= value < 1000"),
     )
     .body(format!(
-        "<body bgcolor='000'><center><img src='https://http.cat/{0}' alt='{0}'></center></body>",
-        status
+        "<body bgcolor='000'><center><img src='https://http.cat/{status}' alt='{status}'></center></body>"
     ))
 }

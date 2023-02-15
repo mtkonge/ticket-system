@@ -7,7 +7,7 @@ pub async fn load_html(_: HttpRequest) -> impl Responder {
     match fs::read("../frontend/index.html") {
         Ok(content) => HttpResponse::Ok().content_type("text/html").body(content),
         Err(err) => {
-            println!("{}", err);
+            println!("{err}");
             html_default_response(500)
         }
     }

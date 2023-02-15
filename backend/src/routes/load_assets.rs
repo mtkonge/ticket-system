@@ -27,13 +27,13 @@ pub async fn load_assets(_: HttpRequest, path: web::Path<String>) -> impl Respon
         return bad_request("invalid file extension");
     };
 
-    let mime_type = file_extension_mime_type(&file_extension);
+    let mime_type = file_extension_mime_type(file_extension);
 
     match fs::read(path) {
         Ok(content) => HttpResponse::Ok().content_type(mime_type).body(content),
         Err(err) if err.kind() == io::ErrorKind::NotFound => html_default_response(404),
         Err(err) => {
-            println!("{}", err);
+            println!("{err}");
             html_default_response(500)
         }
     }

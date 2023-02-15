@@ -56,7 +56,7 @@ impl TicketDb {
             users: Vec::new(),
         }))
     }
-    pub fn edit_user_role(&mut self, user_id: Id, role: Role) -> Result<(), TicketDbError> {
+    pub fn edit_user_role(&mut self, user_id: &Id, role: Role) -> Result<(), TicketDbError> {
         let user = self
             .users
             .iter_mut()
@@ -86,6 +86,11 @@ impl TicketDb {
     }
     pub fn add_session(&mut self, token: &str, user_id: Id) -> Result<(), TicketDbError> {
         let id = self.request_id();
+        self.users
+            .iter()
+            .find(|user| user.id.0 == user_id.0)
+            .ok_or(TicketDbError::NotFound)?;
+
         let session = Session {
             id: Id(id),
             user_id,
