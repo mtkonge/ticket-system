@@ -135,6 +135,7 @@ fn should_pick_with_least_tasks() {
     db.add_ticket(
         String::from("test title"),
         String::from("test content"),
+        Urgency::Request,
         user_2.clone(),
         user_1,
     )
