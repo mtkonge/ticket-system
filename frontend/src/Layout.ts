@@ -23,6 +23,9 @@ export class Layout implements Component {
 			<main>
 				${this.router.render()}
 			</main>
+			<footer>
+				<p>Copyright © 2023 Gruppe 2</p>
+			</footer>
 		`;
 	}
 }
