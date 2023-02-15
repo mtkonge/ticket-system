@@ -61,9 +61,9 @@ main {
 }
 
 footer {
+    box-shadow: 0 0px 4px rgb(0, 0, 0, 0.2);
     text-align: center;
     padding: 20px;
-    background-color: #ddd;
 }
 
 footer p {

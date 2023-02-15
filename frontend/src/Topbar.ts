@@ -9,6 +9,7 @@ export class Topbar implements Component {
     private adminPanelButtonId = generateId("supporter");
 
     private loginButton = generateId("login");
+    private logoutButton = generateId("logout");
 
     public constructor(
         private router: RouterPath,
@@ -26,24 +27,30 @@ export class Topbar implements Component {
                 </div>
                 <div class="text-buttons">
                     ${this.session.value?.role === "Admin" ? html`
-                        <button id="${this.adminPanelButtonId}"></button>
+                        <button id="${this.adminPanelButtonId}">
+                            Admin panel
+                        </button>
                     ` : ""}
-                    ${(() => {
-                if (this.session.value !== null) {
-                    return html`
-                                        <button id="${this.customerButtonId}">
-                                            My tickets
-                                        </button>
-                                        <button id="${this.supporterButtonId}">
-                                            Assigned tickets
-                                        </button>
-                                    `;
-                } else {
-                    return html`
-                                        <button id="${this.loginButton}">Login</button>
-                                    `;
-                }
-            })()}
+                    ${this.session.value !== null ? html`
+                        <button id="${this.customerButtonId}">
+                            My tickets
+                        </button>
+                    ` : ""}
+                    ${this.session.value !== null && this.session.value?.role !== "Consumer" ? html`
+                        <button id="${this.supporterButtonId}">
+                            Assigned tickets
+                        </button>
+                    ` : ""}
+                    ${this.session.value === null ? html`
+                        <button id="${this.loginButton}">
+                            Login
+                        </button>
+                    ` : ""}
+                    ${this.session.value !== null ? html`
+                        <button id="${this.logoutButton}">
+                            Logout
+                        </button>
+                    ` : ""}
                 </div>
             </div>
         `;
@@ -71,6 +78,13 @@ export class Topbar implements Component {
         } else {
             domAddEvent(this.loginButton, "click", () => {
                 this.router.routeTo("/login");
+                update();
+            });
+        }
+        if (this.session.value !== null) {
+            domAddEvent(this.logoutButton, "click", () => {
+                this.session.value = null;
+                this.router.routeTo("/");
                 update();
             });
         }
