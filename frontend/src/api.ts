@@ -1,52 +1,53 @@
-
 export type SessionToken = { token: string };
 
 export type UserRole = "Consumer" | "LevelOne" | "LevelTwo" | "Admin";
 
 export type UserInfo = {
-    id: number,
-    name: string,
-    role: UserRole,
-}
+    id: number;
+    name: string;
+    role: UserRole;
+};
 
 export type TicketType = "Incident" | "Request";
 
 export type TicketStatus = "Open" | "Pending" | "Resolved";
 
 export type TicketComment = {
-    id: number,
-    message: string,
-    creator: number,
-}
+    id: number;
+    message: string;
+    creator: number;
+};
 
 export type Ticket = {
-    id: number,
-    title: string,
-    content: string,
-    creator: number,
-    assignee: number,
-    urgency: TicketType,
-    comments: TicketComment[],
-    status: TicketStatus,
-}
+    id: number;
+    title: string;
+    content: string;
+    creator: number;
+    assignee: number;
+    urgency: TicketType;
+    comments: TicketComment[];
+    status: TicketStatus;
+};
 
-export type Document = {
-    id: number,
-    title: string,
-}
+export type KnowledgeDocument = {
+    id: number;
+    title: string;
+};
 
 export type PostCommentRequest = {
-    token: string,
-    id: number,
-    content: string,
-}
+    token: string;
+    id: number;
+    content: string;
+};
 
 export type PostCommentResponse = {
-    ok: boolean,
-    msg: string,
-}
+    ok: boolean;
+    msg: string;
+};
 
-export async function postComment(request: PostCommentRequest): Promise<PostCommentResponse> {
+export async function postComment(
+    request: PostCommentRequest,
+): Promise<PostCommentResponse> {
     const response = await fetch("/api/ticket/comment", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -59,18 +60,20 @@ export async function postComment(request: PostCommentRequest): Promise<PostComm
 }
 
 export type EditDocumentRequest = {
-    token: string,
-    id: number,
-    title: string,
-    content: string,
-}
+    token: string;
+    id: number;
+    title: string;
+    content: string;
+};
 
 export type EditDocumentResponse = {
-    ok: boolean,
-    msg: string,
-}
+    ok: boolean;
+    msg: string;
+};
 
-export async function editDocument(request: EditDocumentRequest): Promise<EditDocumentResponse> {
+export async function editDocument(
+    request: EditDocumentRequest,
+): Promise<EditDocumentResponse> {
     const response = await fetch("/api/document/edit", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -83,17 +86,19 @@ export async function editDocument(request: EditDocumentRequest): Promise<EditDo
 }
 
 export type CreateDocumentRequest = {
-    token: string,
-    title: string,
-    content: string,
-}
+    token: string;
+    title: string;
+    content: string;
+};
 
 export type CreateDocumentResponse = {
-    ok: boolean,
-    msg: string,
-}
+    ok: boolean;
+    msg: string;
+};
 
-export async function createDocument(request: CreateDocumentRequest): Promise<CreateDocumentResponse> {
+export async function createDocument(
+    request: CreateDocumentRequest,
+): Promise<CreateDocumentResponse> {
     const response = await fetch("/api/document/create", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -106,12 +111,14 @@ export async function createDocument(request: CreateDocumentRequest): Promise<Cr
 }
 
 export type AllDocumentsResponse = {
-    ok: boolean,
-    msg: string,
-    documents: Document[],
-}
+    ok: boolean;
+    msg: string;
+    documents: KnowledgeDocument[];
+};
 
-export async function allDocuments(request: SessionToken): Promise<AllDocumentsResponse> {
+export async function allDocuments(
+    request: SessionToken,
+): Promise<AllDocumentsResponse> {
     const response = await fetch("/api/document/all", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -124,17 +131,19 @@ export async function allDocuments(request: SessionToken): Promise<AllDocumentsR
 }
 
 export type OneTicketRequest = {
-    token: string,
-    id: number,
-}
+    token: string;
+    id: number;
+};
 
 export type OneTicketResponse = {
-    ok: boolean,
-    msg: string,
-    ticket: Ticket,
-}
+    ok: boolean;
+    msg: string;
+    ticket: Ticket;
+};
 
-export async function oneTicket(request: OneTicketRequest): Promise<OneTicketResponse> {
+export async function oneTicket(
+    request: OneTicketRequest,
+): Promise<OneTicketResponse> {
     const response = await fetch("/api/ticket/one", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -147,13 +156,14 @@ export async function oneTicket(request: OneTicketRequest): Promise<OneTicketRes
 }
 
 export type UserCreatedTicketsResponse = {
-    ok: boolean,
-    msg: string,
-    tickets: Ticket[]
+    ok: boolean;
+    msg: string;
+    tickets: Ticket[];
 };
 
-
-export async function userCreatedTickets(request: SessionToken): Promise<UserCreatedTicketsResponse> {
+export async function userCreatedTickets(
+    request: SessionToken,
+): Promise<UserCreatedTicketsResponse> {
     const response = await fetch("/api/user/opened", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -166,13 +176,14 @@ export async function userCreatedTickets(request: SessionToken): Promise<UserCre
 }
 
 export type UserAssignedTicketsResponse = {
-    ok: boolean,
-    msg: string,
-    tickets: Ticket[]
+    ok: boolean;
+    msg: string;
+    tickets: Ticket[];
 };
 
-
-export async function userAssignedTickets(request: SessionToken): Promise<UserAssignedTicketsResponse> {
+export async function userAssignedTickets(
+    request: SessionToken,
+): Promise<UserAssignedTicketsResponse> {
     const response = await fetch("/api/user/assigned", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -185,11 +196,13 @@ export async function userAssignedTickets(request: SessionToken): Promise<UserAs
 }
 
 export type AllUsersResponse = {
-    ok: boolean,
-    users?: UserInfo[],
-}
+    ok: boolean;
+    users?: UserInfo[];
+};
 
-export async function allUsers(request: SessionToken): Promise<AllUsersResponse> {
+export async function allUsers(
+    request: SessionToken,
+): Promise<AllUsersResponse> {
     const response = await fetch("/api/user/all", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
@@ -275,119 +288,128 @@ export async function loginUser(request: LoginRequest): Promise<LoginResponse> {
     };
 }
 
-
 export type OpenTicketRequest = {
-    token: string,
-    title: string,
-    content: string,
-    urgency: TicketType,
-}
+    token: string;
+    title: string;
+    content: string;
+    urgency: TicketType;
+};
 
 export type OpenTicketResponse = {
-    ok: boolean,
-    msg: string,
-}
+    ok: boolean;
+    msg: string;
+};
 
-export async function openTicket(request: OpenTicketRequest): Promise<OpenTicketResponse> {
+export async function openTicket(
+    request: OpenTicketRequest,
+): Promise<OpenTicketResponse> {
     const response = await fetch("/api/ticket/open", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(request),
     });
     return {
-        ...await response.json(),
+        ...(await response.json()),
         ok: response.ok,
     };
 }
 
 export type ReassignTicketRequest = {
-    token: string,
-    id: number,
-    assignee: number,
-}
+    token: string;
+    id: number;
+    assignee: number;
+};
 
 export type ReassignTicketResponse = {
-    ok: boolean,
-    msg: string,
-}
+    ok: boolean;
+    msg: string;
+};
 
-export async function reassignTicket(request: EditTicketRequest): Promise<EditTicketResponse> {
+export async function reassignTicket(
+    request: EditTicketRequest,
+): Promise<EditTicketResponse> {
     const response = await fetch("/api/ticket/reassign", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(request),
     });
     return {
-        ...await response.json(),
+        ...(await response.json()),
         ok: response.ok,
     };
 }
 
 export type EditTicketRequest = {
-    token: string,
-    id: number,
-    title: string,
-    urgency: TicketType,
-}
+    token: string;
+    id: number;
+    title: string;
+    urgency: TicketType;
+};
 
 export type EditTicketResponse = {
-    ok: boolean,
-    msg: string,
-}
+    ok: boolean;
+    msg: string;
+};
 
-export async function editTicket(request: EditTicketRequest): Promise<EditTicketResponse> {
+export async function editTicket(
+    request: EditTicketRequest,
+): Promise<EditTicketResponse> {
     const response = await fetch("/api/ticket/edit", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(request),
     });
     return {
-        ...await response.json(),
+        ...(await response.json()),
         ok: response.ok,
     };
 }
 
 export type UserInfoResponse = {
-    ok: boolean,
-    msg: string,
-    user_id?: number,
-    username?: string,
-    role?: UserRole,
-}
+    ok: boolean;
+    msg: string;
+    user_id?: number;
+    username?: string;
+    role?: UserRole;
+};
 
-export async function userInfo(request: SessionToken): Promise<UserInfoResponse> {
+export async function userInfo(
+    request: SessionToken,
+): Promise<UserInfoResponse> {
     const response = await fetch("/api/user/info", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(request),
     });
     return {
-        ...await response.json(),
+        ...(await response.json()),
         ok: response.ok,
     };
 }
 
 export type UsernamesRequest = {
-    user_ids: number[],
-}
+    user_ids: number[];
+};
 
 export type UsernamesResponse = {
-    ok: boolean,
-    msg: string,
+    ok: boolean;
+    msg: string;
     usernames: {
-        id: number,
-        name: string,
-    }[],
-}
+        id: number;
+        name: string;
+    }[];
+};
 
-export async function usernames(request: UsernamesRequest): Promise<UsernamesResponse> {
+export async function usernames(
+    request: UsernamesRequest,
+): Promise<UsernamesResponse> {
     const response = await fetch("/api/user/usernames", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
         body: JSON.stringify(request),
     });
     return {
-        ...await response.json(),
+        ...(await response.json()),
         ok: response.ok,
     };
 }
