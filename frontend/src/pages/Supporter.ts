@@ -67,10 +67,9 @@ export class Supporter implements Component {
         if (this.usernames.isFetched && this.tickets.isFetched) {
             this.tickets.data!.forEach((ticket, i) => {
                 domAddEvent<HTMLTableRowElement, "click">("random" + i, "click", () => {
-                    this.context.currentTicketEdit = ticket;
                     this.usernames.isFetched = false;
                     this.tickets.isFetched = false;
-                    this.context.router.routeTo("/ticket_editor");
+                    this.context.router.routeTo("/ticket_editor", `?ticket=${ticket.id}`);
                     update();
                 })
             })

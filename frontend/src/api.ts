@@ -16,7 +16,7 @@ export type TicketStatus = "Open" | "Pending" | "Resolved";
 export type TicketComment = {
     id: number,
     message: string,
-    user_id: number,
+    creator: number,
 }
 
 export type Ticket = {
@@ -26,8 +26,8 @@ export type Ticket = {
     creator: number,
     assignee: number,
     urgency: TicketType,
+    comments: TicketComment[],
     status: TicketStatus,
-    comments: TicketComment[]
 }
 
 export type Document = {

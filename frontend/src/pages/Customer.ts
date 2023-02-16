@@ -48,7 +48,7 @@ export class Customer implements Component {
         if (!this.usernames.isFetched && this.tickets.isFetched) {
             usernames({
                 user_ids: this.tickets.data!.map(ticket => ticket.assignee)
-                          .concat(this.tickets.data!.map(ticket => ticket.creator)),
+                    .concat(this.tickets.data!.map(ticket => ticket.creator)),
             }).then((response) => {
                 this.usernames.data = response.usernames.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
                 this.usernames.isFetched = true;
@@ -56,17 +56,16 @@ export class Customer implements Component {
                 update();
             });
         }
-
-        document.querySelectorAll<HTMLDivElement>(".ticket").forEach((ticket, i) => {
-            ticket.addEventListener("click", () => {
-                this.context.currentTicketEdit = this.tickets.data![i];
-                this.usernames.isFetched = false;
-                this.tickets.isFetched = false;
-                this.context.router.routeTo("/ticket_editor");
-                update();
-            });
-        });
-
+        if (this.usernames.isFetched && this.tickets.isFetched) {
+            this.tickets.data!.forEach((ticket, i) => {
+                domAddEvent<HTMLTableRowElement, "click">("random" + i, "click", () => {
+                    this.usernames.isFetched = false;
+                    this.tickets.isFetched = false;
+                    this.context.router.routeTo("/ticket_editor", `?ticket=${ticket.id}`);
+                    update();
+                })
+            })
+        }
         domAddEvent(this.createTicketButtonId, "click", () => {
             this.tickets.isFetched = false;
             this.usernames.isFetched = false;

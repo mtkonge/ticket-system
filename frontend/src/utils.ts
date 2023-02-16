@@ -19,10 +19,11 @@ export class Router {
 		this.currentRoute = url.pathname;
 	}
 
-	public routeTo(route: string) {
+	public routeTo(route: string, query: string = "") {
 		this.currentRoute = route;
 		const url = new URL(window.location.href);
 		url.pathname = route;
+		url.search = query;
 		window.history.pushState({}, "", url);
 	}
 
