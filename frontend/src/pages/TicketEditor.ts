@@ -55,21 +55,20 @@ export class TicketEditor implements Component {
             </p>`
         }
         return `
-            <h1>[${this.ticket.data!.urgency}] [${this.ticket.data!.status}] ${this.ticket.data!.title} (#${this.ticket.data!.id})</h1>
-            ${this.errorMessage !== ""
+            <div style="border-bottom: 1px solid #ccc;">
+                <h1 style="margin-bottom: 0.5rem">[${this.ticket.data!.urgency}] [${this.ticket.data!.status}] ${this.ticket.data!.title} (#${this.ticket.data!.id})</h1>
+                ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
-                : ""
-            }
-            <h2>Creator: ${this.usernames.data![this.ticket.data!.creator]} | Assigned to: ${this.usernames.data![this.ticket.data!.assignee]}</h2>
-            <form id="${this.editFormId}">
+                : ""}
+                <h3 style="color: #aaa; margin: 0">Creator: ${this.usernames.data![this.ticket.data!.creator]} | Assigned to: ${this.usernames.data![this.ticket.data!.assignee]}</h3>
+                <p>${this.ticket.data!.content}</p>
+            </div>
+            <form id="${this.editFormId}" style="border-bottom: 1px solid #ccc;">
                 <input type="hidden" name="title" value="${this.ticket.data!.title}">
                 <h4>Edit mode: <input type="checkbox" ${this.mode === Mode.edit ? "checked" : ""} id=${this.editModeId}></h4>
-                <h2 ${this.mode === Mode.view ? `style="display: none;"` : ""}>${editStatus(this.selectStatusId, this.ticket.data!.status)} | ${editType(this.selectTypeId, this.ticket.data!.urgency)}</h2>
+                <h4 style="${this.mode === Mode.view ? `display: none;` : "margin: 0;"}">${editStatus(this.selectStatusId, this.ticket.data!.status)} | ${editType(this.selectTypeId, this.ticket.data!.urgency)}</h4>
                 <input type="${this.mode === Mode.edit ? "submit" : "hidden"}" id="${this.saveEditId}" value="Save edit" class="brand-button">
             </form>
-            <h2>Description</h2>
-            <p>${this.ticket.data!.content}</p>
-            <h2>Comments</h2>
             ${this.ticket.data!.comments.map(comment => `
                 <div class="comment">
                     <p><b>${this.usernames.data![comment.creator]}</b></p>
@@ -77,8 +76,7 @@ export class TicketEditor implements Component {
                 </div>
                 `).reduce((acc, curr) => acc + curr, "")
             }
-            <h2>Add comment</h2>
-            <form id="${this.addCommentFormId}">
+            <form id="${this.addCommentFormId}" style="margin-top: 1rem">
                 <textarea name="content" placeholder = "Content..."></textarea>
                 <br>
                 <input type="submit" value="Post comment" class="brand-button">
