@@ -27,36 +27,40 @@ enum Mode {
 
 function editType(selectId: string, type: TicketType): string {
     return `
-        <label for="${selectId}">Type: </label>
-        <select name="type" id="${selectId}" class="brand-button">
-            <option ${type === "Request" && "selected"}>Request</option>
-            <option ${type === "Incident" && "selected"}>Incident</option>
-        </select>
+        <div style="display: flex; align-items: center; justify-content: space-between">
+            <label for="${selectId}">Type: </label>
+            <select name="type" id="${selectId}" class="brand-button" style="min-width: 200px">
+                <option ${type === "Request" && "selected"}>Request</option>
+                <option ${type === "Incident" && "selected"}>Incident</option>
+            </select>
+        </div>
     `;
 }
 
 function editStatus(selectId: string, status: TicketStatus): string {
     return `
-        <label for="${selectId}">Status: </label>
-        <select name="status" id="${selectId}" class="brand-button">
-            <option ${status === "Open" && "selected"}>Open</option>
-            <option ${status === "Pending" && "selected"}>Pending</option>
-            <option ${status === "Resolved" && "selected"}>Resolved</option>
-        </select>
+        <div style="display: flex; align-items: center; justify-content: space-between">
+            <label for="${selectId}">Status: </label>
+            <select name="status" id="${selectId}" class="brand-button" style="min-width: 200px">
+                <option ${status === "Open" && "selected"}>Open</option>
+                <option ${status === "Pending" && "selected"}>Pending</option>
+                <option ${status === "Resolved" && "selected"}>Resolved</option>
+            </select>
+        </div>
     `;
 }
 
 function reassignSelection(selectId: string, users: UserInfo[]): string {
     return `
-        <label for="${selectId}">Reassign ticket: </label>
-        <select name="assignee" id="${selectId}" class="brand-button">
-            ${users
-                .map(
-                    (info) =>
-                        `<option value="${info.id}">${info.name} (${info.role})</option>`,
-                )
-                .reduce((acc, curr) => acc + curr, "")}
-        </select>
+        <div style="display: flex; align-items: center; justify-content: space-between">
+            <label for="${selectId}">Reassign ticket: </label>
+            <select name="assignee" id="${selectId}" class="brand-button" style="min-width: 200px">
+                ${users
+                    .map(info => `<option value="${info.id}">${info.name} (${info.role})</option>`)
+                    .join("")
+                }
+            </select>
+        </div>
     `;
 }
 
@@ -111,33 +115,24 @@ export class TicketEditor implements Component {
             </div>
             <form id="${
                 this.editFormId
-            }" style="border-bottom: 1px solid #ccc;">
+            }" style="border-bottom: 1px solid #ccc; line-height: 0.8">
                 <input type="hidden" name="title" value="${
                     this.ticket.data!.title
                 }">
                 <h4>Edit mode: <input type="checkbox" ${
                     this.mode === Mode.edit ? "checked" : ""
                 } id=${this.editModeId}></h4>
-                <h4 style="${
+                <h4 style=" ${
                     this.mode === Mode.view ? `display: none;` : "margin: 0;"
-                }">${editStatus(
-            this.selectStatusId,
-            this.ticket.data!.status,
-        )} | ${editType(this.selectTypeId, this.ticket.data!.urgency)}</h4>
-                <input type="${
-                    this.mode === Mode.edit ? "submit" : "hidden"
-                }" id="${
-            this.saveEditId
-        }" value="Save edit" class="brand-button">
+                }">
+                    ${editStatus(this.selectStatusId, this.ticket.data!.status)}
+                    ${editType(this.selectTypeId, this.ticket.data!.urgency)}
                 ${(() => {
                     if (
                         this.assignableUsers.isFetched &&
                         this.assignableUsers.data !== undefined
                     ) {
                         return `
-                    <div style="${
-                        this.mode === Mode.view ? "display: none;" : ""
-                    }">
                         ${reassignSelection(
                             this.selectAssignId,
                             this.assignableUsers.data!,
@@ -145,11 +140,12 @@ export class TicketEditor implements Component {
                         <button class="brand-button" id="${
                             this.saveAssignId
                         }">Reassign</button>
-                    </div>`;
+                    </h4>`;
                     } else {
                         return "";
                     }
                 })()}
+                <input type="${this.mode === Mode.edit ? "submit" : "hidden"}" id="${this.saveEditId}" value="Save edit" class="brand-button">
             </form>
             ${this.ticket
                 .data!.comments.map(
