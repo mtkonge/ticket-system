@@ -15,7 +15,7 @@ export class TicketEditor implements Component {
 
     public render() {
         if (this.ticket.data === undefined || this.usernames.data === undefined) {
-            return `<h1>Henter ticket...</h1>
+            return `<h1>Loading ticket...</h1>
             ${this.errorMessage !== ""
                     ? html`<p class="error-text">${this.errorMessage}</p>`
                     : ""
@@ -24,13 +24,15 @@ export class TicketEditor implements Component {
         }
         return `
             <h1>[${this.ticket.data!.status}] ${this.ticket.data!.title} (#${this.ticket.data!.id})</h1>
+            <h3>Type: ${this.ticket.data!.urgency}</h2>
+            <h4>Creator: ${this.usernames.data![this.ticket.data!.creator]}</h2>
+            <h4>Assigned to: ${this.usernames.data![this.ticket.data!.assignee]}</h2>
+            <h2>Description</h2>
             ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""
             }
             <p>${this.ticket.data!.content}</p>
-
-            <pre><code>${JSON.stringify(this.ticket.data!, null, 4)}</code></pre>
             <h2>Add comment</h2>
             <form id="${this.addCommentFormId}">
                 <textarea name="content" placeholder = "Content..."></textarea>
