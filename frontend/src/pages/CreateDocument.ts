@@ -1,5 +1,6 @@
 import { Context } from "vm";
-import { Component, fetched, html } from "../framework";
+import { createDocument } from "../api";
+import { Component, domAddEvent, fetched, html } from "../framework";
 import { generateId } from "../utils";
 
 export class DocumentCreator implements Component {
@@ -23,5 +24,26 @@ export class DocumentCreator implements Component {
         `;
     }
 
-    public hydrate(update: () => void): void {}
+    public hydrate(update: () => void): void {
+        domAddEvent<HTMLFormElement, "submit">(
+            this.formId,
+            "submit",
+            async (event) => {
+                event.preventDefault();
+                const form = new FormData(event.target as HTMLFormElement);
+                const response = await createDocument({
+                    token: this.context.session!.token,
+                    title: form.get("title")!.toString(),
+                    content: form.get("content")!.toString(),
+                });
+                if (!response.ok) {
+                    this.errorMessage = response.msg;
+                } else {
+                    this.context.documentHasChangedAmountSinceLastTime = true;
+                    this.context.router.routeTo("/knowledge");
+                }
+                update();
+            },
+        );
+    }
 }

@@ -60,22 +60,6 @@ export class Knowledge implements Component {
                 },
             );
         }
-        if (this.documents.isFetched) {
-            this.documents.data!.forEach((document, i) => {
-                domAddEvent<HTMLTableRowElement, "click">(
-                    "random" + i,
-                    "click",
-                    () => {
-                        this.documents.isFetched = false;
-                        this.context.router.routeTo(
-                            "/document_reader",
-                            `?document=${document.id}`,
-                        );
-                        update();
-                    },
-                );
-            });
-        }
         domAddEvent("create-document", "click", () => {
             this.context.router.routeTo("/document_creator");
             update();
