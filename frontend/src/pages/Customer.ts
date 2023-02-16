@@ -1,7 +1,7 @@
 import { Ticket, userCreatedTickets, usernames } from "../api";
 import { Context } from "../Context";
 import { Component, domAddEvent, fetched, html } from "../framework";
-import { TicketComponent } from "../Ticket";
+import { TicketComponent } from "../TicketComponent";
 import { generateId } from "../utils";
 
 export class Customer implements Component {
@@ -22,31 +22,12 @@ export class Customer implements Component {
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
-                ${this.ticketComponents.map(ticket => ticket.render())}
-                <!--<table class="table">
-                    <tr class="ticket-variables">
-                        <th class="title">Title</th>
-                        <th class="type">Type</th>
-                        <th class="assigned-to">Assigned To</th>
-                    </tr>
-                    ${this.tickets.isFetched && this.usernames.isFetched
-                ? this.tickets.data!.map((ticket, i) => html`
-                            <tr class="ticket-row" id="${"random" + i}">
-                                <td class="title">${ticket.title}</td>
-                                <td class="type">${ticket.urgency || ""}</td>
-                                <td class="assigned-to">${this.usernames.data![ticket.assignee]}</td>
-                            </tr>
-                        `).join("") : ""}
-                </table>-->
+                ${this.ticketComponents.map(ticket => ticket.render()).join("<br>")}
             </div>
         `;
     }
 
     hydrate(update: () => void): void {
-        if (this.tickets.isFetched && this.usernames.isFetched) {
-            this.ticketComponents = this.tickets.data!.map(ticket => new TicketComponent(ticket, this.usernames.data!));
-        }
-
         this.errorMessage = "";
         if (this.context.session === null) {
             this.context.router.routeTo("/login");
@@ -71,20 +52,10 @@ export class Customer implements Component {
             }).then((response) => {
                 this.usernames.data = response.usernames.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
                 this.usernames.isFetched = true;
+                this.showTickets();
                 update();
             });
         }
-        /*if (this.usernames.isFetched && this.tickets.isFetched) {
-            this.tickets.data!.forEach((ticket, i) => {
-                domAddEvent<HTMLTableRowElement, "click">("random" + i, "click", () => {
-                    this.context.currentTicketEdit = ticket;
-                    this.usernames.isFetched = false;
-                    this.tickets.isFetched = false;
-                    this.context.router.routeTo("/ticket_editor");
-                    update();
-                })
-            })
-        }*/
 
         document.querySelectorAll<HTMLDivElement>(".ticket").forEach((ticket, i) => {
             ticket.addEventListener("click", () => {
@@ -102,5 +73,12 @@ export class Customer implements Component {
             this.context.router.routeTo("/create_ticket");
             update();
         });
+    }
+
+    private showTickets() {
+        if (this.tickets.isFetched && this.usernames.isFetched) {
+            this.ticketComponents = this.tickets.data!.map(ticket => new TicketComponent(ticket, this.usernames.data!));
+        }
+
     }
 }

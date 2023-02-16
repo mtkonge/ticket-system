@@ -11,6 +11,8 @@ export type UserInfo = {
 
 export type TicketType = "Incident" | "Request";
 
+export type TicketStatus = "Open" | "Pending" | "Resolved";
+
 export type TicketComment = {
     id: number,
     message: string,
@@ -24,6 +26,7 @@ export type Ticket = {
     creator: number,
     assignee: number,
     urgency: TicketType,
+    status: TicketStatus,
     comments: TicketComment[]
 }
 

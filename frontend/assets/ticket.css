@@ -1,0 +1,77 @@
+.ticket {
+    position: relative;
+    background-color: white;
+    padding: 15px;
+    padding-left: 60px;
+    line-height: 1.5;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    margin 0 10px;
+    width: 500px;
+    word-break: break-word;
+}
+
+.ticket::before {
+    z-index: 1;
+    content: "";
+    display: block;
+    position: absolute;
+    left: -30px;
+    top: calc(50% - 30px);
+    background-color: #FAFAFA;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.ticket .title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.ticket .status, .ticket .urgency {
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    color: white;
+}
+
+.ticket .flex {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ticket .status.open {
+    background-color: #00C853;
+}
+
+.ticket .status.pending {
+    background-color: #FFEA00;
+    color: black;
+}
+
+.ticket .status.resolved {
+    background-color: #D500F9;
+}
+
+.ticket .urgency.request {
+    background-color: #00B0FF;
+}
+
+.ticket .urgency.incident {
+    background-color: #D50000;
+}
+
+.ticket .content {
+    padding: 2px 0;
+    margin: 8px 0;
+    border-top: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+    white-space: pre;
+}
+
+.ticket .assignee {
+    color: #616161;
+}
+
