@@ -57,7 +57,7 @@ export class CreateTicket implements Component {
                 if (!response.ok) {
                     this.errorMessage = response.msg;
                 } else {
-                    this.context.ticketHasChangedAmountLastTime = true;
+                    this.context.ticketHasChangedAmountSinceLastTime = true;
                     this.context.router.routeTo("/customer");
                 }
                 update();

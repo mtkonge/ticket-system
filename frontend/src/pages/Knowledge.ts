@@ -10,10 +10,12 @@ export class Knowledge implements Component {
 
     public render() {
         return html`
-            <h1>Knowledge</h1>
+            <h1 id="knowledge-headtitle">Knowledge</h1>
+            <button id="create-document">Create Document</button>
             ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
+
             <div id="knowledges-container">
                 ${this.documents.isFetched
                     ? this.documents
@@ -40,7 +42,10 @@ export class Knowledge implements Component {
             this.context.router.routeTo("/login");
             return update();
         }
-        if (!this.documents.isFetched) {
+        if (
+            !this.documents.isFetched ||
+            this.context.documentHasChangedAmountSinceLastTime
+        ) {
             allDocuments({ token: this.context.session.token }).then(
                 (response) => {
                     if (!response.ok) {
@@ -49,6 +54,7 @@ export class Knowledge implements Component {
                         this.documents.data = response.documents;
                     }
                     this.documents.isFetched = true;
+                    this.context.documentHasChangedAmountSinceLastTime = false;
                     this.showDocuments();
                     update();
                 },
@@ -70,6 +76,10 @@ export class Knowledge implements Component {
                 );
             });
         }
+        domAddEvent("create-document", "click", () => {
+            this.context.router.routeTo("/document_creator");
+            update();
+        });
     }
     private showDocuments() {
         if (this.documents.isFetched) {

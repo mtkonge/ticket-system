@@ -38,7 +38,7 @@ export class Customer implements Component {
         }
         if (
             !this.tickets.isFetched ||
-            this.context.ticketHasChangedAmountLastTime
+            this.context.ticketHasChangedAmountSinceLastTime
         ) {
             userCreatedTickets({ token: this.context.session.token }).then(
                 (response) => {
@@ -48,7 +48,7 @@ export class Customer implements Component {
                         this.tickets.data = response.tickets;
                     }
                     this.tickets.isFetched = true;
-                    this.context.ticketHasChangedAmountLastTime = false;
+                    this.context.ticketHasChangedAmountSinceLastTime = false;
                     update();
                 },
             );

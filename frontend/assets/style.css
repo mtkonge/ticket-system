@@ -263,6 +263,19 @@ table, th, td {
     filter: brightness(0.7);
 }
 
-.knowledge-title {
+.knowledge-container {
+    text-align: left;
+    position: relative;
+    background-color: white;
+    padding: 15px;
+    padding-left: 60px;
+    line-height: 1.5;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    width: 500px;
+    word-break: break-word;
+}
+
+.knowledge-headtitle {
     
 }

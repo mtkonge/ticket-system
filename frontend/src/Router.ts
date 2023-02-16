@@ -11,6 +11,7 @@ import { Context } from "./Context";
 import { DocumentReader } from "./pages/DocumentReader";
 import { DocumentEditor } from "./pages/DocumentEditor";
 import { Knowledge } from "./pages/Knowledge";
+import { DocumentCreator } from "./pages/CreateDocument";
 
 export class RouterPage implements Component {
     private indexPage = new Index(this.context);
@@ -24,10 +25,9 @@ export class RouterPage implements Component {
     private knowledgePage = new Knowledge(this.context);
     private documentReaderPage = new DocumentReader(this.context);
     private documentEditorPage = new DocumentEditor(this.context);
+    private documentCreatorPage = new DocumentCreator(this.context);
 
-    public constructor(
-        private context: Context,
-    ) { }
+    public constructor(private context: Context) {}
 
     public render() {
         if (this.context.router.route() == "/") return this.indexPage.render();
@@ -51,6 +51,8 @@ export class RouterPage implements Component {
             return this.knowledgePage.render();
         else if (this.context.router.route() == "/document_editor")
             return this.documentEditorPage.render();
+        else if (this.context.router.route() == "/document_creator")
+            return this.documentCreatorPage.render();
         return "<img src='https://http.cat/404.jpg'>";
     }
 
@@ -60,7 +62,8 @@ export class RouterPage implements Component {
             return [this.customerPage];
         else if (this.context.router.route() == "/supporter")
             return [this.supporterPage];
-        else if (this.context.router.route() == "/login") return [this.loginPage];
+        else if (this.context.router.route() == "/login")
+            return [this.loginPage];
         else if (this.context.router.route() == "/register")
             return [this.registerPage];
         else if (this.context.router.route() == "/admin_panel")
@@ -75,6 +78,8 @@ export class RouterPage implements Component {
             return [this.documentReaderPage];
         else if (this.context.router.route() == "/document_editor")
             return [this.documentEditorPage];
+        else if (this.context.router.route() == "/document_creator")
+            return [this.documentCreatorPage];
         else return [];
     }
 
