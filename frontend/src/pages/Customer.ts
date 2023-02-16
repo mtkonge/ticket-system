@@ -9,6 +9,7 @@ export class Customer implements Component {
     private tickets = fetched<Ticket[]>();
     private usernames = fetched<{ [id: number]: string }>();
     private errorMessage = "";
+    private ticketComponents: TicketComponent[] = [];
 
     public constructor(private context: Context) {}
 
@@ -21,8 +22,10 @@ export class Customer implements Component {
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
-                <br><br>
-                ${this.ticketComponents.map(ticket => ticket.render()).join("<br>")}
+                <br /><br />
+                ${this.ticketComponents
+                    .map((ticket) => ticket.render())
+                    .join("<br>")}
             </div>
         `;
     }
@@ -33,7 +36,10 @@ export class Customer implements Component {
             this.context.router.routeTo("/login");
             return update();
         }
-        if (!this.tickets.isFetched) {
+        if (
+            !this.tickets.isFetched ||
+            this.context.ticketHasChangedAmountLastTime
+        ) {
             userCreatedTickets({ token: this.context.session.token }).then(
                 (response) => {
                     if (!response.ok) {
@@ -42,10 +48,12 @@ export class Customer implements Component {
                         this.tickets.data = response.tickets;
                     }
                     this.tickets.isFetched = true;
+                    this.context.ticketHasChangedAmountLastTime = false;
                     update();
                 },
             );
         }
+
         if (!this.usernames.isFetched && this.tickets.isFetched) {
             usernames({
                 user_ids: this.tickets
@@ -61,23 +69,6 @@ export class Customer implements Component {
                 update();
             });
         }
-        if (this.usernames.isFetched && this.tickets.isFetched) {
-            this.tickets.data!.forEach((ticket, i) => {
-                domAddEvent<HTMLTableRowElement, "click">(
-                    "random" + i,
-                    "click",
-                    () => {
-                        this.usernames.isFetched = false;
-                        this.tickets.isFetched = false;
-                        this.context.router.routeTo(
-                            "/ticket_editor",
-                            `?ticket=${ticket.id}`,
-                        );
-                        update();
-                    },
-                );
-            });
-        }
         domAddEvent(this.createTicketButtonId, "click", () => {
             this.tickets.isFetched = false;
             this.usernames.isFetched = false;
@@ -88,7 +79,7 @@ export class Customer implements Component {
 
     private showTickets() {
         if (this.tickets.isFetched && this.usernames.isFetched) {
-            this.tickets.data!.map(
+            this.ticketComponents = this.tickets.data!.map(
                 (ticket) => new TicketComponent(ticket, this.usernames.data!),
             );
         }
