@@ -95,7 +95,7 @@ export class Customer implements Component {
     private showTickets() {
         if (this.tickets.isFetched && this.usernames.isFetched) {
             this.ticketComponents = this.tickets.data!.map(
-                (ticket) => new TicketComponent(ticket, this.usernames.data!),
+                (ticket) => new TicketComponent(ticket, this.usernames.data!, true, true),
             );
         }
     }

@@ -6,11 +6,13 @@ export class TicketComponent implements Component {
     public constructor(
         private ticket: Ticket,
         private usernames: { [id: number]: string },
+        private clickable: boolean,
+        private truncate: boolean,
     ) { }
 
     public render() {
         return html`
-            <div class="ticket">
+            <div class="ticket ${this.clickable ? "clickable" : ""} ${this.truncate ? "truncate" : ""}">
                 <span class="title">${this.ticket.title}</span>
                 <br>
                 <div class="flex">

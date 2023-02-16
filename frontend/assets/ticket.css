@@ -9,6 +9,7 @@
     margin 0 10px;
     width: 500px;
     word-break: break-word;
+    transition-duration: 0.2s;
 }
 
 .ticket::before {
@@ -22,6 +23,12 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
+}
+
+.ticket.clickable:hover {
+    cursor: pointer;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, 0.2);
+    transform: translate(-3px, -3px);
 }
 
 .ticket .title {
@@ -79,7 +86,13 @@
     margin: 8px 0;
     border-top: 1px solid #EEE;
     border-bottom: 1px solid #EEE;
+    white-space: pre-wrap;
+}
+
+.ticket.truncate .content {
     white-space: pre;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .ticket .assignee {
