@@ -202,6 +202,7 @@ status: `200` | `400` | `500`
         urgency: "Incident" | "Request",
         creator: 1024,
         assignee: 1024,
+        status: "Open" | "Pending" | "Resolved",
         comments: [
             {
                 id: 1024,
@@ -240,6 +241,7 @@ status: `200` | `400` | `500`
             urgency: "Incident" | "Request",
             creator: 1024,
             assignee: 1024,
+            status: "Open" | "Pending" | "Resolved",
             comments: [
                 {
                     id: 1024,
@@ -279,6 +281,7 @@ status: `200` | `400` | `500`
             creator: 1024,
             assignee: 1024,
             urgency: "Incident" | "Request",
+            status: "Open" | "Pending" | "Resolved",
             comments: [
                 {
                     id: 1024,

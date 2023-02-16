@@ -24,6 +24,13 @@ pub struct Document {
     pub content: String,
 }
 
+#[derive(Deserialize, Serialize)]
+pub enum TicketStatus {
+    Open,
+    Pending,
+    Resolved,
+}
+
 #[derive(Serialize)]
 pub struct Ticket {
     pub id: u64,
@@ -33,6 +40,7 @@ pub struct Ticket {
     pub assignee: u64,
     pub comments: Vec<TicketComment>,
     pub urgency: Urgency,
+    pub status: TicketStatus,
 }
 
 #[derive(Serialize)]
@@ -243,6 +251,7 @@ impl Db {
         title: Option<String>,
         assignee: Option<u64>,
         urgency: Option<Urgency>,
+        status: Option<TicketStatus>,
     ) -> Result<(), Error> {
         let ticket = self
             .tickets
@@ -258,6 +267,9 @@ impl Db {
         }
         if let Some(urgency) = urgency {
             ticket.urgency = urgency;
+        }
+        if let Some(status) = status {
+            ticket.status = status;
         }
 
         Ok(())
@@ -305,6 +317,7 @@ impl Db {
             content,
             urgency,
             assignee,
+            status: TicketStatus::Open,
             creator,
             comments: Vec::new(),
         };

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 
 use crate::{
-    db::{Db, Error, Role, Urgency},
+    db::{Db, Error, Role, TicketStatus, Urgency},
     response_helper::{bad_request, internal_server_error},
 };
 
@@ -13,6 +13,7 @@ pub struct Request {
     token: String,
     title: String,
     urgency: Urgency,
+    status: TicketStatus,
 }
 
 #[derive(Serialize)]
@@ -43,7 +44,13 @@ async fn edit_ticket(db: web::Data<RwLock<Db>>, request: web::Json<Request>) -> 
         Role::Admin | Role::LevelTwo | Role::LevelOne | Role::Consumer => (),
     }
 
-    match db.edit_ticket(request.id, Some(request.title), None, Some(request.urgency)) {
+    match db.edit_ticket(
+        request.id,
+        Some(request.title),
+        None,
+        Some(request.urgency),
+        Some(request.status),
+    ) {
         Ok(_) => (),
         Err(Error::NotFound) => return bad_request("invalid id"),
         Err(_) => return internal_server_error("db error"),

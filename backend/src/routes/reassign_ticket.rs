@@ -36,7 +36,7 @@ async fn reassign_ticket(db: web::Data<RwLock<Db>>, request: web::Json<Request>)
         Role::Consumer => return bad_request("unauthorized"),
     }
 
-    match db.edit_ticket(request.id, None, Some(request.assignee), None) {
+    match db.edit_ticket(request.id, None, Some(request.assignee), None, None) {
         Ok(_) => (),
         Err(Error::NotFound) => return bad_request("invalid id"),
         Err(_) => return internal_server_error("db error"),
