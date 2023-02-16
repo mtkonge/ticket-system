@@ -56,9 +56,9 @@ function reassignSelection(selectId: string, users: UserInfo[]): string {
             <label for="${selectId}">Reassign ticket: </label>
             <select name="assignee" id="${selectId}" class="brand-button" style="min-width: 200px">
                 ${users
-                    .map(info => `<option value="${info.id}">${info.name} (${info.role})</option>`)
-                    .join("")
-                }
+            .map(info => `<option value="${info.id}">${info.name} (${info.role})</option>`)
+            .join("")
+        }
             </select>
         </div>
     `;
@@ -79,7 +79,7 @@ export class TicketEditor implements Component {
     private editModeId = generateId();
     private mode = Mode.view;
 
-    public constructor(private context: Context) {}
+    public constructor(private context: Context) { }
 
     public render() {
         if (
@@ -87,65 +87,56 @@ export class TicketEditor implements Component {
             this.usernames.data === undefined
         ) {
             return `<h1>Loading ticket...</h1>
-            ${
-                this.errorMessage !== ""
+            ${this.errorMessage !== ""
                     ? html`<p class="error-text">${this.errorMessage}</p>`
                     : ""
-            }
+                }
             </p>`;
         }
         return `
             <div style="border-bottom: 1px solid #ccc;">
-                <h1 style="margin-bottom: 0.5rem">[${
-                    this.ticket.data!.urgency
-                }] [${this.ticket.data!.status}] ${this.ticket.data!.title} (#${
-            this.ticket.data!.id
-        })</h1>
-                ${
-                    this.errorMessage !== ""
-                        ? html`<p class="error-text">${this.errorMessage}</p>`
-                        : ""
-                }
-                <h3 style="color: #aaa; margin: 0">Creator: ${
-                    this.usernames.data![this.ticket.data!.creator]
-                } | Assigned to: ${
-            this.usernames.data![this.ticket.data!.assignee]
-        }</h3>
+                <h1 style="margin-bottom: 0.5rem">[${this.ticket.data!.urgency
+            }] [${this.ticket.data!.status}] ${this.ticket.data!.title} (#${this.ticket.data!.id
+            })</h1>
+                ${this.errorMessage !== ""
+                ? html`<p class="error-text">${this.errorMessage}</p>`
+                : ""
+            }
+                <h3 style="color: #aaa; margin: 0">Creator: ${this.usernames.data![this.ticket.data!.creator]
+            } | Assigned to: ${this.usernames.data![this.ticket.data!.assignee]
+            }</h3>
                 <p>${this.ticket.data!.content}</p>
             </div>
-            <form id="${
-                this.editFormId
+            <form id="${this.editFormId
             }" style="border-bottom: 1px solid #ccc; line-height: 0.8">
-                <input type="hidden" name="title" value="${
-                    this.ticket.data!.title
-                }">
-                <h4>Edit mode: <input type="checkbox" ${
-                    this.mode === Mode.edit ? "checked" : ""
-                } id=${this.editModeId}></h4>
-                <h4 style=" ${
-                    this.mode === Mode.view ? `display: none;` : "margin: 0;"
-                }">
+                <input type="hidden" name="title" value="${this.ticket.data!.title
+            }">
+                <h4>Edit mode: <input type="checkbox" ${this.mode === Mode.edit ? "checked" : ""
+            } id=${this.editModeId}></h4>
+                <h4 style="${this.mode === Mode.view ? `display: none;` : "margin: 0;"
+            }">
                     ${editStatus(this.selectStatusId, this.ticket.data!.status)}
                     ${editType(this.selectTypeId, this.ticket.data!.urgency)}
+                </h4>
+                <input type="${this.mode === Mode.edit ? "submit" : "hidden"}" id="${this.saveEditId}" value="Save edit" class="brand-button">
                 ${(() => {
-                    if (
-                        this.assignableUsers.isFetched &&
-                        this.assignableUsers.data !== undefined
-                    ) {
-                        return `
+                if (
+                    this.assignableUsers.isFetched &&
+                    this.assignableUsers.data !== undefined
+                ) {
+                    return `<h4 style="${this.mode === Mode.view ? `display: none;` : "border-top: 1px solid #ccc; margin: 0;"
+                        }">
                         ${reassignSelection(
                             this.selectAssignId,
                             this.assignableUsers.data!,
                         )}
-                        <button class="brand-button" id="${
-                            this.saveAssignId
+                        <button class="brand-button" id="${this.saveAssignId
                         }">Reassign</button>
                     </h4>`;
-                    } else {
-                        return "";
-                    }
-                })()}
-                <input type="${this.mode === Mode.edit ? "submit" : "hidden"}" id="${this.saveEditId}" value="Save edit" class="brand-button">
+                } else {
+                    return "";
+                }
+            })()}
             </form>
             ${this.ticket
                 .data!.comments.map(
