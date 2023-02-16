@@ -11,21 +11,21 @@ export class Customer implements Component {
     private errorMessage = "";
     private ticketComponents: TicketComponent[] = [];
 
-    public constructor(private context: Context) {}
+    public constructor(private context: Context) { }
 
     public render() {
         return html`
             <div class="customer-tickets-container">
                 ${this.errorMessage !== ""
-                    ? html`<p class="error-text">${this.errorMessage}</p>`
-                    : ""}
+                ? html`<p class="error-text">${this.errorMessage}</p>`
+                : ""}
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
                 <br /><br />
                 ${this.ticketComponents
-                    .map((ticket) => ticket.render())
-                    .join("<br>")}
+                .map((ticket) => ticket.render())
+                .join("<br>")}
             </div>
         `;
     }
@@ -69,8 +69,7 @@ export class Customer implements Component {
                 update();
             });
         }
-<<<<<<< HEAD
-=======
+
         if (this.usernames.isFetched && this.tickets.isFetched) {
             this.tickets.data!.forEach((ticket, i) => {
                 document.querySelectorAll(".ticket")[i].addEventListener("click", () => {
@@ -84,7 +83,7 @@ export class Customer implements Component {
                 });
             });
         }
->>>>>>> 79497bc (Frontend: Add design for ticket creator)
+
         domAddEvent(this.createTicketButtonId, "click", () => {
             this.tickets.isFetched = false;
             this.usernames.isFetched = false;
