@@ -42,11 +42,6 @@ export class Topbar implements Component {
                             Assigned tickets
                         </button>
                     ` : ""}
-                    ${this.context.session !== null && this.context.session?.role !== "Consumer" ? html`
-                        <button id="${this.documentReaderButtonId}">
-                            Knowledge
-                        </button>
-                    ` : ""}
                     ${this.context.session === null ? html`
                         <button id="${this.loginButton}">
                             Login
@@ -81,12 +76,6 @@ export class Topbar implements Component {
         if (this.context.session !== null && this.context.session?.role !== "Consumer") {
             domAddEvent(this.supporterButtonId, "click", () => {
                 this.context.router.routeTo("/supporter");
-                update();
-            });
-        }
-        if (this.context.session !== null && this.context.session?.role !== "Consumer") {
-            domAddEvent(this.documentReaderButtonId, "click", () => {
-                this.context.router.routeTo("/knowledge");
                 update();
             });
         }

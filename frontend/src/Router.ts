@@ -1,15 +1,16 @@
 import { Customer } from "./pages/Customer";
 import { Supporter } from "./pages/Supporter";
-import { ByRef, Component } from "./framework";
+import { Component } from "./framework";
 import { Index } from "./pages/Index";
-import { Router } from "./utils";
-import { Session } from "./session";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { AdminPanel } from "./pages/AdminPanel";
 import { CreateTicket } from "./pages/CreateTicket";
 import { TicketEditor } from "./pages/TicketEditor";
 import { Context } from "./Context";
+import { DocumentReader } from "./pages/DocumentReader";
+import { DocumentEditor } from "./pages/DocumentEditor";
+import { Knowledge } from "./pages/Knowledge";
 
 export class RouterPage implements Component {
     private indexPage = new Index(this.context);
@@ -20,6 +21,9 @@ export class RouterPage implements Component {
     private adminPanelPage = new AdminPanel(this.context);
     private createTicketPage = new CreateTicket(this.context);
     private ticketEditorPage = new TicketEditor(this.context);
+    private knowledgePage = new Knowledge(this.context);
+    private documentReaderPage = new DocumentReader(this.context);
+    private documentEditorPage = new DocumentEditor(this.context);
 
     public constructor(
         private context: Context,
@@ -41,6 +45,12 @@ export class RouterPage implements Component {
             return this.createTicketPage.render();
         else if (this.context.router.route() == "/ticket_editor")
             return this.ticketEditorPage.render();
+        else if (this.context.router.route() == "/document_reader")
+            return this.documentReaderPage.render();
+        else if (this.context.router.route() == "/knowledge")
+            return this.knowledgePage.render();
+        else if (this.context.router.route() == "/document_editor")
+            return this.documentEditorPage.render();
         return "<img src='https://http.cat/404.jpg'>";
     }
 
@@ -59,6 +69,12 @@ export class RouterPage implements Component {
             return [this.createTicketPage];
         else if (this.context.router.route() == "/ticket_editor")
             return [this.ticketEditorPage];
+        else if (this.context.router.route() == "/knowledge")
+            return [this.knowledgePage];
+        else if (this.context.router.route() == "/document_reader")
+            return [this.documentReaderPage];
+        else if (this.context.router.route() == "/document_editor")
+            return [this.documentEditorPage];
         else return [];
     }
 
