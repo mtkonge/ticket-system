@@ -10,16 +10,17 @@ use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
 use db::Db;
 use routes::{
-    all_documents::all_documents, all_users::all_users, create_document::create_document,
-    edit_document::edit_document, edit_role::edit_role, edit_ticket::edit_ticket, get_sla::get_sla,
-    load_assets::load_assets, load_html::load_html, login::login, one_ticket::one_ticket,
-    open_ticket::open_ticket, post_comment::post_comment, reassign_ticket::reassign_ticket,
-    register::register, set_sla::set_sla, user_assigned_tickets::user_assigned_tickets,
-    user_created_tickets::user_created_tickets, user_info::user_info, usernames::usernames,
+    all_assignable_users::all_assignable_users, all_documents::all_documents, all_users::all_users,
+    create_document::create_document, edit_document::edit_document, edit_role::edit_role,
+    edit_ticket::edit_ticket, get_sla::get_sla, load_assets::load_assets, load_html::load_html,
+    login::login, one_ticket::one_ticket, open_ticket::open_ticket, post_comment::post_comment,
+    reassign_ticket::reassign_ticket, register::register, set_sla::set_sla,
+    user_assigned_tickets::user_assigned_tickets, user_created_tickets::user_created_tickets,
+    user_info::user_info, usernames::usernames,
 };
+use std::env;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use std::env;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -46,6 +47,7 @@ async fn main() -> std::io::Result<()> {
                     .service(open_ticket)
                     .service(user_info)
                     .service(all_users)
+                    .service(all_assignable_users)
                     .service(create_document)
                     .service(edit_ticket)
                     .service(post_comment)

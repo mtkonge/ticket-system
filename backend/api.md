@@ -294,6 +294,36 @@ status: `200` | `400` | `500`
 }
 ```
 
+## all assignable users
+
+`user/assignable`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+    "users": [
+        {
+            "id": 1024,
+            "name": "...",
+            "role": "LevelOne" | "LevelTwo" | "Admin"
+        }
+    ]
+}
+```
+
+
 ## all users
 
 `user/all`

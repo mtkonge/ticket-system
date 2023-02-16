@@ -1,3 +1,4 @@
+pub mod all_assignable_users;
 pub mod all_documents;
 pub mod all_users;
 pub mod create_document;
