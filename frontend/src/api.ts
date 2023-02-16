@@ -13,9 +13,9 @@ export type TicketType = "Incident" | "Request";
 export type TicketStatus = "Open" | "Pending" | "Resolved";
 
 export type TicketComment = {
-    id: number;
-    message: string;
-    creator: number;
+    id: number,
+    content: string,
+    creator: number,
 };
 
 export type Ticket = {

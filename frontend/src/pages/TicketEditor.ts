@@ -14,7 +14,7 @@ export class TicketEditor implements Component {
     ) { }
 
     public render() {
-        if (this.ticket.data === undefined) {
+        if (this.ticket.data === undefined || this.usernames.data === undefined) {
             return `<h1>Henter ticket...</h1>
             ${this.errorMessage !== ""
                     ? html`<p class="error-text">${this.errorMessage}</p>`
@@ -29,33 +29,23 @@ export class TicketEditor implements Component {
                 : ""
             }
             <p>${this.ticket.data!.content}</p>
+
+            <pre><code>${JSON.stringify(this.ticket.data!, null, 4)}</code></pre>
             <h2>Add comment</h2>
             <form id="${this.addCommentFormId}">
                 <textarea name="content" placeholder = "Content..."></textarea>
                 <br>
                 <input type="submit" value="Post comment">
             </form>
-            `
-        /*
-        return `
-            <h1>[${this.ticket.data.status}] ${this.context.currentTicketEdit!.title} (#${this.context.currentTicketEdit!.id})</h1>
-            ${this.errorMessage !== ""
-                ? html`<p class="error-text">${this.errorMessage}</p>`
-                : ""
+            <h2>Comments</h2>
+            ${this.ticket.data!.comments.map(comment => `
+                <div class="comment">
+                    <p><b>${this.usernames.data![comment.creator]}</b></p>
+                    <p>${comment.content}</p>
+                </div>
+                `).reduce((acc, curr) => acc + curr)
             }
-        <pre><code>${this.context.currentTicketEdit !== null
-                ? JSON.stringify(this.context.currentTicketEdit, null, 4)
-                : ""
-            } </code></pre>
-
-            <h2>Add comment</h2>
-                <form id = "${this.addCommentFormId}">
-                    <textarea name="content" placeholder = "Content..."></textarea>
-                    <br>
-                    <input type="submit" value = "Post comment">
-                    </form>
-            <h2>Comments</h2>`;
-            */
+            `
     }
 
     public hydrate(update: () => void): void {

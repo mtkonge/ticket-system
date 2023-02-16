@@ -20,11 +20,8 @@ export class Topbar implements Component {
         return html`
             <div class="topbar">
                 <div>
-                    <img src="/favicon.ico" height="36">
-                    <h1>TicketSystem®</h1>
-                    <button id="${this.indexButtonId}">
-                        <span class="material-symbols-outlined">home</span>
-                    </button>
+                    <img src="/favicon.ico">
+                    <h1 id="${this.indexButtonId}">TicketSystem®</h1>
                 </div>
                 <div class="text-buttons">
                     ${this.context.session?.role === "Admin" ? html`
