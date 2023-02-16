@@ -87,7 +87,7 @@ export class TicketEditor implements Component {
                 ${(() => {
                 if (this.assignableUsers.isFetched && this.assignableUsers.data !== undefined) {
                     return `
-                    <div style="${this.mode === Mode.edit ? "display: hidden;" : ""}">
+                    <div style="${this.mode === Mode.view ? "display: none;" : ""}">
                         ${reassignSelection(this.selectAssignId, this.assignableUsers.data!)}
                         <button class="brand-button" id="${this.saveAssignId}">Reassign</button>
                     </div>`
