@@ -29,6 +29,12 @@ export type Ticket = {
     status: TicketStatus;
 };
 
+export type Document = {
+    id: number;
+    title: string;
+    content: string;
+};
+
 export type KnowledgeDocument = {
     id: number;
     title: string;
@@ -429,3 +435,43 @@ export async function usernames(
         ok: response.ok,
     };
 }
+
+export type SLAResponse = {
+    ok: boolean;
+    msg: string;
+    document: Document;
+}
+
+export async function sla(): Promise<SLAResponse> {
+    const response = await fetch("/api/sla/get", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+
+export type SetSLARequest = {
+    token: string;
+    id: number;
+};
+
+export type SetSLAResponse = {
+    ok: boolean;
+    msg: string;
+};
+
+export async function setSla(request: SetSLARequest): Promise<SetSLAResponse> {
+    const response = await fetch("/api/sla/set", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+

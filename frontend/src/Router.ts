@@ -12,6 +12,7 @@ import { DocumentReader } from "./pages/DocumentReader";
 import { DocumentEditor } from "./pages/DocumentEditor";
 import { Knowledge } from "./pages/Knowledge";
 import { DocumentCreator } from "./pages/CreateDocument";
+import { Sla } from "./pages/Sla";
 
 export class RouterPage implements Component {
     private indexPage = new Index(this.context);
@@ -26,6 +27,7 @@ export class RouterPage implements Component {
     private documentReaderPage = new DocumentReader(this.context);
     private documentEditorPage = new DocumentEditor(this.context);
     private documentCreatorPage = new DocumentCreator(this.context);
+    private slaPage = new Sla(this.context);
 
     public constructor(private context: Context) {}
 
@@ -53,6 +55,8 @@ export class RouterPage implements Component {
             return this.documentEditorPage.render();
         else if (this.context.router.route() == "/document_creator")
             return this.documentCreatorPage.render();
+        else if (this.context.router.route() == "/sla")
+            return this.slaPage.render();
         return "<img src='https://http.cat/404.jpg'>";
     }
 
@@ -80,6 +84,8 @@ export class RouterPage implements Component {
             return [this.documentEditorPage];
         else if (this.context.router.route() == "/document_creator")
             return [this.documentCreatorPage];
+        else if (this.context.router.route() == "/sla")
+            return [this.slaPage];
         else return [];
     }
 

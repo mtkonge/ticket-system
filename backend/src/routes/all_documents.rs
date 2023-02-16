@@ -53,7 +53,7 @@ async fn all_documents(db: web::Data<RwLock<Db>>, request: web::Json<Request>) -
     HttpResponse::Ok()
         .insert_header(ContentType::json())
         .json(Response {
-            msg: "ticket successfully created",
+            msg: "all documents returned",
             documents,
         })
 }

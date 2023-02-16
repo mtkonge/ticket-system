@@ -1,4 +1,4 @@
-import { allUsers, editUserRole, registerUser, UserInfo, UserRole } from "../api";
+import { allDocuments, allUsers, editUserRole, registerUser, setSla, UserInfo, UserRole } from "../api";
 import { Context } from "../Context";
 import { Component, domAddEvent, domSelectId, fetched, html } from "../framework"
 import { generateId } from "../utils";
@@ -12,6 +12,10 @@ export class AdminPanel implements Component {
     private userSelectId = generateId();
     private newRoleSelectId = generateId();
     private saveNewRoleButtonId = generateId();
+    private editSlaFormId = generateId();
+    private documentSelectId = generateId();
+    private setSlaButtonId = generateId();
+    private setServiceCatalogButtonId = generateId();
 
     private selectedOptionIndex = 0;
     private usersInfo = fetched<UserInfo[]>();
@@ -57,6 +61,11 @@ export class AdminPanel implements Component {
                     <button id="${this.saveNewRoleButtonId}">Save new role</button>
                     `
                 : ""}
+                <h2>Documents</h2>
+                <select id="${this.documentSelectId}"></select>
+                <br><br>
+                <button id="${this.setSlaButtonId}">Set SLA</button>
+                <button id="${this.setServiceCatalogButtonId}">Set service catalog</button>
             </div>
         `;
     }
@@ -68,6 +77,27 @@ export class AdminPanel implements Component {
             this.context.router.routeTo("/login");
             return update();
         }
+
+        allDocuments({ token: this.context.session!.token }).then(response => {
+            if (!response.ok) {
+                this.errorMessage = response.msg;
+                return;
+            }
+
+            response.documents.forEach(doc => {
+                const option = document.createElement("option");
+                option.value = doc.id.toString();
+                option.innerText = `${doc.title} (#${doc.id})`;
+                domSelectId(this.documentSelectId).appendChild(option);
+            });
+        });
+
+        domAddEvent(this.setSlaButtonId, "click", () => {
+            const documentId = domSelectId<HTMLSelectElement>(this.documentSelectId)!.value;
+            console.log(documentId);
+            if (!documentId) return;
+            setSla({ token: this.context.session!.token, id: parseInt(documentId) });
+        });
 
         const addUserForm = domSelectId<HTMLFormElement>(this.addUserFormId);
         addUserForm.addEventListener("submit", async (event) => {
@@ -82,7 +112,7 @@ export class AdminPanel implements Component {
             }
             this.usersInfo.isFetched = false;
             update();
-        })
+        });
 
         const userSelectElement = domSelectId<HTMLSelectElement>(this.userSelectId);
         if (!this.usersInfo.isFetched) {
