@@ -7,7 +7,7 @@ export class Topbar implements Component {
     private customerButtonId = generateId("customer");
     private supporterButtonId = generateId("supporter");
     private adminPanelButtonId = generateId("supporter");
-    private documentReaderButtonId = generateId();
+    private knowledgeButtonId = generateId();
 
     private loginButton = generateId("login");
     private logoutButton = generateId("logout");
@@ -40,7 +40,7 @@ export class Topbar implements Component {
                         </button>
                     ` : ""}
                     ${this.context.session !== null && this.context.session?.role !== "Consumer" ? html`
-                        <button id="${this.documentReaderButtonId}">
+                        <button id="${this.knowledgeButtonId}">
                             Knowledge
                         </button>
                     ` : ""}
@@ -82,7 +82,7 @@ export class Topbar implements Component {
             });
         }
         if (this.context.session !== null && this.context.session?.role !== "Consumer") {
-            domAddEvent(this.documentReaderButtonId, "click", () => {
+            domAddEvent(this.knowledgeButtonId, "click", () => {
                 this.context.router.routeTo("/knowledge");
                 update();
             });
