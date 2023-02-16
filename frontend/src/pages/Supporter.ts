@@ -1,6 +1,6 @@
 import { Ticket, userAssignedTickets, usernames } from "../api";
 import { Context } from "../Context";
-import { Component, fetched, html } from "../framework";
+import { Component, domAddEvent, domSelectId, fetched, html } from "../framework";
 
 export class Supporter implements Component {
     private tickets = fetched<Ticket[]>();
@@ -25,8 +25,8 @@ export class Supporter implements Component {
                     <th class="assigned-to">Assigned To</th>
                 </tr>
                 ${this.tickets.isFetched && this.usernames.isFetched
-                ? this.tickets.data!.map((ticket) => html`
-                    <tr class="ticket-row">
+                ? this.tickets.data!.map((ticket, i) => html`
+                    <tr class="ticket-row" id="${"random" + i}">
                         <td class="creator">${this.usernames.data![ticket.creator]}</td>
                         <td class="title">${ticket.title}</td>
                         <td class="type">${ticket.urgency || ""}</td>
@@ -63,6 +63,17 @@ export class Supporter implements Component {
                 this.usernames.isFetched = true;
                 update();
             });
+        }
+        if (this.usernames.isFetched && this.tickets.isFetched) {
+            this.tickets.data!.forEach((ticket, i) => {
+                domAddEvent<HTMLTableRowElement, "click">("random" + i, "click", () => {
+                    this.context.currentTicketEdit = ticket;
+                    this.usernames.isFetched = false;
+                    this.tickets.isFetched = false;
+                    this.context.router.routeTo("/ticket_editor");
+                    update();
+                })
+            })
         }
     }
 }

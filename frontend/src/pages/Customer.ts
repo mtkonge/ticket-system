@@ -27,8 +27,8 @@ export class Customer implements Component {
                         <th class="assigned-to">Assigned To</th>
                     </tr>
                     ${this.tickets.isFetched && this.usernames.isFetched
-                ? this.tickets.data!.map((ticket) => html`
-                            <tr class="ticket-row">
+                ? this.tickets.data!.map((ticket, i) => html`
+                            <tr class="ticket-row" id="${"random" + i}">
                                 <td class="title">${ticket.title}</td>
                                 <td class="type">${ticket.urgency || ""}</td>
                                 <td class="assigned-to">${this.usernames.data![ticket.assignee]}</td>
@@ -65,6 +65,17 @@ export class Customer implements Component {
                 this.usernames.isFetched = true;
                 update();
             });
+        }
+        if (this.usernames.isFetched && this.tickets.isFetched) {
+            this.tickets.data!.forEach((ticket, i) => {
+                domAddEvent<HTMLTableRowElement, "click">("random" + i, "click", () => {
+                    this.context.currentTicketEdit = ticket;
+                    this.usernames.isFetched = false;
+                    this.tickets.isFetched = false;
+                    this.context.router.routeTo("/ticket_editor");
+                    update();
+                })
+            })
         }
         domAddEvent(this.createTicketButtonId, "click", () => {
             this.tickets.isFetched = false;
