@@ -1,5 +1,5 @@
-import { Context } from "vm";
 import { createDocument } from "../api";
+import { Context } from "../Context";
 import { Component, domAddEvent, fetched, html } from "../framework";
 import { generateId } from "../utils";
 
