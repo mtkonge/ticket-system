@@ -19,10 +19,18 @@ use routes::{
 };
 use std::sync::Arc;
 use tokio::sync::RwLock;
+use std::env;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let args: Vec<String> = env::args().collect();
     let db = Arc::new(RwLock::new(Db::new()));
+
+    let port: u16 = if args.len() >= 2 {
+        args[1].parse().expect("Port number must be numerical")
+    } else {
+        8080
+    };
 
     HttpServer::new(move || {
         App::new()
@@ -52,7 +60,7 @@ async fn main() -> std::io::Result<()> {
             .service(load_assets)
             .service(load_html)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("127.0.0.1", port))?
     .run()
     .await
 }
