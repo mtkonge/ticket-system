@@ -22,35 +22,8 @@ export class Customer implements Component {
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
-                <table class="table">
-                    <tr class="ticket-variables">
-                        <th class="title">Title</th>
-                        <th class="type">Type</th>
-                        <th class="assigned-to">Assigned To</th>
-                    </tr>
-                    ${this.tickets.isFetched && this.usernames.isFetched
-                        ? this.tickets
-                              .data!.map(
-                                  (ticket, i) => html`
-                                      <tr
-                                          class="ticket-row"
-                                          id="${"random" + i}"
-                                      >
-                                          <td class="title">${ticket.title}</td>
-                                          <td class="type">
-                                              ${ticket.urgency || ""}
-                                          </td>
-                                          <td class="assigned-to">
-                                              ${this.usernames.data![
-                                                  ticket.assignee
-                                              ]}
-                                          </td>
-                                      </tr>
-                                  `,
-                              )
-                              .join("")
-                        : ""}
-                </table>
+                <br><br>
+                ${this.ticketComponents.map(ticket => ticket.render()).join("<br>")}
             </div>
         `;
     }
