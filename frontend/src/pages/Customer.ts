@@ -1,6 +1,7 @@
 import { Ticket, userCreatedTickets, usernames } from "../api";
 import { Context } from "../Context";
 import { Component, domAddEvent, fetched, html } from "../framework";
+import { TicketComponent } from "../Ticket";
 import { generateId } from "../utils";
 
 export class Customer implements Component {
@@ -8,6 +9,7 @@ export class Customer implements Component {
     private tickets = fetched<Ticket[]>();
     private usernames = fetched<{ [id: number]: string }>()
     private errorMessage = "";
+    private ticketComponents: TicketComponent[] = [];
 
     public constructor(private context: Context) { }
 
@@ -20,7 +22,8 @@ export class Customer implements Component {
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
-                <table class="table">
+                ${this.ticketComponents.map(ticket => ticket.render())}
+                <!--<table class="table">
                     <tr class="ticket-variables">
                         <th class="title">Title</th>
                         <th class="type">Type</th>
@@ -34,12 +37,16 @@ export class Customer implements Component {
                                 <td class="assigned-to">${this.usernames.data![ticket.assignee]}</td>
                             </tr>
                         `).join("") : ""}
-                </table>
+                </table>-->
             </div>
         `;
     }
 
     hydrate(update: () => void): void {
+        if (this.tickets.isFetched && this.usernames.isFetched) {
+            this.ticketComponents = this.tickets.data!.map(ticket => new TicketComponent(ticket, this.usernames.data!));
+        }
+
         this.errorMessage = "";
         if (this.context.session === null) {
             this.context.router.routeTo("/login");
@@ -59,14 +66,15 @@ export class Customer implements Component {
         }
         if (!this.usernames.isFetched && this.tickets.isFetched) {
             usernames({
-                user_ids: this.tickets.data!.map((ticket) => ticket.assignee),
+                user_ids: this.tickets.data!.map(ticket => ticket.assignee)
+                          .concat(this.tickets.data!.map(ticket => ticket.creator)),
             }).then((response) => {
                 this.usernames.data = response.usernames.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
                 this.usernames.isFetched = true;
                 update();
             });
         }
-        if (this.usernames.isFetched && this.tickets.isFetched) {
+        /*if (this.usernames.isFetched && this.tickets.isFetched) {
             this.tickets.data!.forEach((ticket, i) => {
                 domAddEvent<HTMLTableRowElement, "click">("random" + i, "click", () => {
                     this.context.currentTicketEdit = ticket;
@@ -76,7 +84,18 @@ export class Customer implements Component {
                     update();
                 })
             })
-        }
+        }*/
+
+        document.querySelectorAll<HTMLDivElement>(".ticket").forEach((ticket, i) => {
+            ticket.addEventListener("click", () => {
+                this.context.currentTicketEdit = this.tickets.data![i];
+                this.usernames.isFetched = false;
+                this.tickets.isFetched = false;
+                this.context.router.routeTo("/ticket_editor");
+                update();
+            });
+        });
+
         domAddEvent(this.createTicketButtonId, "click", () => {
             this.tickets.isFetched = false;
             this.usernames.isFetched = false;
