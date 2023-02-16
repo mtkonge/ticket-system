@@ -1,3 +1,8 @@
+:root {
+    --dark: #497dff;
+    --light: #6849ff;
+    --gradient: linear-gradient(to right, #497dff, #6849ff);
+}
 
 * {
     box-sizing: border-box;
@@ -176,8 +181,44 @@ table, th, td {
     }
 }
 
-#customer-tickets-container {
+.customer-tickets-container {
     margin: 20px
+}
+
+.table th {
+    position: relative;
+    padding: 0.2rem 1rem;
+}
+
+.table th::after {
+    display: block;
+    content: " ";
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    width: 100%;
+    height: 2px;
+    background: var(--gradient);
+}
+
+.table td {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.table tr {
+    transition: 200ms background-color;
+}
+
+.table tr:hover {
+    cursor: pointer;
+    background-color: #fcfcfc;
+}
+
+.table tr:active {
+    background-color: #f0f0f0;
 }
 
 button.brand-button {

@@ -48,6 +48,20 @@ export function domAddEvent<
     domSelectId<T>(id).addEventListener<K>(type, listener);
 }
 
+// export const html = (
+//     literals: TemplateStringsArray,
+//     ...substrings: any[]
+// ): string =>
+//     literals.reduce(
+//         (acc, literal, i) =>
+//             acc +
+//             ((substring) =>
+//                 Array.isArray(substring)
+//                     ? (substring as any[]).map((s) => s.toString()).join("")
+//                     : substring.toString())(substrings[i - 1]) +
+//             literal,
+//     );
+
 export const html = (
     literals: TemplateStringsArray,
     ...substrings: any[]
@@ -55,9 +69,6 @@ export const html = (
     literals.reduce(
         (acc, literal, i) =>
             acc +
-            ((substring) =>
-                Array.isArray(substring)
-                    ? (substring as any[]).map((s) => s.toString()).join("")
-                    : substring.toString())(substrings[i - 1]) +
+            substrings[i - 1].toString() +
             literal,
     );

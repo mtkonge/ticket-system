@@ -13,14 +13,14 @@ export class Customer implements Component {
 
     public render() {
         return html`
-            <div id="customer-tickets-container">
+            <div class="customer-tickets-container">
                 ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
-                <table class="ticket-table">
+                <table class="table">
                     <tr class="ticket-variables">
                         <th class="title">Title</th>
                         <th class="type">Type</th>
@@ -33,13 +33,14 @@ export class Customer implements Component {
                                 <td class="type">${ticket.urgency || ""}</td>
                                 <td class="assigned-to">${this.usernames.data![ticket.assignee]}</td>
                             </tr>
-                        `) : ""}
+                        `).join("") : ""}
                 </table>
             </div>
         `;
     }
 
     hydrate(update: () => void): void {
+        this.errorMessage = "";
         if (this.context.session === null) {
             this.context.router.routeTo("/login");
             return update();
@@ -52,7 +53,6 @@ export class Customer implements Component {
                     } else {
                         this.tickets.data = response.tickets;
                     }
-                    console.log(response)
                     this.tickets.isFetched = true;
                     update();
                 })

@@ -17,7 +17,7 @@ export class Supporter implements Component {
             ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
-            <table class="ticket-table">
+            <table class="table">
                 <tr class="ticket-variables">
                     <th class="creator">Creator</th>
                     <th class="title">Title</th>
@@ -32,12 +32,13 @@ export class Supporter implements Component {
                         <td class="type">${ticket.urgency || ""}</td>
                         <td class="assigned-to">${this.usernames.data![ticket.assignee]}</td>
                     </tr>
-                `) : ""}
+                `).join("") : ""}
             </table>
         `;
     }
 
     public hydrate(update: () => void): void {
+        this.errorMessage = "";
         if (this.context.session === null) {
             this.context.router.routeTo("/login")
             return update();
@@ -50,7 +51,6 @@ export class Supporter implements Component {
                     } else {
                         this.tickets.data = response.tickets;
                     }
-                    console.log(response)
                     this.tickets.isFetched = true;
                     update();
                 })
