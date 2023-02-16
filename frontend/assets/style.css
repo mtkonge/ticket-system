@@ -23,6 +23,23 @@ body {
     color: white;
 }
 
+.comment {
+    border-left: 3px solid var(--dark);
+    padding: 0.4rem 1rem;
+    margin-top: 0.5rem;
+}
+
+.comment > p {
+    margin: 0.25rem;
+}
+
+textarea {
+    font-family: inherit;
+    max-width: 100%;
+    width: min(500px, 100%);
+    height: 5em;
+}
+
 #frontpage-background {
     position: fixed;
     top: 0;
@@ -222,8 +239,10 @@ table, th, td {
     background-color: #f0f0f0;
 }
 
-button.brand-button {
-    margin: 10px;
+.brand-button {
+    cursor: pointer;
+    border: none;
+    margin: 10px 0;
     min-width: 100px;
     padding: 0 10px;
     height: 30px;
@@ -234,12 +253,12 @@ button.brand-button {
     transition-duration: 0.2s;
 }
 
-button.brand-button:hover, button.brand-button:focus {
+.brand-button:hover, button.brand-button:focus {
     filter: brightness(1.3);
     outline: none;
 }
 
-button.brand-button:active {
+.brand-button:active {
     filter: brightness(0.7);
 }
 

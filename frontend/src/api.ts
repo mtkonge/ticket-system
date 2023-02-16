@@ -344,6 +344,7 @@ export type EditTicketRequest = {
     id: number;
     title: string;
     urgency: TicketType;
+    status: TicketStatus;
 };
 
 export type EditTicketResponse = {
