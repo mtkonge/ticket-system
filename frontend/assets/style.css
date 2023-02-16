@@ -181,7 +181,8 @@ table, th, td {
 }
 
 .customer-tickets-container {
-    margin: 20px
+    margin: 20px;
+    text-align: center;
 }
 
 .table th {
