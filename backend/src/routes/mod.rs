@@ -15,3 +15,4 @@ pub mod register;
 pub mod user_assigned_tickets;
 pub mod user_created_tickets;
 pub mod user_info;
+pub mod usernames;

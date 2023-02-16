@@ -18,7 +18,7 @@ use routes::{
     edit_document::edit_document, edit_role::edit_role, edit_ticket::edit_ticket,
     load_assets::load_assets, load_html::load_html, login::login, open_ticket::open_ticket,
     post_comment::post_comment, register::register, user_assigned_tickets::user_assigned_tickets,
-    user_created_tickets::user_created_tickets, user_info::user_info,
+    user_created_tickets::user_created_tickets, user_info::user_info, usernames::usernames,
 };
 use tokio::sync::RwLock;
 
@@ -46,7 +46,8 @@ async fn main() -> std::io::Result<()> {
                     .service(edit_document)
                     .service(all_documents)
                     .service(user_created_tickets)
-                    .service(user_assigned_tickets),
+                    .service(user_assigned_tickets)
+                    .service(usernames),
             )
             .service(load_assets)
             .service(load_html)

@@ -1,29 +1,39 @@
+import { Ticket, userCreatedTickets, usernames } from "../api";
 import { Context } from "../Context";
-import { Component, domAddEvent, domSelectId, html } from "../framework";
+import { Component, domAddEvent, fetched, html } from "../framework";
 import { generateId } from "../utils";
 
 export class Customer implements Component {
     private createTicketButtonId = generateId("createTicket");
+    private tickets = fetched<Ticket[]>();
+    private usernames = fetched<{ [id: number]: string }>()
+    private errorMessage = "";
 
-    public constructor(private context: Context) {}
+    public constructor(private context: Context) { }
 
     public render() {
         return html`
             <div id="customer-tickets-container">
+                ${this.errorMessage !== ""
+                ? html`<p class="error-text">${this.errorMessage}</p>`
+                : ""}
                 <button class="brand-button" id="${this.createTicketButtonId}">
                     Create ticket
                 </button>
-                <table id="ticket-table">
-                    <tr id="ticket-variables">
-                        <th id="title">Title</th>
-                        <th id="status">Status</th>
-                        <th id="assigned-to">Assigned To</th>
+                <table class="ticket-table">
+                    <tr class="ticket-variables">
+                        <th class="title">Title</th>
+                        <th class="type">Type</th>
+                        <th class="assigned-to">Assigned To</th>
                     </tr>
-                    <tr id="ticket-row">
-                        <td id="title">Jeg kan ikke finde mine bitcoins</td>
-                        <td id="status">Open</td>
-                        <td id="assigned-to">1st level</td>
-                    </tr>
+                    ${this.tickets.isFetched && this.usernames.isFetched
+                ? this.tickets.data!.map((ticket) => html`
+                            <tr class="ticket-row">
+                                <td class="title">${ticket.title}</td>
+                                <td class="type">${ticket.urgency || ""}</td>
+                                <td class="assigned-to">${this.usernames.data![ticket.assignee]}</td>
+                            </tr>
+                        `) : ""}
                 </table>
             </div>
         `;
@@ -34,7 +44,31 @@ export class Customer implements Component {
             this.context.router.routeTo("/login");
             return update();
         }
+        if (!this.tickets.isFetched) {
+            userCreatedTickets({ token: this.context.session.token })
+                .then((response) => {
+                    if (!response.ok) {
+                        this.errorMessage = response.msg;
+                    } else {
+                        this.tickets.data = response.tickets;
+                    }
+                    console.log(response)
+                    this.tickets.isFetched = true;
+                    update();
+                })
+        }
+        if (!this.usernames.isFetched && this.tickets.isFetched) {
+            usernames({
+                user_ids: this.tickets.data!.map((ticket) => ticket.assignee),
+            }).then((response) => {
+                this.usernames.data = response.usernames.reduce((acc, { id, name }) => ({ ...acc, [id]: name }), {});
+                this.usernames.isFetched = true;
+                update();
+            });
+        }
         domAddEvent(this.createTicketButtonId, "click", () => {
+            this.tickets.isFetched = false;
+            this.usernames.isFetched = false;
             this.context.router.routeTo("/create_ticket");
             update();
         });

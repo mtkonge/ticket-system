@@ -437,3 +437,28 @@ response:
     username?: string
 }
 ```
+
+## user usernames
+
+`user/usernames`
+
+request:
+
+```
+{
+    user_ids: number[],
+}
+```
+
+response:
+
+```ts
+{
+    msg: string,
+    usernames: {
+        id: number,
+        name: string,
+    }[],
+}
+```
+

@@ -23,7 +23,7 @@ export type Ticket = {
     content: string,
     creator: number,
     assignee: number,
-    urguncy: TicketType,
+    urgency: TicketType,
     comments: TicketComment[]
 }
 
@@ -339,5 +339,29 @@ export async function userInfo(request: SessionToken): Promise<UserInfoResponse>
         ...await response.json(),
         ok: response.ok,
     };
+}
 
+export type UsernamesRequest = {
+    user_ids: number[],
+}
+
+export type UsernamesResponse = {
+    ok: boolean,
+    msg: string,
+    usernames: {
+        id: number,
+        name: string,
+    }[],
+}
+
+export async function usernames(request: UsernamesRequest): Promise<UsernamesResponse> {
+    const response = await fetch("/api/user/usernames", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...await response.json(),
+        ok: response.ok,
+    };
 }
