@@ -21,7 +21,7 @@ export class Topbar implements Component {
             <div class="topbar">
                 <div>
                     <img src="/favicon.ico">
-                    <h1 id="${this.indexButtonId}">TicketSystem®</h1>
+                    <button id="${this.indexButtonId}" class="brand-name">TicketSystem®</h1>
                 </div>
                 <div class="text-buttons">
                     ${this.context.session?.role === "Admin" ? html`

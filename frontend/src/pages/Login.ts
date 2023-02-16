@@ -36,7 +36,7 @@ export class Login implements Component {
                 <button id="${this.loginButtonId}" class="brand-button">Login</button>
                 <p>
                     Don't have an account?
-                    <a class="link" id="${this.loginLinkId}">Register</a>
+                    <a href="#" class="link" id="${this.loginLinkId}">Register</a>
                     here
                 </p>
             </div>

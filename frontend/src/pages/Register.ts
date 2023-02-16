@@ -38,7 +38,7 @@ export class Register implements Component {
 
                 <p>
                     Already have an account?
-                    <a class="link" id="${this.registerLinkId}">Login</a> here
+                    <a href="#" class="link" id="${this.registerLinkId}">Login</a> here
                 </p>
             </div>
         `;
