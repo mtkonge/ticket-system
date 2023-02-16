@@ -475,3 +475,42 @@ export async function setSla(request: SetSLARequest): Promise<SetSLAResponse> {
     };
 }
 
+export type CatalogResponse = {
+    ok: boolean;
+    msg: string;
+    document: Document;
+}
+
+export async function catalog(): Promise<CatalogResponse> {
+    const response = await fetch("/api/catalog/get", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+
+export type SetCatalogRequest = {
+    token: string;
+    id: number;
+};
+
+export type SetCatalogResponse = {
+    ok: boolean;
+    msg: string;
+};
+
+export async function setCatalog(request: SetCatalogRequest): Promise<SetCatalogResponse> {
+    const response = await fetch("/api/catalog/set", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+

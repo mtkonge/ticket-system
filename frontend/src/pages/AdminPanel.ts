@@ -1,4 +1,4 @@
-import { allDocuments, allUsers, editUserRole, registerUser, setSla, UserInfo, UserRole } from "../api";
+import { allDocuments, allUsers, editUserRole, registerUser, setCatalog, setSla, UserInfo, UserRole } from "../api";
 import { Context } from "../Context";
 import { Component, domAddEvent, domSelectId, fetched, html } from "../framework"
 import { generateId } from "../utils";
@@ -15,7 +15,7 @@ export class AdminPanel implements Component {
     private editSlaFormId = generateId();
     private documentSelectId = generateId();
     private setSlaButtonId = generateId();
-    private setServiceCatalogButtonId = generateId();
+    private setCatalogButtonId = generateId();
 
     private selectedOptionIndex = 0;
     private usersInfo = fetched<UserInfo[]>();
@@ -65,7 +65,7 @@ export class AdminPanel implements Component {
                 <select id="${this.documentSelectId}"></select>
                 <br><br>
                 <button id="${this.setSlaButtonId}">Set SLA</button>
-                <button id="${this.setServiceCatalogButtonId}">Set service catalog</button>
+                <button id="${this.setCatalogButtonId}">Set service catalog</button>
             </div>
         `;
     }
@@ -94,9 +94,14 @@ export class AdminPanel implements Component {
 
         domAddEvent(this.setSlaButtonId, "click", () => {
             const documentId = domSelectId<HTMLSelectElement>(this.documentSelectId)!.value;
-            console.log(documentId);
             if (!documentId) return;
             setSla({ token: this.context.session!.token, id: parseInt(documentId) });
+        });
+
+        domAddEvent(this.setCatalogButtonId, "click", () => {
+            const documentId = domSelectId<HTMLSelectElement>(this.documentSelectId)!.value;
+            if (!documentId) return;
+            setCatalog({ token: this.context.session!.token, id: parseInt(documentId) });
         });
 
         const addUserForm = domSelectId<HTMLFormElement>(this.addUserFormId);

@@ -13,7 +13,7 @@ export class Topbar implements Component {
     private logoutButton = generateId("logout");
 
     private slaButton = generateId("sla");
-    private serviceCatalogButton = generateId("service-catalog");
+    private catalogButton = generateId("catalog");
 
     public constructor(
         private context: Context
@@ -30,7 +30,7 @@ export class Topbar implements Component {
                     <button id="${this.slaButton}">
                         SLA
                     </button>
-                    <button id="${this.serviceCatalogButton}">
+                    <button id="${this.catalogButton}">
                         Service Catalog
                     </button>
                     ${this.context.session?.role === "Admin" ? html`
@@ -115,8 +115,8 @@ export class Topbar implements Component {
             update();
         });
 
-        domAddEvent(this.serviceCatalogButton, "click", () => {
-            this.context.router.routeTo("/service-catalog");
+        domAddEvent(this.catalogButton, "click", () => {
+            this.context.router.routeTo("/catalog");
             update();
         });
     }

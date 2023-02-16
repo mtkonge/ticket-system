@@ -16,7 +16,7 @@ use routes::{
     login::login, one_ticket::one_ticket, open_ticket::open_ticket, post_comment::post_comment,
     reassign_ticket::reassign_ticket, register::register, set_sla::set_sla,
     user_assigned_tickets::user_assigned_tickets, user_created_tickets::user_created_tickets,
-    user_info::user_info, usernames::usernames,
+    user_info::user_info, usernames::usernames, get_catalog::get_catalog, set_catalog::set_catalog,
 };
 use std::env;
 use std::sync::Arc;
@@ -54,6 +54,8 @@ async fn main() -> std::io::Result<()> {
                     .service(edit_document)
                     .service(get_sla)
                     .service(set_sla)
+                    .service(get_catalog)
+                    .service(set_catalog)
                     .service(all_documents)
                     .service(user_created_tickets)
                     .service(user_assigned_tickets)
