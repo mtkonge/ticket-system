@@ -120,6 +120,29 @@ export async function allDocuments(request: SessionToken): Promise<AllDocumentsR
     };
 }
 
+export type OneTicketRequest = {
+    token: string,
+    id: number,
+}
+
+export type OneTicketResponse = {
+    ok: boolean,
+    msg: string,
+    ticket: Ticket,
+}
+
+export async function oneTicket(request: OneTicketRequest): Promise<OneTicketResponse> {
+    const response = await fetch("/api/ticket/one", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+
 export type UserCreatedTicketsResponse = {
     ok: boolean,
     msg: string,
