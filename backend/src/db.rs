@@ -61,6 +61,8 @@ pub struct Db {
     tickets: Vec<Ticket>,
     users: Vec<User>,
     documents: Vec<Document>,
+    sla: Option<u64>,
+    catalog: Option<u64>,
 }
 
 #[derive(Debug)]
@@ -77,7 +79,41 @@ impl Db {
             sessions: Vec::new(),
             users: Vec::new(),
             documents: Vec::new(),
+            sla: None,
+            catalog: None,
         }
+    }
+    pub fn set_catalog(&mut self, id: u64) -> Result<(), Error> {
+        self.documents
+            .iter()
+            .find(|doc| doc.id == id)
+            .ok_or(Error::NotFound)?;
+        self.catalog = Some(id);
+        Ok(())
+    }
+    pub fn catalog(&self) -> Result<&Document, Error> {
+        let id = self.catalog.ok_or(Error::NotFound)?;
+
+        self.documents
+            .iter()
+            .find(|doc| doc.id == id)
+            .ok_or(Error::NotFound)
+    }
+    pub fn set_sla(&mut self, id: u64) -> Result<(), Error> {
+        self.documents
+            .iter()
+            .find(|doc| doc.id == id)
+            .ok_or(Error::NotFound)?;
+        self.sla = Some(id);
+        Ok(())
+    }
+    pub fn sla(&self) -> Result<&Document, Error> {
+        let id = self.sla.ok_or(Error::NotFound)?;
+
+        self.documents
+            .iter()
+            .find(|doc| doc.id == id)
+            .ok_or(Error::NotFound)
     }
     pub fn ticket_from_id(&self, id: u64) -> Result<&Ticket, Error> {
         let ticket = self

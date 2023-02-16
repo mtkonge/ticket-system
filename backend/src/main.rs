@@ -5,21 +5,19 @@ mod response_helper;
 mod routes;
 mod token_generation;
 
-use std::sync::Arc;
-
-use crate::db::Db;
 use actix_cors::Cors;
 use actix_web::web;
 use actix_web::{web::Data, App, HttpServer};
-use routes::one_ticket::one_ticket;
-use routes::reassign_ticket::reassign_ticket;
+use db::Db;
 use routes::{
     all_documents::all_documents, all_users::all_users, create_document::create_document,
-    edit_document::edit_document, edit_role::edit_role, edit_ticket::edit_ticket,
-    load_assets::load_assets, load_html::load_html, login::login, open_ticket::open_ticket,
-    post_comment::post_comment, register::register, user_assigned_tickets::user_assigned_tickets,
+    edit_document::edit_document, edit_role::edit_role, edit_ticket::edit_ticket, get_sla::get_sla,
+    load_assets::load_assets, load_html::load_html, login::login, one_ticket::one_ticket,
+    open_ticket::open_ticket, post_comment::post_comment, reassign_ticket::reassign_ticket,
+    register::register, set_sla::set_sla, user_assigned_tickets::user_assigned_tickets,
     user_created_tickets::user_created_tickets, user_info::user_info, usernames::usernames,
 };
+use std::sync::Arc;
 use tokio::sync::RwLock;
 
 #[actix_web::main]
@@ -44,6 +42,8 @@ async fn main() -> std::io::Result<()> {
                     .service(edit_ticket)
                     .service(post_comment)
                     .service(edit_document)
+                    .service(get_sla)
+                    .service(set_sla)
                     .service(all_documents)
                     .service(user_created_tickets)
                     .service(user_assigned_tickets)

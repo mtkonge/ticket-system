@@ -24,6 +24,80 @@ status: `200` | `400` | `500`
 }
 ```
 
+## get sla
+
+`sla/get`
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
+## set sla
+
+`sla/set`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+    "id": 1024,
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
+## get catalog
+
+`catalog/get`
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
+## set catalog
+
+`catalog/set`
+
+request: 
+
+```json
+{
+    "token": "{token_string}",
+    "id": 1024,
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```json
+{
+    "msg": "..."
+}
+```
+
 ## edit document
 
 `document/edit`
