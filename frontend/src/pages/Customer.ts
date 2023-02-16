@@ -69,6 +69,22 @@ export class Customer implements Component {
                 update();
             });
         }
+<<<<<<< HEAD
+=======
+        if (this.usernames.isFetched && this.tickets.isFetched) {
+            this.tickets.data!.forEach((ticket, i) => {
+                document.querySelectorAll(".ticket")[i].addEventListener("click", () => {
+                    this.usernames.isFetched = false;
+                    this.tickets.isFetched = false;
+                    this.context.router.routeTo(
+                        "/ticket_editor",
+                        `?ticket=${ticket.id}`,
+                    );
+                    update();
+                });
+            });
+        }
+>>>>>>> 79497bc (Frontend: Add design for ticket creator)
         domAddEvent(this.createTicketButtonId, "click", () => {
             this.tickets.isFetched = false;
             this.usernames.isFetched = false;

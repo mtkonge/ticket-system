@@ -3,7 +3,10 @@ import { Component, html } from "./framework";
 
 export class TicketComponent implements Component {
 
-    public constructor(private ticket: Ticket, private usernames: { [id: number]: string } ) { console.log(this.usernames) }
+    public constructor(
+        private ticket: Ticket,
+        private usernames: { [id: number]: string },
+    ) { }
 
     public render() {
         return html`

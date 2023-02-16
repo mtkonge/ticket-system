@@ -35,6 +35,7 @@
     padding: 3px 8px;
     font-size: 0.7rem;
     color: white;
+    transition-duration: 0.2s;
 }
 
 .ticket .flex {
@@ -64,6 +65,15 @@
     background-color: #D50000;
 }
 
+.ticket .urgency.selectable {
+    background-color: #BDBDBD;
+    cursor: pointer;
+}
+
+.ticket .urgency.selectable:hover {
+    background-color: #717171;
+}
+
 .ticket .content {
     padding: 2px 0;
     margin: 8px 0;
@@ -74,5 +84,23 @@
 
 .ticket .assignee {
     color: #616161;
+}
+
+.ticket input, .ticket textarea {
+    border: 1px dashed #BDBDBD;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.ticket textarea {
+    height: 100px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.ticket input:focus, .ticket textarea:focus {
+    border: 1px solid black;
+    outline: none;
 }
 

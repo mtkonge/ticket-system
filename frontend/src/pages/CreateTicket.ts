@@ -1,4 +1,4 @@
-import { Component, domAddEvent, html } from "../framework";
+import { Component, domAddEvent, domSelectId, html } from "../framework"
 import { generateId } from "../utils";
 import { openTicket } from "../api";
 import { Context } from "../Context";
@@ -6,27 +6,31 @@ import { Context } from "../Context";
 export class CreateTicket implements Component {
     private errorMessage = "";
     private formId = generateId();
+    private ticketTypeId = generateId();
 
     public constructor(private context: Context) {}
 
     public render() {
         return html`
-            <h1>Create ticket</h1>
-            ${this.errorMessage !== ""
-                ? html`<p class="error-text">${this.errorMessage}</p>`
-                : ""}
-            <form id="${this.formId}">
-                <input placeholder="Title" name="title" />
-                <br />
-                <textarea placeholder="Content" name="content"></textarea>
-                <br />
-                <select name="type">
-                    <option>Request</option>
-                    <option>Incident</option>
-                </select>
-                <br />
-                <input type="submit" value="Create" />
-            </form>
+            <center>
+                <h1>Create ticket</h1>
+                ${this.errorMessage !== "" ? html`<p class="error-text">${this.errorMessage}</p>` : ""}
+                <form id="${this.formId}">
+                    <div class="ticket">
+                        <input class="title" placeholder="Title" name="title">
+                        <br>
+                        <textarea placeholder="Write your message here" name="content"></textarea>
+                        <br>
+                        <div class="flex" style="justify-content: center">
+                            <span class="urgency request" data-name="request" tabindex="0">Request</span>
+                            <span class="urgency selectable" data-name="incident" tabindex="0">Incident</span>
+                        </div>
+                        <input type="hidden" id="${this.ticketTypeId}" name="type" value="Request">
+                    </div>
+                    <br>
+                    <button type="submit" class="brand-button">Create</button>
+                </form>
+            </center>
         `;
     }
 
@@ -59,5 +63,20 @@ export class CreateTicket implements Component {
                 update();
             },
         );
+
+        document.querySelectorAll<HTMLSpanElement>(".urgency").forEach(type => {
+            type.addEventListener("click", event => {
+                if (!type.classList.contains("selectable")) return;
+
+                document.querySelector<HTMLSpanElement>(".urgency:not(.selectable)")!.className = "urgency selectable";
+
+                domSelectId<HTMLInputElement>(this.ticketTypeId).value = type.innerText;
+                type.className = "urgency " + type.dataset.name!;
+            });
+
+            type.addEventListener("keydown", event => {
+                if (event.key === "Enter") type.click();
+            });
+        });
     }
 }
