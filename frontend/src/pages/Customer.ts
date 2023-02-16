@@ -9,7 +9,6 @@ export class Customer implements Component {
     private tickets = fetched<Ticket[]>();
     private usernames = fetched<{ [id: number]: string }>();
     private errorMessage = "";
-    private ticketComponents: TicketComponent[] = [];
 
     public constructor(private context: Context) {}
 
@@ -89,7 +88,7 @@ export class Customer implements Component {
 
     private showTickets() {
         if (this.tickets.isFetched && this.usernames.isFetched) {
-            this.ticketComponents = this.tickets.data!.map(
+            this.tickets.data!.map(
                 (ticket) => new TicketComponent(ticket, this.usernames.data!),
             );
         }

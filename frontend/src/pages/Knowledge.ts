@@ -1,5 +1,6 @@
 import { allDocuments, KnowledgeDocument } from "../api";
 import { Context } from "../Context";
+import { DocumentComponent } from "../DocumentComponent";
 import { Component, domAddEvent, fetched, html } from "../framework";
 
 export class Knowledge implements Component {
@@ -13,10 +14,23 @@ export class Knowledge implements Component {
             ${this.errorMessage !== ""
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
-            <div id="knowledge-container">
-                <h3 class="knowledge-title">Lars Andersen</h3>
-                <h3 class="knowledge-title">Lars Kragh Andersen</h3>
-                <h3 class="knowledge-title">Lorem ipsum dolor sit amet</h3>
+            <div id="knowledges-container">
+                ${this.documents.isFetched
+                    ? this.documents
+                          .data!.map(
+                              (document, i) => html`
+                                  <div
+                                      id="document${i}"
+                                      class="knowledge-container"
+                                  >
+                                      <h3 class="knowledge-title">
+                                          ${document.title}
+                                      </h3>
+                                  </div>
+                              `,
+                          )
+                          .join("")
+                    : ""}
             </div>
         `;
     }
@@ -35,23 +49,33 @@ export class Knowledge implements Component {
                         this.documents.data = response.documents;
                     }
                     this.documents.isFetched = true;
+                    this.showDocuments();
                     update();
                 },
             );
         }
-        // if (this.documents.isFetched) {
-        //     this.documents.data!.forEach((document, i) => {
-        //         domAddEvent<HTMLTableRowElement, "click">(
-        //             "random" + i,
-        //             "click",
-        //             () => {
-        //                 this.context.currentDocumentEdit = document;
-        //                 this.documents.isFetched = false;
-        //                 this.context.router.routeTo("/ticket_editor");
-        //                 update();
-        //             },
-        //         );
-        //     });
-        // }
+        if (this.documents.isFetched) {
+            this.documents.data!.forEach((document, i) => {
+                domAddEvent<HTMLTableRowElement, "click">(
+                    "random" + i,
+                    "click",
+                    () => {
+                        this.documents.isFetched = false;
+                        this.context.router.routeTo(
+                            "/document_reader",
+                            `?document=${document.id}`,
+                        );
+                        update();
+                    },
+                );
+            });
+        }
+    }
+    private showDocuments() {
+        if (this.documents.isFetched) {
+            this.documents.data!.map(
+                (document) => new DocumentComponent(document),
+            );
+        }
     }
 }
