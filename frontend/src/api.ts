@@ -200,6 +200,21 @@ export type AllUsersResponse = {
     users?: UserInfo[];
 };
 
+export async function allAssignableUsers(
+    request: SessionToken,
+): Promise<AllUsersResponse> {
+    const response = await fetch("/api/user/assignable", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+
+
 export async function allUsers(
     request: SessionToken,
 ): Promise<AllUsersResponse> {
@@ -326,8 +341,8 @@ export type ReassignTicketResponse = {
 };
 
 export async function reassignTicket(
-    request: EditTicketRequest,
-): Promise<EditTicketResponse> {
+    request: ReassignTicketRequest,
+): Promise<ReassignTicketResponse> {
     const response = await fetch("/api/ticket/reassign", {
         method: "POST",
         headers: new Headers({ "Content-Type": "application/json" }),
