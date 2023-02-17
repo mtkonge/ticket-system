@@ -29,13 +29,13 @@ export type Ticket = {
     status: TicketStatus;
 };
 
-export type Document = {
+export type KnowledgeDocument = {
     id: number;
     title: string;
     content: string;
 };
 
-export type KnowledgeDocument = {
+export type KnowledgeDocumentInfo = {
     id: number;
     title: string;
 };
@@ -116,10 +116,35 @@ export async function createDocument(
     };
 }
 
+export type OneDocumentRequest = {
+    token: string,
+    document_id: number,
+}
+
+export type OneDocumentResponse = {
+    ok: boolean;
+    msg: string;
+    document: KnowledgeDocument;
+};
+
+export async function oneDocument(
+    request: OneDocumentRequest,
+): Promise<OneDocumentResponse> {
+    const response = await fetch("/api/document/one", {
+        method: "POST",
+        headers: new Headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify(request),
+    });
+    return {
+        ...(await response.json()),
+        ok: response.ok,
+    };
+}
+
 export type AllDocumentsResponse = {
     ok: boolean;
     msg: string;
-    documents: KnowledgeDocument[];
+    documents: KnowledgeDocumentInfo[];
 };
 
 export async function allDocuments(
@@ -439,7 +464,7 @@ export async function usernames(
 export type SLAResponse = {
     ok: boolean;
     msg: string;
-    document: Document;
+    document: KnowledgeDocument;
 }
 
 export async function sla(): Promise<SLAResponse> {
@@ -478,7 +503,7 @@ export async function setSla(request: SetSLARequest): Promise<SetSLAResponse> {
 export type CatalogResponse = {
     ok: boolean;
     msg: string;
-    document: Document;
+    document: KnowledgeDocument;
 }
 
 export async function catalog(): Promise<CatalogResponse> {

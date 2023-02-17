@@ -11,6 +11,8 @@ export function generateId(name: string = "id") {
 	return `${name}_${randomString(10)}`
 }
 
+export const sanitizeTextForHtml = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
 export class Router {
 	public currentRoute: string;
 

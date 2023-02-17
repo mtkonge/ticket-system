@@ -1,8 +1,8 @@
-import { KnowledgeDocument } from "./api";
+import { KnowledgeDocumentInfo } from "./api";
 import { Component, html } from "./framework";
 
 export class DocumentComponent implements Component {
-    public constructor(private document: KnowledgeDocument) {}
+    public constructor(private document: KnowledgeDocumentInfo) { }
 
     public render() {
         return html`

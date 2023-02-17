@@ -269,11 +269,25 @@ table, th, td {
     background-color: white;
     padding: 15px;
     padding-left: 60px;
-    line-height: 1.5;
+    /* line-height: 1.5; */
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     margin: 10px;
     width: 500px;
     word-break: break-word;
+}
+
+.knowledge-container:hover {
+    background: #fcfcfc;
+    cursor: pointer;
+}
+
+.knowledge-container:active{
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.knowledge-container:focus{
+    outline: 2px solid var(--light);
 }
 
 .knowledge-headtitle {

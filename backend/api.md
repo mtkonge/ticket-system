@@ -147,6 +147,33 @@ status: `200` | `400` | `500`
 }
 ```
 
+## one document
+
+`document/one`
+
+request:
+
+```ts
+{
+    token: string,
+    document_id: number,
+}
+```
+
+response: 
+
+status: `200` | `400` | `500`
+
+```ts
+{
+    msg: string,
+    document: {
+        id: number;
+        title: string;
+        content: string;
+    },
+}
+```
 ## all documents
 
 `document/all`

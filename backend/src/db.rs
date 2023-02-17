@@ -132,6 +132,15 @@ impl Db {
 
         Ok(ticket)
     }
+    pub fn document_from_id(&self, id: u64) -> Result<&Document, Error> {
+        let document = self
+            .documents
+            .iter()
+            .find(|document| document.id == id)
+            .ok_or(Error::NotFound)?;
+
+        Ok(document)
+    }
     pub fn edit_user_role(&mut self, user_id: u64, role: Role) -> Result<(), Error> {
         let user = self
             .users

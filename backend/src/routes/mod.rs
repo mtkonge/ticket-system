@@ -10,6 +10,7 @@ pub mod get_sla;
 pub mod load_assets;
 pub mod load_html;
 pub mod login;
+pub mod one_document;
 pub mod one_ticket;
 pub mod open_ticket;
 pub mod post_comment;

@@ -6,6 +6,8 @@ import { Router } from "./utils";
 let context: Context = {
     router: new Router(),
     session: null,
+    ticketHasChangedAmountSinceLastTime: true,
+    documentHasChangedAmountSinceLastTime: true,
 };
 
 initializeApp(new Layout(context));

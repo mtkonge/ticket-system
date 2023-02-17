@@ -12,11 +12,12 @@ use db::Db;
 use routes::{
     all_assignable_users::all_assignable_users, all_documents::all_documents, all_users::all_users,
     create_document::create_document, edit_document::edit_document, edit_role::edit_role,
-    edit_ticket::edit_ticket, get_sla::get_sla, load_assets::load_assets, load_html::load_html,
-    login::login, one_ticket::one_ticket, open_ticket::open_ticket, post_comment::post_comment,
-    reassign_ticket::reassign_ticket, register::register, set_sla::set_sla,
+    edit_ticket::edit_ticket, get_catalog::get_catalog, get_sla::get_sla, load_assets::load_assets,
+    load_html::load_html, login::login, one_document::one_document, one_ticket::one_ticket,
+    open_ticket::open_ticket, post_comment::post_comment, reassign_ticket::reassign_ticket,
+    register::register, set_catalog::set_catalog, set_sla::set_sla,
     user_assigned_tickets::user_assigned_tickets, user_created_tickets::user_created_tickets,
-    user_info::user_info, usernames::usernames, get_catalog::get_catalog, set_catalog::set_catalog,
+    user_info::user_info, usernames::usernames,
 };
 use std::env;
 use std::sync::Arc;
@@ -42,6 +43,7 @@ async fn main() -> std::io::Result<()> {
                     .service(register)
                     .service(login)
                     .service(one_ticket)
+                    .service(one_document)
                     .service(edit_role)
                     .service(reassign_ticket)
                     .service(open_ticket)
