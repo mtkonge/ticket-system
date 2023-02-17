@@ -16,12 +16,12 @@ export class DocumentEditor implements Component {
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
             ${this.knowledgeDocument.isFetched ? html`
-                <form id="${this.documentFormId}">
-                    <input type="text" name="title" value="${this.knowledgeDocument.data!.title}">
+                <form id="${this.documentFormId}" class="document">
+                    <input type="text" name="title" value="${this.knowledgeDocument.data!.title}" class="title">
                     <br>
-                    <textarea name="content">${this.knowledgeDocument.data!.content}</textarea>
+                    <textarea name="content" class="content">${this.knowledgeDocument.data!.content}</textarea>
                     <br>
-                    <input type="submit" value="Save">
+                    <button type="submit" class="brand-button">Save</button>
                 </form>
             ` : html`
                 <h1>Document editor</h1>

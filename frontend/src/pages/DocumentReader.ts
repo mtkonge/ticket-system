@@ -16,9 +16,11 @@ export class DocumentReader implements Component {
                 ? html`<p class="error-text">${this.errorMessage}</p>`
                 : ""}
             ${this.knowledgeDocument.isFetched ? html`
-                <button class="brand-button" id="${this.editDocumentId}">Edit document</button>
-                <h1>${this.knowledgeDocument.data!.title}</h1>
-                ${this.knowledgeDocument.data!.content}
+                <div class="document">
+                    <div class="title">${this.knowledgeDocument.data!.title}</div>
+                    <div class="content">${this.knowledgeDocument.data!.content}</div>
+                    <button class="brand-button" id="${this.editDocumentId}">Edit document</button>
+                </div>
             ` : html`
                 <h1>Document reader</h1>
                 <p>Loading document...</p>
@@ -57,6 +59,7 @@ export class DocumentReader implements Component {
         } else {
             domAddEvent(this.editDocumentId, "click", () => {
                 this.context.router.routeTo("/document_editor", `?document=${this.knowledgeDocument.data!.id}`);
+                this.knowledgeDocument.isFetched = false;
                 update();
             })
         }
